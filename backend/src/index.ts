@@ -1,15 +1,19 @@
 import express from 'express';
 import mongoose from 'mongoose';
-
+import authRoutes from './routes/auth';
+import dotenv from 'dotenv';
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // MongoDB connection
-mongoose.connect('mongodb+srv://junaidarif7078:junaid123@cluster0.1n1nswn.mongodb.net/').then(() => {
+mongoose.connect(process.env.MONGODB_URL as string).then(() => {
   console.log('Connected to MongoDB');
 }).catch(err => {
   console.error('Failed to connect to MongoDB', err);
 });
+app.use(express.json())
+app.use('/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');

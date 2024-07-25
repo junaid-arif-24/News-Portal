@@ -12,6 +12,7 @@ interface RegisterRequest extends Request {
     name: string;
     email: string;
     password: string;
+    role: string;
   };
 }
 
@@ -24,7 +25,7 @@ interface LoginRequest extends Request {
 
 // Registration endpoint
 router.post('/register', async (req: RegisterRequest, res: Response) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -33,7 +34,7 @@ router.post('/register', async (req: RegisterRequest, res: Response) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({ name, email, password: hashedPassword ,role});
 
     await newUser.save();
 

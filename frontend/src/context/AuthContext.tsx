@@ -6,7 +6,7 @@ interface AuthContextProps {
   isAuthenticated: boolean;
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string,role: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -42,8 +42,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     navigate('/');
   };
 
-  const register = async (name: string, email: string, password: string) => {
-    const userData = await apiRegister(name, email, password);
+  const register = async (name: string, email: string, password: string,role: string) => {
+    const userData = await apiRegister(name, email, password,role);
     setUser(userData);
     navigate('/');
   };

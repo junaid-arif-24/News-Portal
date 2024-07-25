@@ -18,10 +18,13 @@ const HomePage: React.FC = () => {
 
   return (
     <div>
-      <h1>Latest News</h1>
-      <SearchFilters setNewsList={setNewsList} />
+     
       <TrendingNews />
-      <NewsList newsList={newsList} />
+
+      <SearchFilters setNewsList={setNewsList} />
+
+      <NewsList  />
+      {/* <NewsList newsList={newsList} /> */}
     </div>
   );
 };

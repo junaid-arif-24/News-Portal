@@ -156,6 +156,23 @@ router.post('/:id/save', auth, async (req: AuthRequest, res: Response) => {
   }
 });
 
+router.get('/all-save-news', auth, async (req: AuthRequest, res: Response) => {
+  if (!req.userId) {
+    return res.status(401).json({ message: 'User not authenticated' });
+  }
+
+  try {
+    const user = await User.findById(req.userId).populate('savedNews');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ savedNews: user.savedNews });
+  } catch (error) {
+    res.status(400).json({ message: 'Error retrieving saved news', error });
+  }
+})
 
 // Add a comment to news
 router.post('/:id/comments', auth, async (req: AuthRequest, res: Response) => {

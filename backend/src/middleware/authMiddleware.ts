@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
+import dotenv from 'dotenv';
+dotenv.config();
 
 interface AuthRequest extends Request {
   userId?: string;
@@ -14,7 +16,7 @@ const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
       return res.status(401).json({ message: 'Auth failed' });
     }
 
-    const decodedData = jwt.verify(token, 'your_jwt_secret') as { id: string };
+    const decodedData = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string };
     req.userId = decodedData.id;
 
     const user = await User.findById(req.userId);

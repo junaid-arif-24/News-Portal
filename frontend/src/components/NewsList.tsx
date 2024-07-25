@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 
 interface News {
   _id: string;
@@ -7,22 +6,11 @@ interface News {
   description: string;
 }
 
-const NewsList: React.FC = () => {
-  const [newsList, setNewsList] = useState<News[]>([]);
+interface NewsListProps {
+  newsList: News[];
+}
 
-  useEffect(() => {
-    fetchNews();
-  }, []);
-
-  const fetchNews = async () => {
-    try {
-      const response = await axios.get<News[]>('/api/news');
-      setNewsList(response.data);
-    } catch (error) {
-      console.error('Error fetching news', error);
-    }
-  };
-
+const NewsList: React.FC<NewsListProps> = ({ newsList }) => {
   return (
     <div>
       <h1>All News</h1>

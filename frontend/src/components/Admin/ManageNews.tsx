@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
+import Comments from '../Comments';
 
 // Define the types for news items and API responses
 interface News {
@@ -24,6 +25,7 @@ const ManageNews: React.FC = () => {
   const [searchTitle, setSearchTitle] = useState<string>('');
   const [searchDescription, setSearchDescription] = useState<string>('');
   const [searchDate, setSearchDate] = useState<string>('');
+  const [selectedNews, setSelectedNews] = useState<News | null>(null);
 
   useEffect(() => {
     fetchNews();
@@ -137,10 +139,12 @@ const ManageNews: React.FC = () => {
           <li key={news._id}>
             <h2>{news.title}</h2>
             <p>{news.description}</p>
+            <button onClick={() => setSelectedNews(news)}>Manage Comments</button> {/* Added button to manage comments */}
             <button>Delete</button>
           </li>
         ))}
       </ul>
+      {selectedNews && <Comments newsId={selectedNews._id} />} 
     </div>
   );
 };

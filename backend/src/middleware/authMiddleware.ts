@@ -18,7 +18,10 @@ const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
     req.userId = decodedData.id;
 
     const user = await User.findById(req.userId);
-    req.userRole = user?.role;
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    req.userRole = user.role;
 
     next();
   } catch (error) {

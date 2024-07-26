@@ -16,17 +16,18 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
   const [comment, setComment] = useState<string>('');
 
   useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get<Comment[]>(`/api/news/${newsId}/comments`);
+        setComments(response.data);
+      } catch (error) {
+        console.error('Error fetching comments', error);
+      }
+    };
     fetchComments();
-  }, []);
+  }, [newsId]);
 
-  const fetchComments = async () => {
-    try {
-      const response = await axios.get<Comment[]>(`/api/news/${newsId}/comments`);
-      setComments(response.data);
-    } catch (error) {
-      console.error('Error fetching comments', error);
-    }
-  };
+ 
 
   const addComment = async () => {
     try {

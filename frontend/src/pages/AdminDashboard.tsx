@@ -6,14 +6,13 @@ import {
   ListItemText,
   ListItemIcon,
   CssBaseline,
-  AppBar,
   Toolbar,
-  IconButton,
+ 
   Typography,
   Divider,
   Box
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+// import MenuIcon from '@mui/icons-material/Menu';
 import PersonIcon from '@mui/icons-material/Person';
 import CreateIcon from '@mui/icons-material/Create';
 import ArticleIcon from '@mui/icons-material/Article';
@@ -81,22 +80,7 @@ const AdminDashboard: React.FC = () => {
   return (
     <div style={{ display: 'flex' }}>
       <CssBaseline />
-      {/* <AppBar
-        position="fixed"
-        sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-      >
-       
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-         
-      </AppBar> */}
+      
 
       <Drawer
         variant="permanent"

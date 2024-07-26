@@ -14,7 +14,7 @@ interface News {
 }
 
 const HomePage: React.FC = () => {
-  const [newsList, setNewsList] = useState<News[]>([]);
+  const [, setNewsList] = useState<News[]>([]);
 
   return (
     <div>

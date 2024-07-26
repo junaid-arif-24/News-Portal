@@ -11,7 +11,7 @@ interface News {
 }
 
 const TrendingNews: React.FC = () => {
-  const [trendingNews, setTrendingNews] = useState<News[]>([]);
+  const [, setTrendingNews] = useState<News[]>([]);
 
   useEffect(() => {
     fetchTrendingNews();

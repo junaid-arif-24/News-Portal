@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaFacebookF, FaLinkedinIn, FaTwitter, FaInstagram } from 'react-icons/fa';
-
+import { Link } from 'react-router-dom';
 const Footer: React.FC = () => {
   return (
     <footer className="bg-black py-10 border-t mt-10">
@@ -11,51 +11,53 @@ const Footer: React.FC = () => {
             Craft narratives that ignite inspiration, knowledge, and entertainment.
           </p>
           <div className="flex space-x-4">
-            <a href="#" className="text-red-500 hover:text-red-700"><FaFacebookF /></a>
-            <a href="#" className="text-red-500 hover:text-red-700"><FaLinkedinIn /></a>
-            <a href="#" className="text-red-500 hover:text-red-700"><FaTwitter /></a>
-            <a href="#" className="text-red-500 hover:text-red-700"><FaInstagram /></a>
+            <Link to="/" className="text-red-500 hover:text-red-700"><FaFacebookF /></Link>
+            <Link to="/" className="text-red-500 hover:text-red-700"><FaLinkedinIn /></Link>
+            <Link to="/" className="text-red-500 hover:text-red-700"><FaTwitter /></Link>
+            <Link to="/" className="text-red-500 hover:text-red-700"><FaInstagram /></Link>
           </div>
         </div>
         <div className="flex flex-wrap justify-between text-white space-x-10">
           <div>
             <h3 className="text-lg font-semibold mb-4">Business</h3>
             <ul className="text-gray-400">
-              <li className="mb-2"><a href="#">Startup</a></li>
-              <li className="mb-2"><a href="#">Employee</a></li>
-              <li className="mb-2"><a href="#">Success</a></li>
-              <li className="mb-2"><a href="#">Videos</a></li>
-              <li className="mb-2"><a href="#">Markets</a></li>
+              <li className="mb-2"><Link to="/">Startup</Link></li>
+              <li className="mb-2"><Link to="/">Employee</Link></li>
+              <li className="mb-2"><Link to="/">Success</Link></li>
+              <li className="mb-2"><Link to="/">Videos</Link></li>
+              <li className="mb-2"><Link to="/">Markets</Link></li>
             </ul>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">Technology</h3>
             <ul className="text-gray-400">
-              <li className="mb-2"><a href="#">Innovate</a></li>
-              <li className="mb-2"><a href="#">Gadget</a></li>
-              <li className="mb-2"><a href="#">Innovative Cities</a></li>
-              <li className="mb-2"><a href="#">Upstarts</a></li>
-              <li className="mb-2"><a href="#">Future Tech</a></li>
+            <li className="mb-2"><Link to="/">Innovate</Link></li>
+              <li className="mb-2"><Link to="/">Gadget</Link></li>
+              <li className="mb-2"><Link to="/">Innovative Cities</Link></li>
+              <li className="mb-2"><Link to="/">Upstarts</Link></li>
+              <li className="mb-2"><Link to="/">Future Tech</Link></li>
+              
             </ul>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">Travel</h3>
             <ul className="text-gray-400">
-              <li className="mb-2"><a href="#">Destinations</a></li>
-              <li className="mb-2"><a href="#">Food & Drink</a></li>
-              <li className="mb-2"><a href="#">Stay</a></li>
-              <li className="mb-2"><a href="#">News</a></li>
-              <li className="mb-2"><a href="#">Videos</a></li>
+            <li className="mb-2"><Link to="/">Destinations</Link></li>
+              <li className="mb-2"><Link to="/">Food & Drink</Link></li>
+              <li className="mb-2"><Link to="/">Stay</Link></li>
+              <li className="mb-2"><Link to="/">News</Link></li>
+              <li className="mb-2"><Link to="/">Videos</Link></li>
+              
             </ul>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">Sports</h3>
             <ul className="text-gray-400">
-              <li className="mb-2"><a href="#">Football</a></li>
-              <li className="mb-2"><a href="#">Tennis</a></li>
-              <li className="mb-2"><a href="#">Golf</a></li>
-              <li className="mb-2"><a href="#">Motorsports</a></li>
-              <li className="mb-2"><a href="#">Esports</a></li>
+            <li className="mb-2"><Link to="/">Football</Link></li>
+              <li className="mb-2"><Link to="/">Tennis</Link></li>
+              <li className="mb-2"><Link to="/">Golf</Link></li>
+              <li className="mb-2"><Link to="/">Motorsports</Link></li>
+              <li className="mb-2"><Link to="/">Esports</Link></li>
             </ul>
           </div>
         </div>

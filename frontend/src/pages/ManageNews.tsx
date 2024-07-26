@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
-import Comments from '../Comments';
+import Comments from '../components/Comments';
 
 // Define the types for news items and API responses
 interface News {

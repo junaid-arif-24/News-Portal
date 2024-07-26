@@ -12,3 +12,12 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
   }
+
+  body {
+    @apply bg-gray-100;
+  }
+
+  *{
+padding: 0px;
+margin: 0px;
+  }

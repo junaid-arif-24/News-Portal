@@ -6,7 +6,7 @@ import Category from '../models/Category';
 const router = express.Router();
 
 // Create category
-router.post('/', auth, checkRole(['admin']), async (req, res) => {
+router.post('/create', auth, checkRole(['admin']), async (req, res) => {
   const { name, description } = req.body;
 
   try {
@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
 });
 
 // Update category
-router.put('/:id', auth, checkRole(['admin']), async (req, res) => {
+router.put('/update/:id', auth, checkRole(['admin']), async (req, res) => {
   const { id } = req.params;
   const { name, description } = req.body;
 
@@ -42,7 +42,7 @@ router.put('/:id', auth, checkRole(['admin']), async (req, res) => {
 });
 
 // Delete category
-router.delete('/:id', auth, checkRole(['admin']), async (req, res) => {
+router.delete('/delete/:id', auth, checkRole(['admin']), async (req, res) => {
   const { id } = req.params;
 
   try {

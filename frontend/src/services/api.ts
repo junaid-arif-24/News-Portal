@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL for the API
-const API_BASE_URL = 'http://localhost:5000/api'; // Adjust the base URL as needed
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // Adjust the base URL as needed
 
 // Login function
 export const login = async (email: string, password: string) => {
@@ -25,7 +25,7 @@ export const register = async (name: string, email: string, password: string , r
   }
 };
 
-// Function to set the authorization token
+// Function to set the authorization token 
 export const setAuthToken = (token: string) => {
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -44,16 +44,25 @@ export const fetchNewsById = async (id: string) => {
   }
 };
 
-// Get current user
+// Get current usER
 export const getUser = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/auth/user`);
+    const token = localStorage.getItem('token'); // Get the token from local storage
+    if (!token) {
+      throw new Error('No token found');
+    }
+
+    const response = await axios.get(`${API_BASE_URL}/auth/user`, {
+      headers: {
+        Authorization: `Bearer ${token}` // Include the token in the Authorization header
+      }
+    });
+
     return response.data;
   } catch (error) {
     throw new Error('Fetching user failed');
   }
 };
-
 // Logout function
 export const logout = async () => {
   try {

@@ -23,6 +23,7 @@ import { AuthProvider } from './context/AuthContext';
 function App() {
   return (
     <AuthProvider>
+      <>
       <Navbar />
       <div className="App">
         <Routes>
@@ -41,11 +42,18 @@ function App() {
             element={<ProtectedRoute><UserProfile /></ProtectedRoute>}
           />
 
+          {/* <Route
+            path="/profile"
+            element={<UserProfile />}
+          /> */}
+
           {/* Catch-all Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
       <Footer />
+      </>
+      
     </AuthProvider>
   );
 }

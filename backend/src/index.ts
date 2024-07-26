@@ -4,12 +4,15 @@ import authRoutes from './routes/auth';
 import categoryRoutes from './routes/category';
 import newsRoutes from './routes/news';
 import dotenv from 'dotenv';
+import cors from 'cors';
+
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(express.json())
+app.use(cors());
 
+app.use(express.json())
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URL as string).then(() => {

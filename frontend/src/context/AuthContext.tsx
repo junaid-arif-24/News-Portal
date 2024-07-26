@@ -27,6 +27,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const fetchUser = async () => {
       try {
         const userData = await getUser();
+        console.log("userData by getUser", userData)
         setUser(userData);
       } catch (error) {
         setUser(null);
@@ -38,7 +39,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = async (email: string, password: string) => {
     const userData = await apiLogin(email, password);
-    setUser(userData);
+    console.log(userData)
+    setUser(()=> userData.result);
     navigate('/');
   };
 

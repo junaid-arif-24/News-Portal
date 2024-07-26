@@ -4,6 +4,7 @@ import axios from 'axios';
 interface Comment {
   _id: string;
   text: string;
+  createdAt: string;
 }
 
 interface CommentsProps {
@@ -38,16 +39,29 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
   };
 
   return (
-    <div>
-      <h2>Comments</h2>
-      <textarea 
-        value={comment} 
-        onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)} 
-      />
-      <button onClick={addComment}>Add Comment</button>
-      <ul>
+    <div className="mt-8">
+      <h2 className="text-2xl font-bold mb-4">Comments</h2>
+      <div className="mb-4">
+        <textarea 
+          className="w-full p-2 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" 
+          rows={4} 
+          value={comment} 
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)} 
+          placeholder="Add a comment..."
+        />
+        <button 
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none" 
+          onClick={addComment}
+        >
+          Add Comment
+        </button>
+      </div>
+      <ul className="space-y-4">
         {comments.map((comment) => (
-          <li key={comment._id}>{comment.text}</li>
+          <li key={comment._id} className="bg-white shadow-md rounded-md p-4">
+            <p className="text-gray-800">{comment.text}</p>
+            <span className="text-sm text-gray-500">{new Date(comment.createdAt).toLocaleString()}</span>
+          </li>
         ))}
       </ul>
     </div>

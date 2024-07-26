@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
-
+import auth from '../middleware/authMiddleware';
 const router = express.Router();
 const SecretKey = process.env.JWT_SECRET || 'secretkey';
 
@@ -71,5 +71,26 @@ router.post('/login', async (req: LoginRequest, res: Response) => {
   }
 });
 
+//logout endpoint
+router.post('/logout', (req: Request, res: Response) => {
+  res.status(200).json({ message: 'Logged out successfully' });
+});
+
+// Get current user endpoint
+router.get('/user', auth, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).userId; // Get the userId from the request
+    const user = await User.findById(userId).select('-password'); // Exclude the password field
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user:", error);  // Log the error for debugging
+    res.status(500).json({ message: 'Something went wrong' });
+  }
+});
 
 export default router;

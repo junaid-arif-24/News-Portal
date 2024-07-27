@@ -42,6 +42,7 @@ const ManageCategories: React.FC = () => {
       setCategories([...categories, response.data]);
       setName('');
       setDescription('');
+      setEditingCategoryId(null);
       toast.success('Category created successfully');
     } catch (error) {
       console.error('Error creating category', error);
@@ -95,7 +96,7 @@ const ManageCategories: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 bg-gray-100 w-screen h-[200vh] overflow-scroll">
+    <div className="container mx-auto p-4 bg-gray-100 w-screen ">
       <h1 className="text-2xl font-bold mb-4">Manage Categories</h1>
 
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} closeOnClick pauseOnHover draggable />
@@ -110,7 +111,7 @@ const ManageCategories: React.FC = () => {
       )}
 
       {(editingCategoryId || editingCategoryId === '') && (
-        <form onSubmit={handleSubmit} className="mb-4 p-4 border rounded">
+        <form onSubmit={handleSubmit} className="mb-4 p-4 border bg-white shadow-md rounded">
           <div className="mb-2">
             <label className="block mb-1 font-semibold">Name</label>
             <input
@@ -150,6 +151,7 @@ const ManageCategories: React.FC = () => {
       )}
 
       <div className="bg-white shadow-xl rounded p-4">
+        <h2 className="text-lg  font-semibold mb-4">All Categories</h2>
         {categories.length === 0 ? (
           <p className="text-center text-5xl py-10">No categories</p>
         ) : (

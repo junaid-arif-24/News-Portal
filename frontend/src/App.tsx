@@ -19,6 +19,10 @@ import AdminRoute from './components/AdminRoute';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { AuthProvider } from './context/AuthContext';
+import CreateNewsPage from './pages/CreateNewsPage';
+import ManageNews from './pages/ManageNews';
+import ManageCategories from './pages/CategoryManagement';
+import ManageCommentsPage from './pages/ManageCommentsPage';
 
 function App() {
   return (
@@ -31,12 +35,23 @@ function App() {
           <Route path="/news/:id" element={<NewsDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          {/* <Route path="profile" element={<UserProfile />} /> */}
+          
           
           {/* Protected Routes */}
           <Route
             path="/admin/*"
             element={<AdminRoute><AdminDashboard /></AdminRoute>}
           />
+          
+          <Route path="/create-news" element={<AdminRoute><CreateNewsPage /></AdminRoute>} />
+          <Route path="/manage-news" element={ <AdminRoute><ManageNews /></AdminRoute>} />
+          <Route
+            path="/manage-category"
+            element={<AdminRoute><ManageCategories /></AdminRoute>}
+          />
+          <Route path="/manage-comments" element={<AdminRoute><ManageCommentsPage /></AdminRoute>} />
+
           <Route
             path="/profile"
             element={<ProtectedRoute><UserProfile /></ProtectedRoute>}

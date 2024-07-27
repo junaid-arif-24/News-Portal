@@ -36,11 +36,17 @@ const CreateNews: React.FC = () => {
     }
   };
 
+  // Handle multiple image upload
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const filesArray = Array.from(e.target.files).map(file => URL.createObjectURL(file));
-      setImages(filesArray);
+      setImages(prevImages => prevImages.concat(filesArray));
     }
+  };
+
+  // Remove selected image
+  const removeImage = (image: string) => {
+    setImages(images.filter(img => img !== image));
   };
 
   const handleTagInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -119,6 +125,20 @@ const CreateNews: React.FC = () => {
             multiple
             onChange={handleImageUpload}
           />
+          <div className="mt-2 flex flex-wrap">
+            {images.map((image, index) => (
+              <div key={index} className="relative m-1">
+                <img src={image} alt={`upload-${index}`} className="w-20 h-20 object-cover rounded" />
+                <button
+                  type="button"
+                  className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1"
+                  onClick={() => removeImage(image)}
+                >
+                  &times;
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date">Date</label>
@@ -188,6 +208,7 @@ const CreateNews: React.FC = () => {
             <option value="private">Private</option>
           </select>
         </div>
+
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           type="submit"

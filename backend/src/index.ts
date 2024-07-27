@@ -5,6 +5,7 @@ import categoryRoutes from './routes/category';
 import newsRoutes from './routes/news';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import multer from 'multer';
 
 dotenv.config();
 const app = express();
@@ -16,6 +17,11 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// Middleware to parse URL-encoded bodies
+app.use(express.urlencoded({ extended: true }));
+
+
 
 app.use(express.json())
 

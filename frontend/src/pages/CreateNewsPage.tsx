@@ -11,7 +11,7 @@ interface Category {
 const CreateNews: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
   const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10));
   const [time, setTime] = useState<string>(new Date().toLocaleTimeString());
   const [tags, setTags] = useState<string[]>([]);
@@ -39,13 +39,13 @@ const CreateNews: React.FC = () => {
   // Handle multiple image upload
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const filesArray = Array.from(e.target.files).map(file => URL.createObjectURL(file));
+      const filesArray = Array.from(e.target.files);
       setImages(prevImages => prevImages.concat(filesArray));
     }
   };
 
   // Remove selected image
-  const removeImage = (image: string) => {
+  const removeImage = (image: File) => {
     setImages(images.filter(img => img !== image));
   };
 
@@ -72,19 +72,31 @@ const CreateNews: React.FC = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`${API_BASE_URL}/api/news/create`, {
-        title,
-        description,
-        images,
-        date,
-        time,
-        tags,
-        category,
-        visibility,
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+      images.forEach(image => formData.append('images', image));
+      formData.append('date', date);
+      formData.append('time', time);
+      formData.append('tags', JSON.stringify(tags));
+      formData.append('category', category);
+      formData.append('visibility', visibility);
+
+      await axios.post(`${API_BASE_URL}/api/news/create`, formData, {
+        headers: { 
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}` 
+        }
       });
       toast.success('News created successfully');
+      setTitle('');
+      setDescription('');
+      setImages([]);
+      setDate(new Date().toISOString().slice(0, 10));
+      setTime(new Date().toLocaleTimeString());
+      setTags([]);
+      setCategory('');
+      setVisibility('public');
     } catch (error) {
       console.error('Error creating news', error);
       toast.error('Error creating news');
@@ -128,7 +140,7 @@ const CreateNews: React.FC = () => {
           <div className="mt-2 flex flex-wrap">
             {images.map((image, index) => (
               <div key={index} className="relative m-1">
-                <img src={image} alt={`upload-${index}`} className="w-20 h-20 object-cover rounded" />
+                <img src={URL.createObjectURL(image)} alt={`upload-${index}`} className="w-20 h-20 object-cover rounded" />
                 <button
                   type="button"
                   className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1"
@@ -200,6 +212,9 @@ const CreateNews: React.FC = () => {
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="visibility">Visibility</label>
           <select
             className="shadow cursor-pointer appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          
+
+
             value={visibility}
             onChange={(e: ChangeEvent<HTMLSelectElement>) => setVisibility(e.target.value as 'public' | 'private')}
             required

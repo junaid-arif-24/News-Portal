@@ -6,6 +6,7 @@ import News from '../models/News';
 import User from '../models/User';
 import Comment from '../models/Comment';
 import mongoose from 'mongoose';
+import { v2 as cloudinary } from 'cloudinary';
 
 const router = express.Router();
 
@@ -14,20 +15,34 @@ interface AuthRequest extends Request {
   }
 // Create news
 router.post(
-  '/',
+  '/create',
   auth,
   checkRole(['admin']),
-  upload.array('images'),
+  upload.array('images', 12),
   async (req: Request, res: Response) => {
-    const { title, description, category, tags, visibility } = req.body;
+    console.log('Files received:', req.files); 
+    const { title, description, category, tags, visibility,time,date } = req.body;
     const files = req.files as Express.Multer.File[];
-    const images = files.map((file: Express.Multer.File) => file.path);
+    if (!files) {
+      return res.status(400).json({ message: 'No files were uploaded.' });
+    }
 
     try {
+      const uploadPromises = files.map(file =>
+        cloudinary.uploader.upload(file.path, {
+          folder: 'news_images',
+          format: 'jpeg',
+        })
+      );
+      const uploadResults = await Promise.all(uploadPromises);
+      const imageUrls = uploadResults.map(result => result.secure_url);
+
       const newNews = new News({
         title,
         description,
-        images,
+        images: imageUrls,
+        date,
+        time,
         category,
         tags: tags.split(','),
         visibility,
@@ -35,6 +50,7 @@ router.post(
       await newNews.save();
       res.status(201).json(newNews);
     } catch (error) {
+      console.error('Error creating news', error);
       res.status(400).json({ message: 'Error creating news', error });
     }
   }

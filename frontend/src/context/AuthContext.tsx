@@ -8,6 +8,7 @@ interface AuthContextProps {
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string,role: string) => Promise<void>;
   logout: () => void;
+  loading: boolean;
 }
 
 interface User {
@@ -21,6 +22,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,6 +33,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setUser(userData);
       } catch (error) {
         setUser(null);
+      }finally {
+        setLoading(false);
       }
     };
 
@@ -57,7 +61,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!user, user, login, register, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated: !!user, user, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

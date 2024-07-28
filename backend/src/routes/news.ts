@@ -7,6 +7,8 @@ import User from '../models/User';
 import Comment from '../models/Comment';
 import mongoose from 'mongoose';
 import { v2 as cloudinary } from 'cloudinary';
+import multer from 'multer';
+const upload2 = multer();
 
 const router = express.Router();
 
@@ -56,39 +58,23 @@ router.post(
   }
 );
 
-// Get all news with filters
-router.get('/filter', async (req: Request, res: Response) => {
-  const visibility = req.query.visibility || 'public';
-  const { title, description, date } = req.query;
 
-  const query: any = { visibility };
-
-  if (title) query.title = { $regex: title, $options: 'i' };
-  if (description) query.description = { $regex: description, $options: 'i' };
-  if (date) query.date = new Date(date as string);
-
-  try {
-    const news = await News.find(query);
-    res.status(200).json(news);
-  } catch (error) {
-    res.status(400).json({ message: 'Error fetching news', error });
-  }
-});
 
 // Get all news with advanced filters
 router.get('/', async (req, res) => {
-    const { title, description, date, tags, category } = req.query;
+    const { title, description, date, tags, category,visibility } = req.query;
   
     const query: any = {};
   
     if (title) query.title = { $regex: title, $options: 'i' };
     if (description) query.description = { $regex: description, $options: 'i' };
     if (date) query.date = new Date(date as string);
-    if (typeof tags === 'string') query.tags = { $in: tags.split(',') };
+    if (typeof tags === 'string' && tags!=='') query.tags = { $in: tags.split(',') };
     if (category) query.category = category;
+    if (typeof visibility === 'string') query.visibility = visibility;
   
     try {
-      const news = await News.find(query);
+      const news = await News.find(query).populate('category', 'name');
       res.status(200).json(news);
     } catch (error) {
       res.status(400).json({ message: 'Error fetching news', error });
@@ -112,7 +98,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 });
 
 // Update news
-router.put('/:id', auth, checkRole(['admin']), async (req: Request, res: Response) => {
+router.put('/:id', auth, checkRole(['admin']),upload2.none(), async (req: Request, res: Response) => {
   const { id } = req.params;
   const { title, description, category, tags, visibility } = req.body;
 

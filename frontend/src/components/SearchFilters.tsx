@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, useEffect } from 'react';
 import axios from 'axios';
 import { FaSearch } from 'react-icons/fa';
 
@@ -12,10 +12,12 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
   const [date, setDate] = useState<string>('');
   const [tags, setTags] = useState<string>('');
   const [category, setCategory] = useState<string>('');
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const fetchFilteredNews = async () => {
     try {
-      const response = await axios.get('/api/news', {
+      const response = await axios.get(`${API_BASE_URL}/api/news`, {
         params: {
           title,
           description,
@@ -30,14 +32,23 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
     }
   };
 
+  useEffect(() => {
+    if (refreshing) {
+      fetchFilteredNews().then(() => setRefreshing(false));
+    }
+  }, [refreshing]);
+
+  const handleRefresh = () => {
+    setTitle('');
+    setDescription('');
+    setDate('');
+    setTags('');
+    setCategory('');
+    setRefreshing(true);
+  }
+
   return (
     <div className="bg-white shadow-md rounded-lg p-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-      <div className="flex items-center space-x-2">
-        <h2 className="text-lg font-semibold">Standard</h2>
-        <button className="text-gray-500">
-          <FaSearch />
-        </button>
-      </div>
       <div className="flex flex-wrap items-center space-x-4">
         <input
           type="text"
@@ -81,7 +92,12 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
         >
           Go
         </button>
-        
+        <button
+          onClick={handleRefresh}
+          className="bg-blue-500 text-white rounded-md px-4 py-2"
+        >
+          Refresh
+        </button>
       </div>
     </div>
   );

@@ -23,12 +23,11 @@ const Navbar: React.FC = () => {
           <Link to="/">Shot News</Link>
         </div>
         <nav className="hidden md:flex space-x-4">
-          <Link to="/cycling" className="hover:underline">Cycling</Link>
-          <Link to="/football" className="hover:underline">Football</Link>
-          <Link to="/basketball" className="hover:underline">Basketball</Link>
-          <Link to="/tennis" className="hover:underline">Tennis</Link>
-          <Link to="/running" className="hover:underline">Running</Link>
-          <Link to="/badminton" className="hover:underline">Badminton</Link>
+          <Link to="/business" className="hover:underline">Business </Link>
+          <Link to="/tarvel" className="hover:underline">Travel</Link>
+          <Link to="/basketball" className="hover:underline">Hollywood</Link>
+          <Link to="/tennis" className="hover:underline">Technology</Link>
+          <Link to="/running" className="hover:underline">Sports</Link>
         </nav>
         <div className="hidden md:flex space-x-4 items-center">
           {isAuthenticated ? (

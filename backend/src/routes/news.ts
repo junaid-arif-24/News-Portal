@@ -87,7 +87,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const news = await News.findByIdAndUpdate(id, { $inc: { views: 1 } }, { new: true });
+    const news = await News.findByIdAndUpdate(id, { $inc: { views: 1 } }, { new: true }).populate('category', 'name').exec();
     if (!news) {
       return res.status(404).json({ message: 'News not found' });
     }
@@ -126,6 +126,52 @@ router.delete('/:id', auth, checkRole(['admin']), async (req: Request, res: Resp
   }
 });
 
+
+// Get relatable news based on category and tags
+router.get('/relatable/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const currentNews = await News.findById(id).populate('category');
+    if (!currentNews) {
+      return res.status(404).json({ message: 'News not found' });
+    }
+
+    const relatableNews = await News.find({
+      _id: { $ne: id },
+      category: currentNews.category,
+      tags: { $in: currentNews.tags },
+    }).limit(4);
+
+    res.status(200).json(relatableNews);
+  } catch (error) {
+    console.error('Error fetching relatable news', error);
+    res.status(500).json({ message: 'Error fetching relatable news', error });
+  }
+});
+
+router.get('/:id/saved', auth, async (req: AuthRequest, res: Response) => {
+  // console.log("userId",req.userId)
+  const { id } = req.params;
+
+  if (!req.userId) {
+    return res.status(401).json({ message: 'User not authenticated' });
+  }
+
+  try {
+    const user = await User.findById(req.userId).populate('savedNews');
+    // console.log("user",user)
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ savedNews: user.savedNews });
+  } catch (error) {
+    res.status(400).json({ message: 'Error retrieving saved news', error });
+  }
+});
+
 // Save news
 router.post('/:id/save', auth, async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
@@ -158,53 +204,37 @@ router.post('/:id/save', auth, async (req: AuthRequest, res: Response) => {
   }
 });
 
-router.get('/all-save-news', auth, async (req: AuthRequest, res: Response) => {
+// Unsave news
+router.post('/:id/unsave', auth, async (req: AuthRequest, res: Response) => {
+  const { id } = req.params;
+
   if (!req.userId) {
     return res.status(401).json({ message: 'User not authenticated' });
   }
 
   try {
-    const user = await User.findById(req.userId).populate('savedNews');
+    const user = await User.findById(req.userId);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.status(200).json({ savedNews: user.savedNews });
+    const newsId = new mongoose.Types.ObjectId(id);
+
+    if (user.savedNews && user.savedNews.includes(newsId)) {
+      user.savedNews = user.savedNews.filter(savedNewsId => !savedNewsId.equals(newsId));
+      await user.save();
+    }
+
+    res.status(200).json({ message: 'News unsaved' });
   } catch (error) {
-    res.status(400).json({ message: 'Error retrieving saved news', error });
+    res.status(400).json({ message: 'Error unsaving news', error });
   }
-})
+});
 
-// Add a comment to news
-router.post('/:id/comments', auth, async (req: AuthRequest, res: Response) => {
-    const { id } = req.params;
-    const { text } = req.body;
-  
-    if (!req.userId) {
-      return res.status(401).json({ message: 'User not authenticated' });
-    }
-  
-    try {
-      const comment = new Comment({ text, user: req.userId, news: new mongoose.Types.ObjectId(id) });
-      await comment.save();
-      res.status(201).json(comment);
-    } catch (error) {
-      res.status(400).json({ message: 'Error adding comment', error });
-    }
-  });
-  
-  // Get comments for a news article
-  router.get('/:id/comments', async (req: Request, res: Response) => {
-    const { id } = req.params;
-    try {
-      const comments = await Comment.find({ news: new mongoose.Types.ObjectId(id) }).populate('user', 'email');
-      res.status(200).json(comments);
-    } catch (error) {
-      res.status(400).json({ message: 'Error fetching comments', error });
-    }
-  });
 
+
+  
   // Get trending news
 router.get('/trending', async (req, res) => {
     try {

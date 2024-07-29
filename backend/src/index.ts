@@ -2,6 +2,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 import authRoutes from './routes/auth';
 import categoryRoutes from './routes/category';
+import commentRoutes from './routes/comment';
+
+
 import newsRoutes from './routes/news';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -35,6 +38,8 @@ mongoose.connect(process.env.MONGODB_URL as string).then(() => {
 app.use('/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/news', newsRoutes);
+app.use('/api/comments', commentRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');

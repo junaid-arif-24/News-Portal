@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Comments from '../components/Comments';
+import { toast } from 'react-toastify';
+import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
+
+interface Category {
+  _id: string;
+  name: string;
+}
 
 interface News {
   _id: string;
@@ -10,31 +17,45 @@ interface News {
   date: string;
   time: string;
   images: string[];
-  category: string;
+  category: Category;
   tags: string[];
   visibility: string;
   views: number;
 }
 
-const fetchTrendingNews = async (setTrendingNews: React.Dispatch<React.SetStateAction<News[]>>) => {
+const fetchRelatableNews = async (newsId: string, setRelatableNews: React.Dispatch<React.SetStateAction<News[]>>) => {
   try {
-    const response = await axios.get<News[]>('/api/news/trending');
-    setTrendingNews(response.data);
+    const response = await axios.get<News[]>(`${process.env.REACT_APP_API_BASE_URL}/api/news/relatable/${newsId}`);
+    setRelatableNews(response.data);
   } catch (error) {
-    console.error('Error fetching trending news', error);
+    console.error('Error fetching relatable news', error);
   }
 };
 
 const NewsDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [news, setNews] = useState<News | null>(null);
-  const [trendingNews, setTrendingNews] = useState<News[]>([]);
+  const [relatableNews, setRelatableNews] = useState<News[]>([]);
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchNewsDetails = async () => {
       try {
-        const response = await axios.get<News>(`/api/news/${id}`);
+        const response = await axios.get<News>(`${API_BASE_URL}/api/news/${id}`);
         setNews(response.data);
+
+        // Check if news is saved
+        const savedResponse = await axios.get(`${API_BASE_URL}/api/news/${id}/saved`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
+        const savedNewsIds = savedResponse.data.savedNews.map((news: any) => news._id);
+        setIsSaved(savedNewsIds.includes(id));
+        
       } catch (error) {
         console.error('Error fetching news details', error);
       }
@@ -43,56 +64,116 @@ const NewsDetails: React.FC = () => {
   }, [id]);
 
   useEffect(() => {
-    fetchTrendingNews(setTrendingNews);
-  }, []);
+    if (id) {
+      fetchRelatableNews(id, setRelatableNews);
+    }
+  }, [id]);
+
+  function formatDate(date: string) {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+
+
+
+  const handleSaveToggle = async () => {
+    try {
+      if (isSaved) {
+        await axios.post(`${API_BASE_URL}/api/news/${id}/unsave`, {}, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        toast.success('News has been unsaved');
+      } else {
+        await axios.post(`${API_BASE_URL}/api/news/${id}/save`, {}, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        toast.success('News has been saved');
+      }
+      setIsSaved(!isSaved);
+    } catch (error) {
+      console.error('Error saving news', error);
+      toast.error('Failed to save/unsave news');
+    }
+  };
+  
 
   if (!news) return <div className="flex justify-center items-center h-screen">Loading...</div>;
 
   return (
     <div className="container mx-auto p-4">
       <div className="bg-white shadow-md rounded-lg p-6">
-        <div className="mb-4">
-          <h1 className="text-3xl font-bold">{news.title}</h1>
-          <p className="text-gray-600 mt-2">
-            {news.date} &bull; {news.time} &bull; {news.views} views
-          </p>
+        <div className="mb-4 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold">{news.title}</h1>
+            <p className="text-gray-600 mt-2">
+              {formatDate(news.date)} &bull; {news.time} &bull; {news.views} views
+            </p>
+          </div>
+
+
+<button
+  onClick={handleSaveToggle}
+  className={`text-2xl ${isSaved ? 'text-red-500' : 'text-gray-500'}`}
+  aria-label={isSaved ? 'Unsave' : 'Save'}
+>
+  {isSaved ? <FaBookmark /> : <FaRegBookmark />}
+</button>
+
         </div>
         <div className="mb-4">
           {news.images.map((image, index) => (
-            <img key={index} src={image} alt={`news-${index}`} className="w-full h-auto rounded mb-4" />
+            <img key={index} src={image} alt={`news-${index}`} className="w-full h-96 rounded mb-4" />
           ))}
         </div>
         <div className="mb-4">
           <p className="text-lg">{news.description}</p>
         </div>
         <div className="mb-4">
-          <span className="font-semibold">Category:</span> {news.category}
+          <span className="font-semibold">Category:</span> {news.category.name}
         </div>
         <div className="mb-4">
-          <span className="font-semibold">Tags:</span> {news.tags.join(', ')}
+          <div className="flex items-center">
+            <span className="font-semibold mr-2">Tags:</span>
+            <div className="flex flex-wrap">
+              {news.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
         <div className="mb-4">
           <span className="font-semibold">Visibility:</span> {news.visibility}
         </div>
 
-        {/* Trending News Section */}
+        {/* Relatable News Section */}
         <div className="mt-8">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold">Trending News</h2>
-            <a href="/trending-news" className="text-red-500 hover:underline">See all &rarr;</a>
+            <h2 className="text-2xl font-bold">Relatable News</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {trendingNews.map((trendingNewsItem) => (
-              <div key={trendingNewsItem._id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src={trendingNewsItem.images[0]} alt={trendingNewsItem.title} className="w-full h-48 object-cover"/>
+            {relatableNews.map((newsItem) => (
+              <div key={newsItem._id} className="bg-gray-100 rounded-lg shadow-md overflow-hidden">
+                <img src={newsItem.images[0]} alt={newsItem.title} className="w-full h-48 object-cover" />
                 <div className="p-4">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-gray-500">{trendingNewsItem.category}</span>
-                    <span className="text-sm text-gray-500">{trendingNewsItem.date}</span>
+                    <span className="text-sm text-gray-500">{newsItem.category.name}</span>
+                    <span className="text-sm text-gray-500">{formatDate(newsItem.date)}</span>
                   </div>
-                  <h3 className="text-lg font-semibold">{trendingNewsItem.title}</h3>
-                  <p className="text-gray-600 text-sm">{trendingNewsItem.description}</p>
-                  <a href={`/news/${trendingNewsItem._id}`} className="text-blue-500 hover:underline text-sm mt-2 block">Read more</a>
+                  <h3 className="text-lg font-semibold">{newsItem.title}</h3>
+                  <p className="text-gray-600 text-sm">{newsItem.description.substring(0, 100)}....</p>
+                  <a href={`/news/${newsItem._id}`} className="text-blue-500 hover:underline text-sm mt-2 block">Read more</a>
                 </div>
               </div>
             ))}
@@ -100,7 +181,7 @@ const NewsDetails: React.FC = () => {
         </div>
 
         <div className="mt-8">
-          <h2 className="text-2xl font-bold mb-4">Comments</h2>
+          {/* <h2 className="text-2xl font-bold mb-4">Comments</h2> */}
           {id ? <Comments newsId={id} /> : null}
         </div>
       </div>

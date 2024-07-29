@@ -4,7 +4,6 @@ import checkRole from '../middleware/roleMiddleware';
 import upload from '../utils/multer';
 import News from '../models/News';
 import User from '../models/User';
-import Comment from '../models/Comment';
 import mongoose from 'mongoose';
 import { v2 as cloudinary } from 'cloudinary';
 import multer from 'multer';

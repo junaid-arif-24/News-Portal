@@ -48,41 +48,41 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
   }
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+    <div className="bg-white shadow-md rounded-lg mx-5 p-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
       <div className="flex flex-wrap items-center space-x-4">
         <input
           type="text"
           placeholder="Title"
           value={title}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
-          className="border border-gray-300 rounded-md p-2"
+          className="border border-gray-300 rounded-md p-1"
         />
         <input
           type="text"
           placeholder="Tags (comma separated)"
           value={tags}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setTags(e.target.value)}
-          className="border border-gray-300 rounded-md p-2"
+          className="border border-gray-300 rounded-md p-1"
         />
         <input
           type="text"
           placeholder="Description"
           value={description}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)}
-          className="border border-gray-300 rounded-md p-2"
+          className="border border-gray-300 rounded-md p-1"
         />
         <input
           type="date"
           value={date}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setDate(e.target.value)}
-          className="border border-gray-300 rounded-md p-2"
+          className="border border-gray-300 rounded-md p-1"
         />
         <input
           type="text"
           placeholder="Category"
           value={category}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setCategory(e.target.value)}
-          className="border border-gray-300 rounded-md p-2"
+          className="border border-gray-300 rounded-md p-1"
         />
       </div>
       <div className="flex items-center space-x-2">

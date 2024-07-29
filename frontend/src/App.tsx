@@ -23,10 +23,12 @@ import CreateNewsPage from './pages/CreateNewsPage';
 import ManageNews from './pages/ManageNews';
 import ManageCategories from './pages/CategoryManagement';
 import ManageCommentsPage from './pages/ManageCommentsPage';
+import CategoryPage from './pages/CategoryPage';
 
 function App() {
   return (
-    <AuthProvider>
+    <div className='bg-gray-100'>
+  <AuthProvider>
       <>
       <Navbar />
       <div className="App">
@@ -35,6 +37,8 @@ function App() {
           <Route path="/news/:id" element={<NewsDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/category" element={<CategoryPage />} />
+
           {/* <Route path="profile" element={<UserProfile />} /> */}
           
           
@@ -70,6 +74,8 @@ function App() {
       </>
       
     </AuthProvider>
+    </div>
+  
   );
 }
 

@@ -80,7 +80,14 @@ router.post('/logout', (req: Request, res: Response) => {
 router.get('/user', auth, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId; // Get the userId from the request
-    const user = await User.findById(userId).select('-password'); // Exclude the password field
+    const user = await User.findById(userId).select('-password').populate('subscriptions', 'name').populate({
+      path: 'savedNews',
+      select: 'title date time images category',
+      populate: {
+        path: 'category',
+        select: 'name',
+      },
+    }); // Exclude the password field
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });

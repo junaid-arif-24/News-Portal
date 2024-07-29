@@ -18,6 +18,8 @@ import CategoryIcon from "@mui/icons-material/Category";
 import CloseIcon from "@mui/icons-material/Close";
 import CommentIcon from "@mui/icons-material/Comment";
 import { Link, Route, Routes } from "react-router-dom";
+import ManageNews from "./ManageNews";
+import UserProfile from "./UserProfile";
 // import CreateNewsPage from "./CreateNewsPage";
 // import UserProfile from "./UserProfile";
 // import ManageNews from "./ManageNews";
@@ -49,30 +51,34 @@ const AdminDashboard: React.FC = () => {
         </button>
       </div>
       <List>
-        <ListItem component={Link} to="/profile">
+        {/* <ListItem component={Link} to="/profile">
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
           <ListItemText primary="User Profile" />
-        </ListItem>
+        </ListItem> */}
+
         <ListItem component={Link} to="/create-news">
           <ListItemIcon>
             <CreateIcon />
           </ListItemIcon>
           <ListItemText primary="Create News" />
         </ListItem>
+        <Divider/>
         <ListItem component={Link} to="/manage-news">
           <ListItemIcon>
             <ArticleIcon />
           </ListItemIcon>
           <ListItemText primary="Manage News " />
         </ListItem>
+        <Divider/>
         <ListItem component={Link} to="/manage-category">
           <ListItemIcon>
             <CategoryIcon />
           </ListItemIcon>
           <ListItemText primary="Manage Category " />
         </ListItem>
+        <Divider/>
         <ListItem component={Link} to="/manage-comments">
           <ListItemIcon>
             <CommentIcon />
@@ -85,7 +91,7 @@ const AdminDashboard: React.FC = () => {
   );
 
   return (
-    <div className="flex">
+    <div className="flex bg-gray-100">
       <CssBaseline />
 
       <Drawer
@@ -120,64 +126,20 @@ const AdminDashboard: React.FC = () => {
           padding: "10px",
           marginLeft: drawerOpen ? drawerWidth : 0,
           transition: "margin 0.3s",
+          width:"100%"
         }}
       >
         <Toolbar />
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis,
-          sequi ducimus at repellat cum illum laboriosam illo eveniet enim
-          corporis fugiat officia provident nostrum. Corrupti quibusdam
-          laboriosam neque illum, quod quam amet accusamus? Possimus, odit
-          repellendus vel perferendis molestias sunt animi ullam. Ducimus eos
-          officia laborum ut? Deleniti similique vitae nemo perspiciatis odio
-          laudantium unde voluptas dignissimos nisi incidunt id, doloribus
-          mollitia enim quis. Delectus voluptas, adipisci expedita deleniti ab
-          mollitia. Cumque unde excepturi beatae saepe quia, fuga, nulla
-          expedita tenetur repellat ullam similique corrupti deserunt quidem
-          voluptate tempore! Aliquam omnis modi vel est tempora similique optio
-          maxime, ipsa nesciunt, quos voluptatum aliquid quidem tempore non
-          suscipit inventore. Eligendi ipsam voluptate quis aliquam perferendis
-          repellendus enim, tempora dignissimos, temporibus minus doloremque
-          dolorum amet odio vel, repudiandae maiores eum excepturi. Rem officia,
-          est reprehenderit iusto voluptate, quae delectus quos temporibus
-          eligendi laborum debitis eius odit adipisci id natus cum autem eos
-          voluptatem ratione recusandae nemo ipsam exercitationem quasi.
-          Reiciendis vitae doloremque perspiciatis esse quam dolor ipsam
-          repudiandae. Commodi ea quibusdam, error, laborum minima et
-          necessitatibus voluptatibus quo quas ducimus soluta? Quae vel
-          repellendus blanditiis praesentium ad molestiae, obcaecati, modi magni
-          distinctio quia beatae explicabo autem inventore doloremque error
-          illum, ipsam temporibus iste velit unde quisquam reiciendis. Nihil
-          dolorem at, rem dignissimos provident vel tempora laboriosam ullam
-          eveniet ipsam enim hic nisi culpa recusandae numquam quos, earum
-          tempore dicta adipisci? Dolore ab fugit impedit sint repellendus
-          assumenda consequatur natus eum aut? Modi vero, officia consequatur
-          nobis mollitia voluptatum repudiandae incidunt blanditiis ullam
-          distinctio, fugit unde dolor animi velit facere magni eum quisquam
-          esse minima nostrum voluptas. Tenetur magnam enim voluptatem
-          dignissimos accusantium. Cumque illo ut veritatis quae pariatur earum.
-          Ullam dolorem natus aliquid obcaecati similique, provident laudantium
-          accusantium tempore earum. Repellat nobis ad iste assumenda incidunt
-          officiis. Beatae recusandae quos obcaecati, eaque error voluptatibus
-          ab, dolore a atque voluptas nihil ratione tenetur enim quidem facere
-          alias nostrum numquam accusamus fuga earum veniam voluptatum
-          reiciendis qui. Doloremque beatae, alias animi ullam rerum perferendis
-          ipsam unde impedit maiores porro non esse libero itaque deserunt
-          molestiae. Vel officia dolore officiis maiores? Id amet quibusdam
-          consequuntur quod obcaecati maiores tenetur dolor aperiam eveniet
-          cumque quis, iusto debitis labore ducimus consequatur consectetur
-          animi temporibus accusantium blanditiis nihil explicabo sit ipsa in.
-          Eius temporibus similique, delectus molestias, magni reiciendis
-          tempore cum atque maxime incidunt blanditiis expedita quam sit iure
-          nisi, repudiandae eaque iusto non veritatis? Alias sit delectus,
-          labore aspernatur atque maxime, adipisci praesentium, quaerat
-          architecto sapiente distinctio. Provident nulla suscipit, fugiat nemo
-          debitis repudiandae corporis quidem est consequuntur culpa labore! Et,
-          unde fugiat! Accusantium dolorem, a magni soluta, iure illum officiis
-          atque repellendus perferendis, reiciendis alias temporibus
-          reprehenderit esse error dolores fugit consequatur molestias eius
-          iusto distinctio facere. Ullam ut vero molestiae.
-        </p>
+        {/* <button onClick={handleDrawerToggle} className="text-2xl font-bold px-2 py-4  text-white bg-black rounded absolute left-1 ">
+          {">"}
+        </button> */}
+        <button
+          onClick={handleDrawerToggle}
+          className="text-2xl font-bold px-2 py-4 text-white bg-black rounded fixed left-0 top-20 md:left-1 md:top-auto  md:absolute"
+        >
+          {">"}
+        </button>
+        <UserProfile/>
       </main>
     </div>
   );

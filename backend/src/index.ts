@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import authRoutes from './routes/auth';
 import categoryRoutes from './routes/category';
 import commentRoutes from './routes/comment';
+import UserRoutes from './routes/user';
+
 
 
 import newsRoutes from './routes/news';
@@ -39,7 +41,7 @@ app.use('/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/comments', commentRoutes);
-
+app.use('/api/user', UserRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');

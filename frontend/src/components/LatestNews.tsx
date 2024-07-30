@@ -10,12 +10,13 @@ interface News {
   images: string[];
   time: string;
   date: string;
-  // Remove author if it's not in the API response
+  category: string;
+  visibility: string;
 }
 
 const LatestNews: React.FC = () => {
   const [latestNews, setLatestNews] = useState<News[]>([]);
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL ;
   const navigate  = useNavigate();
   useEffect(() => {
     fetchLatestNews();
@@ -32,7 +33,9 @@ const LatestNews: React.FC = () => {
 
   // Check if there is at least one news item to display
   if (latestNews.length === 0) {
-    return <p>Loading...</p>; // Or any other loading state you prefer
+    return  <div className="flex justify-center items-center h-64">
+    <p className="text-4xl font-semibold text-gray-700">No news available</p>
+  </div>
   }
 
   return (

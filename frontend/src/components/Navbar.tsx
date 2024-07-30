@@ -23,11 +23,11 @@ const Navbar: React.FC = () => {
           <Link to="/">Shot News</Link>
         </div>
         <nav className="hidden md:flex space-x-4">
-          <Link to="/business" className="hover:underline">Business </Link>
-          <Link to="/tarvel" className="hover:underline">Travel</Link>
-          <Link to="/basketball" className="hover:underline">Hollywood</Link>
-          <Link to="/tennis" className="hover:underline">Technology</Link>
-          <Link to="/running" className="hover:underline">Sports</Link>
+          <Link to="/" className="hover:underline">Business </Link>
+          <Link to="/" className="hover:underline">Travel</Link>
+          <Link to="/" className="hover:underline">Hollywood</Link>
+          <Link to="/" className="hover:underline">Technology</Link>
+          <Link to="/" className="hover:underline">Sports</Link>
           <Link to="/catgory" className="hover:underline">All Categories</Link>
 
         </nav>
@@ -71,11 +71,11 @@ const Navbar: React.FC = () => {
       {menuOpen && (
         <div className="md:hidden mt-4">
           <nav className="flex flex-col space-y-2">
-          <Link to="/business" className="hover:underline" onClick={toggleMenu} >Business </Link>
-          <Link to="/tarvel" className="hover:underline" onClick={toggleMenu} >Travel</Link>
-          <Link to="/basketball" className="hover:underline" onClick={toggleMenu} >Hollywood</Link>
-          <Link to="/tennis" className="hover:underline" onClick={toggleMenu} >Technology</Link>
-          <Link to="/running" className="hover:underline" onClick={toggleMenu} >Sports</Link>
+          <Link to="/" className="hover:underline" onClick={toggleMenu} >Business </Link>
+          <Link to="/" className="hover:underline" onClick={toggleMenu} >Travel</Link>
+          <Link to="/" className="hover:underline" onClick={toggleMenu} >Hollywood</Link>
+          <Link to="/" className="hover:underline" onClick={toggleMenu} >Technology</Link>
+          <Link to="/" className="hover:underline" onClick={toggleMenu} >Sports</Link>
           <Link to="/catgory" className="hover:underline" onClick={toggleMenu} >ALl Categories</Link>
             {isAuthenticated ? (
               <>

@@ -28,6 +28,8 @@ const Navbar: React.FC = () => {
           <Link to="/basketball" className="hover:underline">Hollywood</Link>
           <Link to="/tennis" className="hover:underline">Technology</Link>
           <Link to="/running" className="hover:underline">Sports</Link>
+          <Link to="/catgory" className="hover:underline">All Categories</Link>
+
         </nav>
         <div className="hidden md:flex space-x-4 items-center">
           {isAuthenticated ? (
@@ -69,12 +71,12 @@ const Navbar: React.FC = () => {
       {menuOpen && (
         <div className="md:hidden mt-4">
           <nav className="flex flex-col space-y-2">
-            <Link to="/cycling" className="hover:underline" onClick={toggleMenu}>Cycling</Link>
-            <Link to="/football" className="hover:underline" onClick={toggleMenu}>Football</Link>
-            <Link to="/basketball" className="hover:underline" onClick={toggleMenu}>Basketball</Link>
-            <Link to="/tennis" className="hover:underline" onClick={toggleMenu}>Tennis</Link>
-            <Link to="/running" className="hover:underline" onClick={toggleMenu}>Running</Link>
-            <Link to="/badminton" className="hover:underline" onClick={toggleMenu}>Badminton</Link>
+          <Link to="/business" className="hover:underline" onClick={toggleMenu} >Business </Link>
+          <Link to="/tarvel" className="hover:underline" onClick={toggleMenu} >Travel</Link>
+          <Link to="/basketball" className="hover:underline" onClick={toggleMenu} >Hollywood</Link>
+          <Link to="/tennis" className="hover:underline" onClick={toggleMenu} >Technology</Link>
+          <Link to="/running" className="hover:underline" onClick={toggleMenu} >Sports</Link>
+          <Link to="/catgory" className="hover:underline" onClick={toggleMenu} >ALl Categories</Link>
             {isAuthenticated ? (
               <>
                 {user?.role === 'admin' && (

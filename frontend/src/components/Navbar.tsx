@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
           <Link to="/" className="hover:underline">Hollywood</Link>
           <Link to="/" className="hover:underline">Technology</Link>
           <Link to="/" className="hover:underline">Sports</Link>
-          <Link to="/catgory" className="hover:underline">All Categories</Link>
+          <Link to="/category" className="hover:underline">All Categories</Link>
 
         </nav>
         <div className="hidden md:flex space-x-4 items-center">
@@ -76,7 +76,7 @@ const Navbar: React.FC = () => {
           <Link to="/" className="hover:underline" onClick={toggleMenu} >Hollywood</Link>
           <Link to="/" className="hover:underline" onClick={toggleMenu} >Technology</Link>
           <Link to="/" className="hover:underline" onClick={toggleMenu} >Sports</Link>
-          <Link to="/catgory" className="hover:underline" onClick={toggleMenu} >ALl Categories</Link>
+          <Link to="/category" className="hover:underline" onClick={toggleMenu} >ALl Categories</Link>
             {isAuthenticated ? (
               <>
                 {user?.role === 'admin' && (

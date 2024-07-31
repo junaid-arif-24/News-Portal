@@ -74,7 +74,7 @@ const ManageCommentsPage: React.FC = () => {
                 {comments.length > 0 ? comments.map(comment => (
                   <tr key={comment._id}>
                     <td className="px-4 py-2 border">{comment.user.name}</td>
-                    <td className="px-4 py-2 border">{comment.news.title ? comment.news.title : 'N/A'}</td>
+                    <td className="px-4 py-2 border">{comment.news && comment.news.title ? comment.news.title : 'N/A'}</td>
                     <td className="px-4 py-2 border">{comment.text}</td>
                     <td className="px-4 py-2 border">{formatDate(comment.date)}</td>
                     <td className="px-4 py-2 border">
@@ -100,7 +100,7 @@ const ManageCommentsPage: React.FC = () => {
             {comments.length > 0 ? comments.map(comment => (
               <div key={comment._id} className="bg-white shadow rounded-lg mb-4 p-4">
                 <h2 className="text-xl font-bold">{comment.user.name}</h2>
-                <p className="text-gray-700"><strong>News Title:</strong> {comment.news.title ? comment.news.title : 'N/A'}</p>
+                <p className="text-gray-700"><strong>News Title:</strong> {comment.news && comment.news.title ? comment.news.title : 'N/A'}</p>
                 <p className="text-gray-700"><strong>Comment:</strong> {comment.text}</p>
                 <p className="text-gray-500"><strong>Date:</strong> {formatDate(comment.date)}</p>
                 <button

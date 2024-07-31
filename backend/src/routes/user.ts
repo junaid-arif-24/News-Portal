@@ -72,4 +72,23 @@ router.post('/unsubscribe', auth, async (req: AuthRequest, res: Response) => {
   }
 });
 
+// Fetch subscribed categories
+router.get('/subscribed-categories', auth, async (req: AuthRequest, res: Response) => {
+  if (!req.userId) {
+    return res.status(401).json({ message: 'User not authenticated' });
+  }
+
+  try {
+    const user = await User.findById(req.userId).populate('subscriptions');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(user.subscriptions);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching subscribed categories', error });
+  }
+});
+
 export default router;

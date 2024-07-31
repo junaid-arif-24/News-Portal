@@ -48,7 +48,7 @@ const NewsList: React.FC<NewsListProps> = ({ newsList }) => {
               <p className="text-gray-600 text-sm mb-2">{news.description.substring(0, 100)}....</p>
               <button
                 onClick={() => handleReadMore(news._id)}
-                className="bg-blue-500 w-36 text-white rounded-md py-2 hover:underline mt-6 mx-auto"
+                className="bg-blue-500 w-36 text-white align-bottom rounded-md py-2 hover:underline mt-6 mx-auto"
               >
                 Read more
               </button>

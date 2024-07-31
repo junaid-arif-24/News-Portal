@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Loader from '../components/Loader';  // Adjust the path as necessary
+
 interface Category {
   _id: string;
   name: string;
@@ -9,11 +12,17 @@ interface Category {
 
 const CategoryPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [subscribedCategories, setSubscribedCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
-    fetchCategories();
+    const fetchData = async () => {
+      await fetchCategories();
+      await fetchSubscribedCategories();
+      setLoading(false);
+    };
+    fetchData();
   }, []);
 
   const fetchCategories = async () => {
@@ -22,8 +31,19 @@ const CategoryPage: React.FC = () => {
       setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories', error);
-    } finally {
-      setLoading(false);
+    }
+  };
+
+  const fetchSubscribedCategories = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/user/subscribed-categories`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      setSubscribedCategories(response.data.map((category: Category) => category._id));
+    } catch (error) {
+      console.error('Error fetching subscribed categories', error);
     }
   };
 
@@ -39,6 +59,7 @@ const CategoryPage: React.FC = () => {
         }
       );
       toast.success('Subscribed successfully');
+      setSubscribedCategories([...subscribedCategories, categoryId]);
     } catch (error) {
       console.error('Error subscribing', error);
     }
@@ -55,14 +76,19 @@ const CategoryPage: React.FC = () => {
           },
         }
       );
-      alert('Unsubscribed successfully');
+      toast.success('Unsubscribed successfully');
+      setSubscribedCategories(subscribedCategories.filter(id => id !== categoryId));
     } catch (error) {
       console.error('Error unsubscribing', error);
     }
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader loading={loading} />
+      </div>
+    );
   }
 
   return (
@@ -79,21 +105,24 @@ const CategoryPage: React.FC = () => {
               <div className="rounded-lg shadow-md bg-white p-4 flex flex-col justify-between">
                 <div>
                   <h2 className="text-xl font-semibold mb-2">{category.name}</h2>
-                  <p className='text-gray-700'>{category.description}</p>
+                  <p className="text-gray-700">{category.description}</p>
                 </div>
                 <div className="flex justify-between mt-4">
-                  <button
-                    onClick={() => handleSubscribe(category._id)}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                    Subscribe
-                  </button>
-                  <button
-                    onClick={() => handleUnsubscribe(category._id)}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                    Unsubscribe
-                  </button>
+                  {subscribedCategories.includes(category._id) ? (
+                    <button
+                      onClick={() => handleUnsubscribe(category._id)}
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Unsubscribe
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleSubscribe(category._id)}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Subscribe
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

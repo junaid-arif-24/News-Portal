@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { formatDate, formatTime } from '../utils/helper';
-
 interface News {
   _id: string;
   title: string;
@@ -19,7 +18,6 @@ interface NewsListProps {
 
 const NewsList: React.FC<NewsListProps> = ({ newsList }) => {
   const navigate = useNavigate(); // Initialize useNavigate
-
   // Function to handle navigation
   const handleReadMore = (id: string) => {
     navigate(`/news/${id}`);
@@ -35,7 +33,8 @@ const NewsList: React.FC<NewsListProps> = ({ newsList }) => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {newsList.slice(0, 8).map((news) => (
-            <div key={news._id} className="bg-white p-4 rounded-lg shadow-md flex flex-col">
+            <div key={news._id} className="bg-white p-4 rounded-lg shadow-md flex flex-col justify-between">
+              <div>
               <img
                 src={news.images[0]}
                 alt={news.title}
@@ -46,6 +45,8 @@ const NewsList: React.FC<NewsListProps> = ({ newsList }) => {
               </div>
               <h3 className="text-lg font-semibold mb-2">{news.title}</h3>
               <p className="text-gray-600 text-sm mb-2">{news.description.substring(0, 100)}....</p>
+              </div>
+            
               <button
                 onClick={() => handleReadMore(news._id)}
                 className="bg-blue-500 w-36 text-white align-bottom rounded-md py-2 hover:underline mt-6 mx-auto"

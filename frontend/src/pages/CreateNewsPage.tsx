@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-
+import Loader from '../components/Loader';
 interface Category {
   _id: string;
   name: string;
@@ -35,6 +35,8 @@ const CreateNews: React.FC = () => {
   const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [categories, setCategories] = useState<Category[]>([]);
   const [isEdit, setIsEdit] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
 
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // Replace with your actual API base URL
   const location = useLocation();
@@ -100,6 +102,7 @@ const CreateNews: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setLoading(true); // Set loading state to true
     try {
       const token = localStorage.getItem("token");
       const formData = new FormData();
@@ -146,6 +149,8 @@ const CreateNews: React.FC = () => {
     } catch (error) {
       console.error("Error creating or updating news", error);
       toast.error("Error creating or updating news");
+    } finally {
+      setLoading(false); // Set loading state to false after request completes
     }
   };
 
@@ -155,6 +160,11 @@ const CreateNews: React.FC = () => {
       <h1 className="text-3xl font-bold mb-4">
         {newsToEdit ? "Edit News" : "Create News"}
       </h1>
+      {loading ? (
+      <div className="flex justify-center items-center h-screen">
+        <Loader loading={loading} />
+      </div>
+    ) : (
       <form
         className="bg-white p-6 rounded-lg shadow-lg"
         onSubmit={handleSubmit}
@@ -350,7 +360,7 @@ const CreateNews: React.FC = () => {
         >
           {newsToEdit ? "Update News" : "Publish News"}
         </button>
-      </form>
+      </form>)}
     </div>
   );
 };

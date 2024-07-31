@@ -3,6 +3,7 @@ import SearchFilters from '../components/SearchFilters';
 import NewsList from '../components/NewsList';
 import LatestNews from '../components/LatestNews';
 import axios from 'axios';
+import Loader from '../components/Loader';
 interface News {
   _id: string;
   title: string;
@@ -18,8 +19,10 @@ interface News {
 
 const HomePage: React.FC = () => {
   const [newsList, setNewsList] = useState<News[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const fetchFilteredNews = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/api/news`, {
         
@@ -27,6 +30,9 @@ const HomePage: React.FC = () => {
       setNewsList(response.data);
     } catch (error) {
       console.error('Error fetching news', error);
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
@@ -37,12 +43,11 @@ const HomePage: React.FC = () => {
   return (
     <div>
      
-      <LatestNews />
+     {isLoading ? <Loader loading={isLoading} /> : <LatestNews />} 
 
       <SearchFilters setNewsList={setNewsList} />
-
+      {isLoading ? <Loader loading={isLoading} /> : <NewsList newsList={newsList} />} 
      
-      <NewsList newsList={newsList} />
     </div>
   );
 };

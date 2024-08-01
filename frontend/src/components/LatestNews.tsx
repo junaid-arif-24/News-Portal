@@ -40,6 +40,8 @@ const LatestNews: React.FC = () => {
 
   return (
     <div className="bg-gray-100 p-6">
+      <h1 className="text-3xl font-bold mb-6 underline">Latest News</h1>
+
       <div className="container mx-auto">
         {/* Main News Section */}
         <div className="md:flex">

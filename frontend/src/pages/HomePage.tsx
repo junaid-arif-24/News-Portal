@@ -4,6 +4,7 @@ import NewsList from '../components/NewsList';
 import LatestNews from '../components/LatestNews';
 import axios from 'axios';
 import Loader from '../components/Loader';
+import TrendingNews from '../components/TrendingNews';
 interface News {
   _id: string;
   title: string;
@@ -44,6 +45,8 @@ const HomePage: React.FC = () => {
     <div>
      
      {isLoading ? <Loader loading={isLoading} /> : <LatestNews />} 
+     {isLoading ? <Loader loading={isLoading} /> : <TrendingNews />} 
+
 
       <SearchFilters setNewsList={setNewsList} />
       {isLoading ? <Loader loading={isLoading} /> : <NewsList newsList={newsList} />} 

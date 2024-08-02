@@ -180,8 +180,16 @@ const ManageNews: React.FC = () => {
       <div className="grid grid-cols-1 gap-4">
   {newsList && newsList.length > 0 ? (
     newsList.map((news) => (
-      <div key={news._id} className="bg-white p-4 rounded shadow">
-        <h2 className="text-2xl font-bold">{news.title}</h2>
+      <div key={news._id} className="bg-white flex flex-col md:flex-row gap-10 justify-between p-4 rounded shadow">
+        <div className='md:w-96 md:h-60'>
+          <img
+            src={news.images[0]}
+            alt={news.title}
+            className="w-full h-full object-fill rounded-lg mb-4"
+          />
+        </div>
+      <div>
+      <h2 className="text-2xl font-bold">{news.title}</h2>
         <p className="text-gray-600 ">{news.description.substring(0, 300)}.....</p>
         <div className="mt-2 flex flex-wrap">
           {news.tags.map((tag, index) => (
@@ -210,6 +218,7 @@ const ManageNews: React.FC = () => {
             Delete
           </button>
         </div>
+      </div>
       </div>
     ))
   ) : (

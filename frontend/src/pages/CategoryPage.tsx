@@ -3,7 +3,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../components/Loader';  // Adjust the path as necessary
-
+import { useAuth } from '../context/AuthContext';
+import {useNavigate} from 'react-router-dom';
 interface Category {
   _id: string;
   name: string;
@@ -15,6 +16,8 @@ const CategoryPage: React.FC = () => {
   const [subscribedCategories, setSubscribedCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const {isAuthenticated} = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +51,13 @@ const CategoryPage: React.FC = () => {
   };
 
   const handleSubscribe = async (categoryId: string) => {
+    if(!isAuthenticated) {
+      toast.error('Please login to subscribe');
+      navigate('/login');
+      return;
+    }
     try {
+      
       await axios.post(
         `${API_BASE_URL}/api/user/subscribe`,
         { categoryId },
@@ -66,6 +75,11 @@ const CategoryPage: React.FC = () => {
   };
 
   const handleUnsubscribe = async (categoryId: string) => {
+    if(!isAuthenticated) {
+      toast.error('Please login to unsubscribe');
+      navigate('/login');
+      return;
+    }
     try {
       await axios.post(
         `${API_BASE_URL}/api/user/unsubscribe`,

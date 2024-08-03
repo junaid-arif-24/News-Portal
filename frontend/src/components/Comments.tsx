@@ -2,6 +2,9 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
 import { FaUserCircle } from 'react-icons/fa';
 import { formatDate } from '../utils/helper';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 interface Comment {
   _id: string;
   text: string;
@@ -21,27 +24,35 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
   const [comment, setComment] = useState<string>('');
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const token = localStorage.getItem('token');
-
+  const navigate = useNavigate();
+  const {isAuthenticated} = useAuth();
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get<Comment[]>(`${API_BASE_URL}/api/comments/${newsId}/comments`);
+      setComments(response.data);
+    } catch (error) {
+      console.error('Error fetching comments', error);
+    }
+  };
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await axios.get<Comment[]>(`${API_BASE_URL}/api/comments/${newsId}/comments`);
-        setComments(response.data);
-      } catch (error) {
-        console.error('Error fetching comments', error);
-      }
-    };
+ 
     fetchComments();
   }, [newsId]);
 
   const addComment = async () => {
+    if(!isAuthenticated) {
+      toast.error('Please login to comment');
+      navigate('/login');
+      return;
+       
+    }
     try {
       const response = await axios.post<Comment>(`${API_BASE_URL}/api/comments/${newsId}/comments`, { text: comment }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setComments([...comments, response.data]);
+      fetchComments();
       setComment('');
     } catch (error) {
       console.error('Error adding comment', error);
@@ -53,7 +64,7 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
     <div className="mt-8">
       <h2 className="text-2xl font-bold mb-4">Comments</h2>
       {comments.length === 0 ? (
-        <div className="text-center text-gray-600">No Comments Yet</div>
+        <div className="text-center text-gray-600 mb-4">No Comments Yet</div>
       ) : (
         <ul className="space-y-4 mb-4">
           {comments.map((comment) => (

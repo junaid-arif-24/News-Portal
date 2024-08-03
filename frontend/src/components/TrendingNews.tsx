@@ -57,26 +57,26 @@ const TrendingNews: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {trendingNews.slice(0, 4).map((news) => (
-            <div key={news._id} className="bg-white p-4 rounded-lg shadow-md flex flex-col justify-between">
-              <div>
-                <img
-                  src={news.images[0]}
-                  alt={news.title}
-                  className="w-full h-40 object-cover rounded-lg mb-4"
-                />
-                <div className="text-gray-500 text-sm text-right">
+            <div
+            key={news._id}
+            onClick={() => handleReadMore(news._id)}
+            className="bg-white cursor-pointer rounded-md shadow-md flex flex-col gap-1"
+          >
+            <img
+              src={news.images[0]}
+              alt={news.title}
+              className="w-full h-40 object-cover mb-1"
+            />
+            <div className="p-2 pt-0">
+            <div className="text-gray-500 text-xs text-right ">
                   <p>&bull; {formatDate(news.date)} at {formatTime(news.time)}</p>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{news.title}</h3>
-                <p className="text-gray-600 text-sm mb-2">{news.description.substring(0, 100)}....</p>
-              </div>
-              <button
-                onClick={() => handleReadMore(news._id)}
-                className="bg-blue-500 w-36 text-white align-bottom rounded-md py-2 hover:underline mt-6 mx-auto"
-              >
-                Read more
-              </button>
+              <h3 className="text-lg font-semibold mb-2">{news.title}</h3>
+              <p className="text-gray-600 text-sm mb-2">
+                {news.description.substring(0, 100)}....
+              </p>
             </div>
+          </div>
           ))}
         </div>
       )}

@@ -51,13 +51,13 @@ function App() {
             element={<AdminRoute><AdminDashboard /></AdminRoute>}
           />
           
-          <Route path="/create-news" element={<AdminRoute><CreateNewsPage /></AdminRoute>} />
+          {/* <Route path="/create-news" element={<AdminRoute><CreateNewsPage /></AdminRoute>} />
           <Route path="/manage-news" element={ <AdminRoute><ManageNews /></AdminRoute>} />
           <Route
             path="/manage-category"
             element={<AdminRoute><ManageCategories /></AdminRoute>}
           />
-          <Route path="/manage-comments" element={<AdminRoute><ManageCommentsPage /></AdminRoute>} />
+          <Route path="/manage-comments" element={<AdminRoute><ManageCommentsPage /></AdminRoute>} /> */}
 
           <Route
             path="/profile"

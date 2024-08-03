@@ -96,7 +96,7 @@ const ManageCategories: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 bg-gray-100 w-screen ">
+    <div className="container mx-auto p-4 bg-gray-100 w-full ">
       <h1 className="text-2xl font-bold mb-4">Manage Categories</h1>
 
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} closeOnClick pauseOnHover draggable />

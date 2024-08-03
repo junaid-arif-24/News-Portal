@@ -24,6 +24,7 @@ import ManageNews from './pages/ManageNews';
 import ManageCategories from './pages/CategoryManagement';
 import ManageCommentsPage from './pages/ManageCommentsPage';
 import CategoryPage from './pages/CategoryPage';
+import AllNews from './pages/AllNews';
 
 function App() {
   return (
@@ -38,6 +39,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/category" element={<CategoryPage />} />
+          <Route path="/all-news" element={<AllNews />} />
+
 
           {/* <Route path="profile" element={<UserProfile />} /> */}
           

@@ -5,6 +5,7 @@ import LatestNews from '../components/LatestNews';
 import axios from 'axios';
 import Loader from '../components/Loader';
 import TrendingNews from '../components/TrendingNews';
+import { useNavigate } from 'react-router-dom';
 interface News {
   _id: string;
   title: string;
@@ -22,6 +23,7 @@ const HomePage: React.FC = () => {
   const [newsList, setNewsList] = useState<News[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const navigate = useNavigate();
   const fetchFilteredNews = async () => {
     setIsLoading(true);
     try {
@@ -48,8 +50,9 @@ const HomePage: React.FC = () => {
      {isLoading ? <Loader loading={isLoading} /> : <TrendingNews />} 
 
 
-      <SearchFilters setNewsList={setNewsList} />
+      {/* <SearchFilters setNewsList={setNewsList} /> */}
       {isLoading ? <Loader loading={isLoading} /> : <NewsList newsList={newsList} />} 
+      <p onClick={()=>{navigate('/all-news')}} className='text-blue-500 underline text-xl cursor-pointer text-right mx-5'>{`see all ->`}</p>
      
     </div>
   );

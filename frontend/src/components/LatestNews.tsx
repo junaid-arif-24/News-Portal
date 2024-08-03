@@ -47,20 +47,22 @@ const LatestNews: React.FC = () => {
         <div className="md:flex">
           {/* Main Featured News */}
           <div className="md:w-2/3 p-4">
-            <div onClick={() => navigate(`/news/${latestNews[0]._id}`)} className="bg-white p-4 rounded-lg shadow-md cursor-pointer">
+            <div onClick={() => navigate(`/news/${latestNews[0]._id}`)} className="bg-white p-0 rounded-lg shadow-md cursor-pointer">
               {latestNews[0].images.length > 0 && (
-                <img src={latestNews[0].images[0]} alt={latestNews[0].title} className="w-full h-80 object-cover rounded-lg mb-4" />
+                <img src={latestNews[0].images[0]} alt={latestNews[0].title} className="w-full h-96 object-cover rounded-lg mb-4" />
               )}
-              <div className="flex justify-between items-center mb-2">
-                {/* Span for author has been removed as it's not in the API response */}
+              <div className='p-4'>
+              <div className="flex justify-between items-center  mb-2">
                 <span className="text-gray-500">&bull; {formatDate(latestNews[0].date)} at {formatTime(latestNews[0].time)}</span>
               </div>
               <h2 className="text-2xl font-bold mb-2">{latestNews[0].title}</h2>
               <p className="text-gray-700">{latestNews[0].description.substring(0, 100)}</p>
+              </div>
+              
             </div>
           </div>
           {/* Side News */}
-          <div className="md:w-1/3 p-4 space-y-4 max-h-[calc(100vh-110px)] overflow-y-auto">
+          <div className="md:w-1/3 p-4 space-y-4 max-h-[calc(100vh-20px)] overflow-y-auto">
             {latestNews.slice(1, 4).map((news) => (
               <div onClick={() => navigate(`/news/${news._id}`)} key={news._id} className="bg-white p-4 rounded-lg cursor-pointer shadow-md flex">
                 {news.images.length > 0 && (

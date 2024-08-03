@@ -60,7 +60,7 @@ const TrendingNews: React.FC = () => {
             <div
             key={news._id}
             onClick={() => handleReadMore(news._id)}
-            className="bg-white cursor-pointer rounded-md shadow-md flex flex-col gap-1"
+            className="bg-white cursor-pointer rounded-md shadow-md flex flex-col gap-1 transition-transform transform hover:scale-105"
           >
             <img
               src={news.images[0]}

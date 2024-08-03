@@ -48,7 +48,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
   }
 
   return (
-    <div className="bg-white shadow-md rounded-lg mx-5 p-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+    <div className="bg-white shadow-md  mx-0 p-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
       <div className="flex flex-wrap items-center space-x-4">
         <input
           type="text"

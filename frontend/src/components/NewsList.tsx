@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
 import { formatDate, formatTime } from "../utils/helper";
+import parse from 'html-react-parser';
 
 interface News {
   _id: string;
@@ -55,7 +56,7 @@ const NewsList: React.FC<NewsListProps> = ({ newsList }) => {
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{news.title}</h3>
                 <p className="text-gray-600 text-sm mb-2">
-                  {news.description.substring(0, 100)}....
+                  {parse(news.description.substring(0, 100))}....
                 </p>
               </div>
             </div>

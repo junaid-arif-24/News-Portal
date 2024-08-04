@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { formatDate, formatTime } from '../utils/helper';
+import parse from 'html-react-parser';
 
 interface News {
   _id: string;
@@ -73,7 +74,7 @@ const TrendingNews: React.FC = () => {
                 </div>
               <h3 className="text-lg font-semibold mb-2">{news.title}</h3>
               <p className="text-gray-600 text-sm mb-2">
-                {news.description.substring(0, 100)}....
+                {parse(news.description.substring(0, 100))}....
               </p>
             </div>
           </div>

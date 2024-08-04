@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {formatDate, formatTime} from '../utils/helper';
 import { useNavigate } from 'react-router-dom';
+import parse from 'html-react-parser';
 // Adjust the News interface based on the API response
 interface News {
   _id: string;
@@ -56,7 +57,7 @@ const LatestNews: React.FC = () => {
                 <span className="text-gray-500">&bull; {formatDate(latestNews[0].date)} at {formatTime(latestNews[0].time)}</span>
               </div>
               <h2 className="text-2xl font-bold mb-2">{latestNews[0].title}</h2>
-              <p className="text-gray-700">{latestNews[0].description.substring(0, 100)}</p>
+              <p className="text-gray-700">{parse(latestNews[0].description.substring(0, 100))}</p>
               </div>
               
             </div>

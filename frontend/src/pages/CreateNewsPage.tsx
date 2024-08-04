@@ -3,7 +3,10 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+import "react-quill/dist/quill.snow.css"; // Import styles for react-quill
+import ReactQuill from "react-quill";
 import Loader from '../components/Loader';
+
 interface Category {
   _id: string;
   name: string;
@@ -36,7 +39,6 @@ const CreateNews: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
-
 
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // Replace with your actual API base URL
   const location = useLocation();
@@ -145,7 +147,7 @@ const CreateNews: React.FC = () => {
       setTags([]);
       setCategory("");
       setVisibility("public");
-      navigate("/manage-news");
+      navigate("/admin/manage-news");
     } catch (error) {
       console.error("Error creating or updating news", error);
       toast.error("Error creating or updating news");
@@ -161,206 +163,204 @@ const CreateNews: React.FC = () => {
         {newsToEdit ? "Edit News" : "Create News"}
       </h1>
       {loading ? (
-      <div className="flex justify-center items-center h-screen">
-        <Loader loading={loading} />
-      </div>
-    ) : (
-      <form
-        className="bg-white p-6 rounded-lg shadow-lg"
-        onSubmit={handleSubmit}
-      >
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="title"
-          >
-            Title
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            placeholder="Title"
-            value={title}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setTitle(e.target.value)
-            }
-            required
-          />
+        <div className="flex justify-center items-center h-screen">
+          <Loader loading={loading} />
         </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="description"
-          >
-            Description
-          </label>
-          <textarea
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none resize-none focus:shadow-outline"
-            rows={10}
-           
-            placeholder="Description"
-            value={description}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-              setDescription(e.target.value)
-            }
-            required
-          ></textarea>
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="images"
-          >
-            Images
-          </label>
-          <input
-            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-              isEdit ? "bg-gray-300" : ""
-            }`}
-            type="file"
-            multiple
-            onChange={handleImageUpload}
-            disabled={isEdit}
-          />
-          <div className="mt-2 flex flex-wrap">
-            {images.map((image, index) => (
-              <div key={index} className="relative m-1">
-                <img
-                  src={URL.createObjectURL(image)}
-                  alt={`upload-${index}`}
-                  className="w-20 h-20 object-cover rounded"
-                />
-                <button
-                  type="button"
-                  className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1"
-                  onClick={() => removeImage(image)}
-                >
-                  &times;
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="date"
-          >
-            Date
-          </label>
-          <input
-            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-              isEdit ? "bg-gray-300" : ""
-            }`}
-            type="date"
-            value={date}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setDate(e.target.value)
-            }
-            disabled={isEdit}
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="time"
-          >
-            Time
-          </label>
-          <input
-            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-              isEdit ? "bg-gray-300" : ""
-            }`}
-            type="time"
-            value={time}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setTime(e.target.value)
-            }
-            disabled={isEdit}
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="tags"
-          >
-            Tags
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            placeholder="Tags (comma or enter to add)"
-            value={tagInput}
-            onChange={handleTagInputChange}
-            onKeyDown={handleTagKeyDown}
-          />
-          <div className="mt-2">
-            {tags.map((tag, index) => (
-              <span
-                key={index}
-                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-              >
-                {tag}
-                <button
-                  className="ml-2 text-red-500"
-                  onClick={() => removeTag(tag)}
-                >
-                  &times;
-                </button>
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="category"
-          >
-            Category
-          </label>
-          <select
-            className="shadow cursor-pointer appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            value={category}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-              setCategory(e.target.value)
-            }
-            required
-          >
-            <option value="">Select Category</option>
-            {categories.map((cat) => (
-              <option key={cat._id} value={cat._id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="visibility"
-          >
-            Visibility
-          </label>
-          <select
-            className="shadow cursor-pointer appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            value={visibility}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-              setVisibility(e.target.value as "public" | "private")
-            }
-            required
-          >
-            <option value="public">Public</option>
-            <option value="private">Private</option>
-          </select>
-        </div>
-
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="submit"
+      ) : (
+        <form
+          className="bg-white p-6 rounded-lg shadow-lg"
+          onSubmit={handleSubmit}
         >
-          {newsToEdit ? "Update News" : "Publish News"}
-        </button>
-      </form>)}
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="title"
+            >
+              Title
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="text"
+              placeholder="Title"
+              value={title}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setTitle(e.target.value)
+              }
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="description"
+            >
+              Description
+            </label>
+            <ReactQuill
+              theme="snow"
+              value={description}
+              onChange={setDescription}
+              className="bg-white"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="images"
+            >
+              Images
+            </label>
+            <input
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                isEdit ? "bg-gray-300" : ""
+              }`}
+              type="file"
+              multiple
+              onChange={handleImageUpload}
+              disabled={isEdit}
+            />
+            <div className="mt-2 flex flex-wrap">
+              {images.map((image, index) => (
+                <div key={index} className="relative m-1">
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt={`upload-${index}`}
+                    className="w-20 h-20 object-cover rounded"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1"
+                    onClick={() => removeImage(image)}
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="date"
+            >
+              Date
+            </label>
+            <input
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                isEdit ? "bg-gray-300" : ""
+              }`}
+              type="date"
+              value={date}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setDate(e.target.value)
+              }
+              required
+              disabled={isEdit}
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="time"
+            >
+              Time
+            </label>
+            <input
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                isEdit ? "bg-gray-300" : ""
+              }`}
+              type="time"
+              value={time}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setTime(e.target.value)
+              }
+              required
+              disabled={isEdit}
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="tags"
+            >
+              Tags
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="text"
+              placeholder="Add tags and press Enter"
+              value={tagInput}
+              onChange={handleTagInputChange}
+              onKeyDown={handleTagKeyDown}
+            />
+            <div className="mt-2 flex flex-wrap">
+              {tags.map((tag, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                >
+                  {tag}
+                  <button
+                    type="button"
+                    className="ml-1 text-red-600"
+                    onClick={() => removeTag(tag)}
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="category"
+            >
+              Category
+            </label>
+            <select
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={category}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                setCategory(e.target.value)
+              }
+              required
+            >
+              <option value="">Select a category</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="visibility"
+            >
+              Visibility
+            </label>
+            <select
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={visibility}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                setVisibility(e.target.value as "public" | "private")
+              }
+              required
+            >
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            {newsToEdit ? "Update News" : "Create News"}
+          </button>
+        </form>
+      )}
     </div>
   );
 };

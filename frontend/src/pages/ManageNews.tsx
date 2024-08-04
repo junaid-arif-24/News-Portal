@@ -66,9 +66,10 @@ const ManageNews: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      toast.success("News deleted successfully");
+      
   
       fetchNews();
+      toast.success("News deleted successfully");
     } catch (error) {
       console.error('Error deleting news', error);
       toast.error('Error deleting news');
@@ -90,7 +91,7 @@ const ManageNews: React.FC = () => {
         <h1 className="text-3xl font-bold">Manage News</h1>
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"
-          onClick={() => navigate('/create-news')}
+          onClick={() => navigate('/admin/create-news')}
         >
           <svg
             className="w-4 h-4 mr-2"

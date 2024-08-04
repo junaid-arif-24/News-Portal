@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import parse from 'html-react-parser';
 
 interface Category {
   _id: string;
@@ -69,7 +70,6 @@ const NewsDetails: React.FC = () => {
 
         const savedNewsIds = savedResponse.data.savedNews.map((news: any) => news._id);
         setIsSaved(savedNewsIds.includes(id));
-
       } catch (error) {
         console.error('Error fetching news details', error);
       }
@@ -147,11 +147,11 @@ const NewsDetails: React.FC = () => {
           </div>
           <div className="mb-4">
             {news.images.map((image, index) => (
-              <img key={index} src={image} alt={`news-${index}`} className="w-full  rounded mb-4" />
+              <img key={index} src={image} alt={`news-${index}`} className="w-full rounded mb-4" />
             ))}
           </div>
-          <div className="mb-4">
-            <p className="text-lg">{news.description}</p>
+          <div className="mb-4 text-lg">
+            {parse(news.description)}
           </div>
           <div className="mb-4">
             <span className="font-semibold">Category:</span> {news.category.name}

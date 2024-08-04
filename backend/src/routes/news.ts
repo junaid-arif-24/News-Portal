@@ -4,8 +4,10 @@ import checkRole from '../middleware/roleMiddleware';
 import upload from '../utils/multer';
 import News from '../models/News';
 import User from '../models/User';
+import Category from '../models/Category';
 import mongoose from 'mongoose';
 import { v2 as cloudinary } from 'cloudinary';
+
 import multer from 'multer';
 const upload2 = multer();
 
@@ -80,25 +82,35 @@ router.get('/latest', async (req: Request, res: Response) => {
 
 
 // Get all news with advanced filters
+
 router.get('/', async (req, res) => {
-    const { title, description, date, tags, category,visibility } = req.query;
-  
-    const query: any = {};
-  
-    if (title) query.title = { $regex: title, $options: 'i' };
-    if (description) query.description = { $regex: description, $options: 'i' };
-    if (date) query.date = new Date(date as string);
-    if (typeof tags === 'string' && tags!=='') query.tags = { $in: tags.split(',') };
-    if (category) query.category = category;
-    if (typeof visibility === 'string') query.visibility = visibility;
-  
-    try {
-      const news = await News.find(query).populate('category', 'name');
-      res.status(200).json(news);
-    } catch (error) {
-      res.status(400).json({ message: 'Error fetching news', error });
+  const { title, description, date, tags, category, visibility } = req.query;
+
+  const query: any = {};
+
+  if (title) query.title = { $regex: title, $options: 'i' };
+  if (description) query.description = { $regex: description, $options: 'i' };
+  if (date) query.date = new Date(date as string);
+  if (typeof tags === 'string' && tags !== '') query.tags = { $in: tags.split(',') };
+  if (category) {
+    // Assuming `Category` is your category model
+    const categoryDoc = await Category.findOne({ name: category });
+    if (categoryDoc) {
+      query.category = categoryDoc._id;
+    } else {
+      return res.status(400).json({ message: 'Category not found' });
     }
-  });
+  }
+  if (typeof visibility === 'string') query.visibility = visibility;
+
+  try {
+    const news = await News.find(query).populate('category', 'name');
+    res.status(200).json(news);
+  } catch (error) {
+    res.status(400).json({ message: 'Error fetching news', error });
+  }
+});
+
   
 
 // Get news by ID

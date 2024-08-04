@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import SearchFilters from '../components/SearchFilters';
 import NewsList from '../components/NewsList';
 import LatestNews from '../components/LatestNews';
 import axios from 'axios';

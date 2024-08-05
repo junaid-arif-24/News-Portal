@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
           <button onClick={() => handleCategoryClick('Business')} className="hover:underline">Business</button>
           <button onClick={() => handleCategoryClick('Travel')} className="hover:underline">Travel</button>
           <button onClick={() => handleCategoryClick('Hollywood')} className="hover:underline">Hollywood</button>
-          <button onClick={() => handleCategoryClick('Technology')} className="hover:underline">Technology</button>
+          <button onClick={() => handleCategoryClick('Tech')} className="hover:underline">Technology</button>
           <button onClick={() => handleCategoryClick('Sports')} className="hover:underline">Sports</button>
           <button onClick={() => navigate('/category')} className="hover:underline">All Categories</button>
         </nav>
@@ -78,7 +78,7 @@ const Navbar: React.FC = () => {
             <button onClick={() => handleCategoryClick('Business')} className="hover:underline">Business</button>
             <button onClick={() => handleCategoryClick('Travel')} className="hover:underline">Travel</button>
             <button onClick={() => handleCategoryClick('Hollywood')} className="hover:underline">Hollywood</button>
-            <button onClick={() => handleCategoryClick('Technology')} className="hover:underline">Technology</button>
+            <button onClick={() => handleCategoryClick('Tech')} className="hover:underline">Technology</button>
             <button onClick={() => handleCategoryClick('Sports')} className="hover:underline">Sports</button>
             <button onClick={() => navigate('/category')} className="hover:underline">All Categories</button>
             {isAuthenticated ? (

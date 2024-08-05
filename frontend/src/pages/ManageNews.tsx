@@ -28,7 +28,7 @@ const ManageNews: React.FC = () => {
   const [searchTags, setSearchTags] = useState<string>('');
   const [searchCategory, setSearchCategory] = useState<string>('');
   const [searchVisibility, setSearchVisibility] = useState<string>('public');
-  const [selectedNews, setSelectedNews] = useState<News | null>(null);
+  const [selectedNews, ] = useState<News | null>(null);
   const navigate = useNavigate();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 

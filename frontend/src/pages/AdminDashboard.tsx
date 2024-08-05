@@ -15,7 +15,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import ArticleIcon from "@mui/icons-material/Article";
 import CategoryIcon from "@mui/icons-material/Category";
 import CommentIcon from "@mui/icons-material/Comment";
-import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import {  Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ManageNews from "./ManageNews";
 import UserProfile from "./UserProfile";
 import CreateNews from "./CreateNewsPage";
@@ -49,16 +49,16 @@ useEffect(() => {
           },
         }}
       >
-        <Box sx={{ width: drawerWidth }} role="presentation">
+         <Box sx={{ width: drawerWidth }} role="presentation">
           <div className="text-2xl flex justify-around items-center font-bold bg-black py-4">
-            <Link to="/" className="text-white">
+            <p onClick={() => navigate("/")} className="text-white cursor-pointer">
               Shot News
-            </Link>
+            </p>
           </div>
           <List>
             <ListItem
-              component={Link}
-              to="/admin/profile"
+              button
+              onClick={() => navigate("/admin/profile")}
               className={getLinkClass("/admin/profile")}
             >
               <ListItemIcon>
@@ -68,8 +68,8 @@ useEffect(() => {
             </ListItem>
             <Divider />
             <ListItem
-              component={Link}
-              to="/admin/create-news"
+              button
+              onClick={() => navigate("/admin/create-news")}
               className={getLinkClass("/admin/create-news")}
             >
               <ListItemIcon>
@@ -79,8 +79,8 @@ useEffect(() => {
             </ListItem>
             <Divider />
             <ListItem
-              component={Link}
-              to="/admin/manage-news"
+              button
+              onClick={() => navigate("/admin/manage-news")}
               className={getLinkClass("/admin/manage-news")}
             >
               <ListItemIcon>
@@ -90,8 +90,8 @@ useEffect(() => {
             </ListItem>
             <Divider />
             <ListItem
-              component={Link}
-              to="/admin/manage-category"
+              button
+              onClick={() => navigate("/admin/manage-category")}
               className={getLinkClass("/admin/manage-category")}
             >
               <ListItemIcon>
@@ -101,8 +101,8 @@ useEffect(() => {
             </ListItem>
             <Divider />
             <ListItem
-              component={Link}
-              to="/admin/manage-comments"
+              button
+              onClick={() => navigate("/admin/manage-comments")}
               className={getLinkClass("/admin/manage-comments")}
             >
               <ListItemIcon>
@@ -116,8 +116,6 @@ useEffect(() => {
       </Drawer>
 
       <main className="w-full">
-        {/* <Toolbar /> */}
-        {/* <div className="container mx-auto p-4 bg-white shadow-md rounded-lg w-full"> */}
         <Routes>
           <Route path="profile" element={<UserProfile />} />
           <Route path="create-news" element={<CreateNews />} />

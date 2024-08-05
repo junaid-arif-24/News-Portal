@@ -119,11 +119,11 @@ useEffect(() => {
         {/* <Toolbar /> */}
         {/* <div className="container mx-auto p-4 bg-white shadow-md rounded-lg w-full"> */}
         <Routes>
-          <Route path="/profile" element={<UserProfile />} />
+          <Route path="profile" element={<UserProfile />} />
           <Route path="create-news" element={<CreateNews />} />
-          <Route path="/manage-news" element={<ManageNews />} />
-          <Route path="/manage-category" element={<ManageCategories />} />
-          <Route path="/manage-comments" element={<ManageCommentsPage />} />
+          <Route path="manage-news" element={<ManageNews />} />
+          <Route path="manage-category" element={<ManageCategories />} />
+          <Route path="manage-comments" element={<ManageCommentsPage />} />
           {/* <Route path="/" element={<Navigate to="/admin/profile" />} /> */}
           <Route path="*" element={<NotFound />} />
         </Routes>

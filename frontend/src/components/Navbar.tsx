@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
               {user?.role === 'admin' && (
                 <Link to="/admin/dashboard" className="hover:underline">Admin Dashboard</Link>
               )}
-              <Link to="/profile" className="hover:underline">Profile</Link>
+             {user?.role === 'subscriber' && <Link to="/profile" className="hover:underline">Profile</Link>}
               <button onClick={handleLogout} className="hover:underline">Logout</button>
             </>
           ) : (

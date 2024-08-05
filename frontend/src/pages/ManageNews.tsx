@@ -55,7 +55,7 @@ const ManageNews: React.FC = () => {
   };
 
   const handleEdit = (news: News) => {
-    navigate('/create-news', { state: news  });
+    navigate('/admin/create-news', { state: news  });
   };
 
   const handleDelete = async (id: string) => {
@@ -182,7 +182,7 @@ const ManageNews: React.FC = () => {
   {newsList && newsList.length > 0 ? (
     newsList.map((news) => (
       <div key={news._id} className="bg-white flex flex-col md:flex-row gap-10 justify-between p-4 rounded shadow">
-        <div className='md:w-96 md:h-60'>
+        <div className='md:w-[700px] md:h-auto'>
           <img
             src={news.images[0]}
             alt={news.title}

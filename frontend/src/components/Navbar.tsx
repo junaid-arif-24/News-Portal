@@ -16,6 +16,11 @@ const Navbar: React.FC = () => {
     setMenuOpen(!menuOpen);
   };
 
+  const handleCategoryClick = (category: string) => {
+    navigate('/all-news', { state: { category } });
+    toggleMenu();
+  };
+
   return (
     <header className="bg-black text-white p-4">
       <div className="flex justify-between items-center">
@@ -23,13 +28,12 @@ const Navbar: React.FC = () => {
           <Link to="/">Shot News</Link>
         </div>
         <nav className="hidden md:flex space-x-4">
-          <Link to="/" className="hover:underline">Business </Link>
-          <Link to="/" className="hover:underline">Travel</Link>
-          <Link to="/" className="hover:underline">Hollywood</Link>
-          <Link to="/" className="hover:underline">Technology</Link>
-          <Link to="/" className="hover:underline">Sports</Link>
-          <Link to="/category" className="hover:underline">All Categories</Link>
-
+          <button onClick={() => handleCategoryClick('Business')} className="hover:underline">Business</button>
+          <button onClick={() => handleCategoryClick('Travel')} className="hover:underline">Travel</button>
+          <button onClick={() => handleCategoryClick('Hollywood')} className="hover:underline">Hollywood</button>
+          <button onClick={() => handleCategoryClick('Technology')} className="hover:underline">Technology</button>
+          <button onClick={() => handleCategoryClick('Sports')} className="hover:underline">Sports</button>
+          <button onClick={() => navigate('/category')} className="hover:underline">All Categories</button>
         </nav>
         <div className="hidden md:flex space-x-4 items-center">
           {isAuthenticated ? (
@@ -71,12 +75,12 @@ const Navbar: React.FC = () => {
       {menuOpen && (
         <div className="md:hidden mt-4">
           <nav className="flex flex-col space-y-2">
-          <Link to="/" className="hover:underline" onClick={toggleMenu} >Business </Link>
-          <Link to="/" className="hover:underline" onClick={toggleMenu} >Travel</Link>
-          <Link to="/" className="hover:underline" onClick={toggleMenu} >Hollywood</Link>
-          <Link to="/" className="hover:underline" onClick={toggleMenu} >Technology</Link>
-          <Link to="/" className="hover:underline" onClick={toggleMenu} >Sports</Link>
-          <Link to="/category" className="hover:underline" onClick={toggleMenu} >ALl Categories</Link>
+            <button onClick={() => handleCategoryClick('Business')} className="hover:underline">Business</button>
+            <button onClick={() => handleCategoryClick('Travel')} className="hover:underline">Travel</button>
+            <button onClick={() => handleCategoryClick('Hollywood')} className="hover:underline">Hollywood</button>
+            <button onClick={() => handleCategoryClick('Technology')} className="hover:underline">Technology</button>
+            <button onClick={() => handleCategoryClick('Sports')} className="hover:underline">Sports</button>
+            <button onClick={() => navigate('/category')} className="hover:underline">All Categories</button>
             {isAuthenticated ? (
               <>
                 {user?.role === 'admin' && (

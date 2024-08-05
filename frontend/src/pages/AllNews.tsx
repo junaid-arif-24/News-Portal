@@ -1,5 +1,5 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import SearchFilters from "../components/SearchFilters";
 import Loader from "../components/Loader";
@@ -21,10 +21,15 @@ function AllNews() {
   const [newsList, setNewsList] = useState<News[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const location = useLocation();
+  const category = location.state?.category || "";
+
   const fetchFilteredNews = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/news`, {});
+      const response = await axios.get(`${API_BASE_URL}/api/news`, {
+        params: category ? { category } : {},
+      });
       setNewsList(response.data);
     } catch (error) {
       console.error("Error fetching news", error);
@@ -35,11 +40,13 @@ function AllNews() {
 
   useEffect(() => {
     fetchFilteredNews();
-  }, []);
+  }, [category]);
 
   return (
     <>
-      <SearchFilters setNewsList={setNewsList} />
+      {!category && <SearchFilters setNewsList={setNewsList} />}
+      <h1 className="text-3xl font-bold mb-6 underline m-5">{category ? `${category} News` : "All News"}</h1>
+
       {isLoading ? (
         <Loader loading={isLoading} />
       ) : (

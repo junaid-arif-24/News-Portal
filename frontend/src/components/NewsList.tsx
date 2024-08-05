@@ -32,7 +32,6 @@ const NewsList: React.FC<NewsListProps> = ({ newsList }) => {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-6 underline">All News</h1>
       {newsList.length === 0 ? (
         <div className="flex justify-center items-center h-64">
           <p className="text-4xl font-semibold text-gray-700">No news available</p>

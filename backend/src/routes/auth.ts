@@ -5,7 +5,6 @@ import User from '../models/User';
 import auth from '../middleware/authMiddleware';
 const router = express.Router();
 const SecretKey = process.env.JWT_SECRET || 'secretkey';
-import mg from '../utils/mailgunClient';
 
 
 interface RegisterRequest extends Request {
@@ -24,21 +23,7 @@ interface LoginRequest extends Request {
   };
 }
 
-const sendEmail = async (to: string, subject: string, text: string): Promise<void> => {
-  console.log("domain in auth.ts", process.env.MAILGUN_DOMAIN)
 
-  try {
-    await mg.messages.create(process.env.MAILGUN_DOMAIN as string, {
-      from: 'mohdjunaid7078@gmail.com',
-      to,
-      subject,
-      text,
-    });
-    console.log(`Email sent to ${to}`);
-  } catch (error) {
-    console.error(`Failed to send email to ${to}:`, error);
-  }
-};
 
 // Registration endpoint
 router.post('/register', async (req: RegisterRequest, res: Response) => {
@@ -56,7 +41,6 @@ router.post('/register', async (req: RegisterRequest, res: Response) => {
     await newUser.save();
 
     const token = jwt.sign({ email: newUser.email, id: newUser._id }, SecretKey, { expiresIn: '12h' });
-    await sendEmail(email, 'Welcome to Your App!', 'Thank you for registering!');
     res.status(201).json({ result: newUser, token });
   } catch (error) {
     console.error("Error during registration:", error);  // Log the error for debugging
@@ -80,7 +64,6 @@ router.post('/login', async (req: LoginRequest, res: Response) => {
     }
 
     const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, SecretKey, { expiresIn: '12h' });
-    await sendEmail(email, 'Login Notification', 'You have successfully logged in!');
     res.status(200).json({ result: existingUser, token });
   } catch (error) {
     console.error("Error during login:", error);  // Log the error for debugging

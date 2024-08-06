@@ -3,9 +3,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import auth from '../middleware/authMiddleware';
+import { sendRegistrationWelcomeEmail,sendLoginWelcomeEmail } from '../utils/mailer';
 const router = express.Router();
 const SecretKey = process.env.JWT_SECRET || 'secretkey';
-
 
 interface RegisterRequest extends Request {
   body: {
@@ -41,6 +41,7 @@ router.post('/register', async (req: RegisterRequest, res: Response) => {
     await newUser.save();
 
     const token = jwt.sign({ email: newUser.email, id: newUser._id }, SecretKey, { expiresIn: '12h' });
+    await sendRegistrationWelcomeEmail(email, name);
     res.status(201).json({ result: newUser, token });
   } catch (error) {
     console.error("Error during registration:", error);  // Log the error for debugging
@@ -64,6 +65,7 @@ router.post('/login', async (req: LoginRequest, res: Response) => {
     }
 
     const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, SecretKey, { expiresIn: '12h' });
+    await sendLoginWelcomeEmail(email, existingUser.name);
     res.status(200).json({ result: existingUser, token });
   } catch (error) {
     console.error("Error during login:", error);  // Log the error for debugging

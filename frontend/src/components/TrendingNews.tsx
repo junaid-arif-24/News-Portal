@@ -46,7 +46,7 @@ const TrendingNews: React.FC = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-6 underline">Trending News</h1>
+      <h1 className="text-lg font-bold mb-3 underline">Trending News</h1>
       {loading ? (
         <div className="flex justify-center items-center h-64">
           <p className="text-4xl font-semibold text-gray-700">Loading...</p>

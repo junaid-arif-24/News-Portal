@@ -41,7 +41,7 @@ const LatestNews: React.FC = () => {
 
   return (
     <div className="bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold mb-6 underline">Latest News</h1>
+      <h1 className="text-lg font-bold mb-3 underline">Latest News</h1>
 
       <div className="container mx-auto">
         {/* Main News Section */}
@@ -65,21 +65,25 @@ const LatestNews: React.FC = () => {
           {/* Side News */}
           <div className="md:w-1/3 p-4 space-y-4 max-h-[calc(100vh-20px)] overflow-y-auto">
             {latestNews.slice(1, 4).map((news) => (
-              <div onClick={() => navigate(`/news/${news._id}`)} key={news._id} className="bg-white p-4 rounded-lg cursor-pointer shadow-md flex">
+              <div onClick={() => navigate(`/news/${news._id}`)} key={news._id} className="bg-white p-1 rounded-lg cursor-pointer shadow-md flex">
                 {news.images.length > 0 && (
-                  <img src={news.images[0]} alt={news.title} className="w-1/3 h-24 object-cover rounded-lg mr-4" />
+                  <img src={news.images[0]} alt={news.title} className="w-1/3  object-cover rounded-lg mr-4" />
                 )}
                 <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-500 text-sm">&bull; { formatDate(news.date)} at {formatTime(news.time)}</span>
-                  </div>
+                  <div className='p-1'>
                   <h3 className="text-lg font-bold mb-1">{news.title}</h3>
-                  <p className="text-gray-600 text-sm">{news.description.substring(0, 100)}</p>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-gray-500 text-xs">&bull; { formatDate(news.date)} at {formatTime(news.time)}</span>
+                  </div>
+                  <p className="text-gray-600 text-sm">{news.description.substring(0, 100)}....</p>
+                  </div>
+                 
+                 
                 </div>
               </div>
             ))}
             {latestNews.length > 4 && (
-              <div className="bg-white p-4 rounded-lg shadow-md flex justify-center items-center">
+              <div onClick={() => navigate('/all-news')} className="bg-white p-4 rounded-lg shadow-md flex cursor-pointer justify-center items-center">
                 <p className="text-gray-600">More news...</p>
               </div>
             )}

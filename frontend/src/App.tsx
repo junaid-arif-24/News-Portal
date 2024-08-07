@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route,  Routes } from 'react-router-dom';
+import { Route,  Routes,useLocation } from 'react-router-dom';
 import './App.css';
 
 // Import components
@@ -19,14 +19,12 @@ import AdminRoute from './components/AdminRoute';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { AuthProvider } from './context/AuthContext';
-import CreateNewsPage from './pages/CreateNewsPage';
-import ManageNews from './pages/ManageNews';
-import ManageCategories from './pages/CategoryManagement';
-import ManageCommentsPage from './pages/ManageCommentsPage';
 import CategoryPage from './pages/CategoryPage';
 import AllNews from './pages/AllNews';
 
 function App() {
+  const location = useLocation();
+
   return (
     <div className='bg-gray-100'>
   <AuthProvider>
@@ -73,7 +71,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
-      <Footer />
+      {!location.pathname.includes('/admin') && <Footer />}
       </>
       
     </AuthProvider>

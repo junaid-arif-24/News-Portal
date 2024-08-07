@@ -32,7 +32,7 @@ const NewsList: React.FC<NewsListProps> = ({ newsList }) => {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-6 underline m-5">{location.pathname === "/" && "All News" }</h1>
+      <h1 className="text-lg font-bold mb-3 underline ">{location.pathname === "/" && "All News" }</h1>
 
       {newsList.length === 0 ? (
         <div className="flex justify-center items-center h-64">

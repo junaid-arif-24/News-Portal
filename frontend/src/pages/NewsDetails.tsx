@@ -163,7 +163,7 @@ const NewsDetails: React.FC = () => {
         <div className="bg-white shadow-md rounded-lg p-6">
           <div className="mb-4 flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold">{news.title}</h1>
+              <h1 className=" text-2xl md:text-3xl font-bold">{news.title}</h1>
               <p className="text-gray-600 mt-2">
                 {formatDate(news.date)} &bull; {news.time} &bull;{" "}
                 <span className="font-semibold">{news.views} views</span>

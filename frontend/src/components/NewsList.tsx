@@ -31,7 +31,7 @@ const NewsList: React.FC<NewsListProps> = ({ newsList }) => {
   };
 
   return (
-    <div className="container mx-auto py-8">
+    <div className=" mx-auto p-5">
       <h1 className="text-lg font-bold mb-3 underline ">{location.pathname === "/" && "All News" }</h1>
 
       {newsList.length === 0 ? (

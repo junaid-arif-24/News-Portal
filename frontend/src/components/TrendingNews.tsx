@@ -45,7 +45,7 @@ const TrendingNews: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto py-8">
+    <div className=" mx-auto p-5">
       <h1 className="text-lg font-bold mb-3 underline">Trending News</h1>
       {loading ? (
         <div className="flex justify-center items-center h-64">

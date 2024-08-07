@@ -43,7 +43,7 @@ const HomePage: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className='m-0 p-0'>
      
      {isLoading ? <Loader loading={isLoading} /> : <LatestNews />} 
      {isLoading ? <Loader loading={isLoading} /> : <TrendingNews />} 

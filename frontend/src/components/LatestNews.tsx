@@ -44,8 +44,8 @@ const LatestNews: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-100 p-5 mb-5">
-      <h1 className="text-lg font-bold mb-3 underline">Latest News</h1>
+    <div className="bg-gray-100 p-5 py-2 mb-5">
+      <h1 className="text-lg font-bold mb-1 underline">Latest News</h1>
       <div className="mx-auto">
         <div className="md:flex md:max-h-[calc(100vh-30px)]">
           {/* Main Featured News Slider */}

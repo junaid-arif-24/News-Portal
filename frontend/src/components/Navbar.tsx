@@ -46,8 +46,8 @@ const Navbar: React.FC = () => {
             </>
           ) : (
             <>
-              <Link to="/login" className="hover:underline">Login</Link>
-              <Link to="/register" className="hover:underline">Register</Link>
+              <button onClick={() => navigate('/login')} className="hover:underline">Login</button>
+              <button onClick={() => navigate('/register')} className="hover:underline">Register</button>
             </>
           )}
           <div className="relative w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center text-white font-semibold">

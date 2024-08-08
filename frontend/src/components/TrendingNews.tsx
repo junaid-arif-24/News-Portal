@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { formatDate, formatTime } from '../utils/helper';
 import parse from 'html-react-parser';
+import { TrendingNewsSkeleton } from './Skeletons';
 
 interface News {
   _id: string;
@@ -47,10 +48,9 @@ const TrendingNews: React.FC = () => {
   return (
     <div className=" mx-auto p-5">
       <h1 className="text-lg font-bold mb-3 underline">Trending News</h1>
-      {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <p className="text-4xl font-semibold text-gray-700">Loading...</p>
-        </div>
+      {loading ?
+       (
+       <TrendingNewsSkeleton />
       ) : trendingNews.length === 0 ? (
         <div className="flex justify-center items-center h-64">
           <p className="text-4xl font-semibold text-gray-700">No trending news available</p>

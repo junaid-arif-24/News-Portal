@@ -45,12 +45,12 @@ const HomePage: React.FC = () => {
   return (
     <div className='m-0 p-0'>
      
-     {isLoading ? <Loader loading={isLoading} /> : <LatestNews />} 
-     {isLoading ? <Loader loading={isLoading} /> : <TrendingNews />} 
+      <LatestNews />
+      <TrendingNews />
 
 
       {/* <SearchFilters setNewsList={setNewsList} /> */}
-      {isLoading ? <Loader loading={isLoading} /> : <NewsList newsList={newsList} />} 
+      <NewsList newsList={newsList} isLoading={isLoading} />
       <p onClick={()=>{navigate('/all-news')}} className='text-blue-500 underline text-xl cursor-pointer text-right mx-5'>{`see all ->`}</p>
      
     </div>

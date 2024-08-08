@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import parse from 'html-react-parser';
 import Carousel from 'react-material-ui-carousel';
 import { Paper } from '@mui/material';
+import { LatestNewsSkeleton } from './Skeletons'; // Import the custom skeleton
 
 interface News {
   _id: string;
@@ -19,6 +20,7 @@ interface News {
 
 const LatestNews: React.FC = () => {
   const [latestNews, setLatestNews] = useState<News[]>([]);
+  const [isLoading, setIsLoading] = useState(true); // State to manage loading
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const navigate = useNavigate();
 
@@ -32,8 +34,14 @@ const LatestNews: React.FC = () => {
       setLatestNews(response.data);
     } catch (error) {
       console.error('Error fetching latest news', error);
+    } finally {
+      setIsLoading(false); // Set loading to false after data is fetched
     }
   };
+
+  if (isLoading) {
+    return <LatestNewsSkeleton />; // Show skeleton when data is loading
+  }
 
   if (latestNews.length === 0) {
     return (

@@ -47,11 +47,9 @@ function AllNews() {
       {!category && <SearchFilters setNewsList={setNewsList} />}
       <h1 className="text-lg font-bold m-3 underline  ">{category ? `${category} News` : "All News"}</h1>
 
-      {isLoading ? (
-        <Loader loading={isLoading} />
-      ) : (
-        <NewsList newsList={newsList} />
-      )}
+     
+        <NewsList newsList={newsList}  isLoading={isLoading} />
+     
     </>
   );
 }

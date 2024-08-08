@@ -1,7 +1,8 @@
 import React from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
+import { useNavigate, useLocation } from "react-router-dom";
 import { formatDate, formatTime } from "../utils/helper";
 import parse from 'html-react-parser';
+import { NewsListSkeleton } from './Skeletons'; // Import the custom skeleton
 
 interface News {
   _id: string;
@@ -9,32 +10,33 @@ interface News {
   description: string;
   images: string[];
   date: string;
-  time: string; // Include time in the News interface
+  time: string;
   tags: string[];
   category: string;
 }
 
 interface NewsListProps {
   newsList: News[];
+  isLoading: boolean; // Add a prop to check if data is loading
 }
 
-const NewsList: React.FC<NewsListProps> = ({ newsList }) => {
-  const navigate = useNavigate(); // Initialize useNavigate
-  const location = useLocation(); // Initialize useLocation
+const NewsList: React.FC<NewsListProps> = ({ newsList, isLoading }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   
-  // Determine the number of news items to display
   const maxItems = location.pathname === "/all-news" ? newsList.length : 4;
 
-  // Function to handle navigation
   const handleReadMore = (id: string) => {
     navigate(`/news/${id}`);
   };
 
   return (
-    <div className=" mx-auto p-5">
-      <h1 className="text-lg font-bold mb-3 underline ">{location.pathname === "/" && "All News" }</h1>
+    <div className="mx-auto p-5">
+      <h1 className="text-lg font-bold mb-3 underline ">{location.pathname === "/" && "All News"}</h1>
 
-      {newsList.length === 0 ? (
+      {isLoading ? (
+        <NewsListSkeleton /> // Show skeleton when data is loading
+      ) : newsList.length === 0 ? (
         <div className="flex justify-center items-center h-64">
           <p className="text-4xl font-semibold text-gray-700">No news available</p>
         </div>

@@ -181,15 +181,15 @@ const ManageNews: React.FC = () => {
       <div className="grid grid-cols-1 gap-4">
   {newsList && newsList.length > 0 ? (
     newsList.map((news) => (
-      <div key={news._id} className="bg-white flex flex-col md:flex-row gap-10 justify-between p-4 rounded shadow">
-        <div className='md:w-[700px] md:h-auto'>
+      <div key={news._id} className="bg-white flex flex-col md:flex-row gap-5 justify-between p-4 rounded shadow">
+        <div className='w-[30%] max-h-[300px]'>
           <img
             src={news.images[0]}
             alt={news.title}
-            className="w-full h-full object-fill rounded-lg mb-4"
+            className=" w-full h-full object-cover rounded-lg mb-4"
           />
         </div>
-      <div>
+      <div className='w-[70%] '>
       <h2 className="text-2xl font-bold">{news.title}</h2>
         <p className="text-gray-600 ">{news.description.substring(0, 300)}.....</p>
         <div className="mt-2 flex flex-wrap">
@@ -229,7 +229,7 @@ const ManageNews: React.FC = () => {
   )}
 </div>
 
-      {selectedNews && <Comments newsId={selectedNews._id} />}
+      {/* {selectedNews && <Comments newsId={selectedNews._id} />} */}
     </div>
   );
 };

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { formatDate, formatTime } from '../utils/helper';
-import { useNavigate } from 'react-router-dom';
-import parse from 'html-react-parser';
-import Carousel from 'react-material-ui-carousel';
-import { Paper } from '@mui/material';
-import { LatestNewsSkeleton } from './Skeletons'; // Import the custom skeleton
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { formatDate, formatTime } from "../utils/helper";
+import { useNavigate } from "react-router-dom";
+import parse from "html-react-parser";
+import Carousel from "react-material-ui-carousel";
+import { Paper } from "@mui/material";
+import { LatestNewsSkeleton } from "./Skeletons"; // Import the custom skeleton
 
 interface News {
   _id: string;
@@ -30,10 +30,12 @@ const LatestNews: React.FC = () => {
 
   const fetchLatestNews = async () => {
     try {
-      const response = await axios.get<News[]>(`${API_BASE_URL}/api/news/latest`);
+      const response = await axios.get<News[]>(
+        `${API_BASE_URL}/api/news/latest`
+      );
       setLatestNews(response.data);
     } catch (error) {
-      console.error('Error fetching latest news', error);
+      console.error("Error fetching latest news", error);
     } finally {
       setIsLoading(false); // Set loading to false after data is fetched
     }
@@ -46,7 +48,9 @@ const LatestNews: React.FC = () => {
   if (latestNews.length === 0) {
     return (
       <div className="flex justify-center items-center h-64">
-        <p className="text-4xl font-semibold text-gray-700">No news available</p>
+        <p className="text-4xl font-semibold text-gray-700">
+          No news available
+        </p>
       </div>
     );
   }
@@ -58,9 +62,21 @@ const LatestNews: React.FC = () => {
         <div className="md:flex md:max-h-[calc(100vh-30px)]">
           {/* Main Featured News Slider */}
           <div className="md:w-2/3 p-4">
-            <Carousel animation="slide" interval={5000} duration={300} navButtonsAlwaysVisible>
+            <Carousel
+              animation="slide"
+              interval={5000}
+              duration={300}
+              navButtonsAlwaysVisible
+              navButtonsProps={{
+                style: {
+                  top: "50%", // Position the buttons vertically in the middle
+                  transform: "translateY(-250%)",
+                  // backgroundColor: "rgba(0, 0, 0, 0.5)", // Optional: to make buttons more visible
+                },
+              }}
+            >
               {latestNews.slice(0, 3).map((news) => (
-                <Paper 
+                <Paper
                   key={news._id}
                   onClick={() => navigate(`/news/${news._id}`)}
                   className="bg-white md:h-[calc(100vh-30px)] p-0 rounded-lg shadow-md cursor-pointer"
@@ -74,10 +90,15 @@ const LatestNews: React.FC = () => {
                   )}
                   <div className="p-4">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-500">&bull; {formatDate(news.date)} at {formatTime(news.time)}</span>
+                      <span className="text-gray-500">
+                        &bull; {formatDate(news.date)} at{" "}
+                        {formatTime(news.time)}
+                      </span>
                     </div>
                     <h2 className="text-2xl font-bold mb-2">{news.title}</h2>
-                    <p className="text-gray-700">{parse(news.description.substring(0, 100))}</p>
+                    <p className="text-gray-700">
+                      {parse(news.description.substring(0, 100))}
+                    </p>
                   </div>
                 </Paper>
               ))}
@@ -99,17 +120,23 @@ const LatestNews: React.FC = () => {
                   />
                 )}
                 <div className="p-2 flex flex-col justify-between w-2/3">
-                  <h3 className="text-lg font-bold mb-1 line-clamp-2">{news.title}</h3>
+                  <h3 className="text-lg font-bold mb-1 line-clamp-2">
+                    {news.title}
+                  </h3>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-500 text-xs">&bull; {formatDate(news.date)} at {formatTime(news.time)}</span>
+                    <span className="text-gray-500 text-xs">
+                      &bull; {formatDate(news.date)} at {formatTime(news.time)}
+                    </span>
                   </div>
-                  <p className="text-gray-600 text-sm line-clamp-2">{news.description.substring(0, 100)}....</p>
+                  <p className="text-gray-600 text-sm line-clamp-2">
+                    {news.description.substring(0, 100)}....
+                  </p>
                 </div>
               </div>
             ))}
             {latestNews.length > 8 && (
               <div
-                onClick={() => navigate('/all-news')}
+                onClick={() => navigate("/all-news")}
                 className="bg-white p-4 rounded-lg shadow-md flex cursor-pointer justify-center items-center"
               >
                 <p className="text-gray-600">More news...</p>

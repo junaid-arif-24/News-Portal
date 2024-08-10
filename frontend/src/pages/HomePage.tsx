@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import NewsList from '../components/NewsList';
 import LatestNews from '../components/LatestNews';
 import axios from 'axios';
-import Loader from '../components/Loader';
 import TrendingNews from '../components/TrendingNews';
 import { useNavigate } from 'react-router-dom';
 interface News {

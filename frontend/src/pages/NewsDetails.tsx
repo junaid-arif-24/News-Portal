@@ -7,6 +7,7 @@ import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import parse from "html-react-parser";
+import Carousel from "react-material-ui-carousel";
 
 interface Category {
   _id: string;
@@ -181,14 +182,29 @@ const NewsDetails: React.FC = () => {
             </button>
           </div>
           <div className="mb-4">
-            {news.images.map((image, index) => (
+            {news.images.length > 1 ? (
+              <Carousel
+                animation="slide"
+                interval={5000}
+                duration={300}
+                navButtonsAlwaysVisible
+              >
+                {news.images.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={`news-${index}`}
+                    className="w-full rounded mb-4 object-cover"
+                  />
+                ))}
+              </Carousel>
+            ) : (
               <img
-                key={index}
-                src={image}
-                alt={`news-${index}`}
+                src={news.images[0]}
+                alt={`news-0`}
                 className="w-full rounded mb-4"
               />
-            ))}
+            )}
           </div>
           <div className="mb-4 text-lg">
             {isDescriptionExpanded ? (
@@ -272,49 +288,51 @@ const NewsDetails: React.FC = () => {
         </div>
       </div>
       <div className="w-full lg:w-1/3 p-4">
-  <div className="bg-white shadow-md rounded-lg p-2">
-    <h2 className="text-2xl font-bold mb-4">Trending News</h2>
-    <div className="  space-y-6  ">
-      {trendingNews.map((newsItem) => (
-        <div
-          key={newsItem._id}
-          onClick={() => {navigate(`/news/${newsItem._id}`); setIsDescriptionExpanded(false);}}
-          className="bg-gray-100 p-1 rounded-lg cursor-pointer shadow-md flex"
-        >
-          {newsItem.images.length > 0 && (
-            <img
-              src={newsItem.images[0]}
-              alt={newsItem.title}
-              className="w-1/3 object-center rounded-lg mr-4"
-            />
-          )}
-          <div>
-            <div className='p-1'>
-              <h3 className="text-lg font-bold mb-1">{newsItem.title}</h3>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-500 text-xs">
-                  &bull; {formatDate(newsItem.date)} at {newsItem.time}
-                </span>
+        <div className="space-y-4 max-h-full overflow-y-auto">
+          {trendingNews.slice(0, 4).map((newsItem) => (
+            <div
+              key={newsItem._id}
+              onClick={() => {
+                navigate(`/news/${newsItem._id}`);
+                setIsDescriptionExpanded(false);
+              }}
+              className="bg-white p-1 rounded-lg cursor-pointer shadow-md flex h-36"
+            >
+              {newsItem.images.length > 0 && (
+                <img
+                  src={newsItem.images[0]}
+                  alt={newsItem.title}
+                  className="w-1/3 object-cover rounded-l-lg h-full"
+                />
+              )}
+              <div className="p-2 flex flex-col justify-between w-2/3">
+                <h3 className="text-lg font-bold mb-1 line-clamp-2">
+                  {newsItem.title}
+                </h3>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-gray-500 text-xs">
+                    &bull; {formatDate(newsItem.date)} at {newsItem.time}
+                  </span>
+                </div>
+                <p className="text-gray-600 text-sm line-clamp-2">
+                  {newsItem.description.substring(0, 100)}....
+                </p>
               </div>
-              <p className="text-gray-600 text-sm">
-                {newsItem.description.substring(0, 100)}....
-              </p>
             </div>
-          </div>
+          ))}
+          {trendingNews.length > 4 && (
+            <div
+              onClick={() => {
+                navigate("/all-news");
+                setIsDescriptionExpanded(false);
+              }}
+              className="bg-white p-4 rounded-lg shadow-md flex cursor-pointer justify-center items-center"
+            >
+              <p className="text-gray-600">More news...</p>
+            </div>
+          )}
         </div>
-      ))}
-      {trendingNews.length > 4 && (
-        <div
-          onClick={() => {navigate('/all-news'); setIsDescriptionExpanded(false);}}
-          className="bg-white p-4 rounded-lg shadow-md flex cursor-pointer justify-center items-center"
-        >
-          <p className="text-gray-600">More news...</p>
-        </div>
-      )}
-    </div>
-  </div>
-</div>
-
+      </div>
     </div>
   );
 };

@@ -17,7 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://frontend-news-jd.netlify.app', 'https://news-portal-frontend-orpin.vercel.app'],
+  origin: ['http://localhost:3000', 'https://frontend-news-jd.netlify.app', 'https://news-portal-frontend-orpin.vercel.app','https://news-portal1.onrender.com'],
   optionsSuccessStatus: 200 
 };
 

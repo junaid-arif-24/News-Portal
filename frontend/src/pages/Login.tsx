@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -71,13 +71,13 @@ const Login: React.FC = () => {
         </div>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <div className="mb-4">
-          <a href="/forgot-password" className="text-sm text-blue-500 hover:underline">Forgot password?</a>
+          <button onClick={() => navigate('/forgot-password')}  className="text-sm text-blue-500 hover:underline">Forgot password?</button>
         </div>
         <button type="submit" className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
           Log in
         </button>
         <p className="mt-4 text-center">
-          Don’t have an account? <a href="/register" className="text-blue-500 hover:underline">Sign up now!</a>
+          Don’t have an account? <button onClick={() => navigate('/register')} className="text-blue-500 hover:underline">Sign up now!</button>
         </p>
       </form>
     </div>

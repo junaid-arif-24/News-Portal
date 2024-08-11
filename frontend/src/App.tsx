@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route,  Routes,useLocation } from 'react-router-dom';
 import './App.css';
 
@@ -21,6 +20,8 @@ import Footer from './components/Footer';
 import { AuthProvider } from './context/AuthContext';
 import CategoryPage from './pages/CategoryPage';
 import AllNews from './pages/AllNews';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   const location = useLocation();
@@ -38,6 +39,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/category" element={<CategoryPage />} />
           <Route path="/all-news" element={<AllNews />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
 
 
           {/* <Route path="profile" element={<UserProfile />} /> */}

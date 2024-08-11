@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document ,Model} from 'mongoose';
+import mongoose, { Schema, Document, Model } from 'mongoose';
 
 interface IUser extends Document {
   name: string;
@@ -7,16 +7,19 @@ interface IUser extends Document {
   role: string;
   subscriptions: mongoose.Types.ObjectId[];
   savedNews: mongoose.Types.ObjectId[];
+  resetPasswordToken?: string;
+  resetPasswordExpires?: number;
 }
 
 const UserSchema: Schema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ['admin', 'subscriber'], default: 'subscriber' }, 
+  role: { type: String, enum: ['admin', 'subscriber'], default: 'subscriber' },
   subscriptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
-  savedNews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'News' }]
-
+  savedNews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'News' }],
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Number }
 });
 
 const User: Model<IUser> = mongoose.model<IUser>('User', UserSchema);

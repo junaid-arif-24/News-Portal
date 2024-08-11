@@ -1,9 +1,10 @@
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import User from '../models/User';
 import auth from '../middleware/authMiddleware';
-import { sendRegistrationWelcomeEmail,sendLoginWelcomeEmail } from '../utils/mailer';
+import { sendRegistrationWelcomeEmail,sendLoginWelcomeEmail,sendResetPasswordEmail } from '../utils/mailer';
 const router = express.Router();
 const SecretKey = process.env.JWT_SECRET || 'secretkey';
 
@@ -22,6 +23,80 @@ interface LoginRequest extends Request {
     password: string;
   };
 }
+
+
+
+interface ForgotPasswordRequest extends Request {
+  body: {
+    email: string;
+  };
+}
+
+interface ResetPasswordRequest extends Request {
+  body: {
+    token: string;
+    password: string;
+  };
+}
+
+// Forgot Password - Request Password Reset
+router.post('/forgot-password', async (req: ForgotPasswordRequest, res: Response) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = await bcrypt.hash(resetToken, 12);
+
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour expiration
+
+    await user.save();
+
+    await sendResetPasswordEmail(email,user.name, resetToken);
+
+    res.status(200).json({ message: 'Password reset token sent to email' });
+  } catch (error) {
+    console.error('Error in forgot-password:', error);
+    res.status(500).json({ message: 'Something went wrong' });
+  }
+});
+
+// Reset Password - Update the password
+router.post('/reset-password', async (req: ResetPasswordRequest, res: Response) => {
+  const { token, password } = req.body;
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: { $exists: true },
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired token , please try again' });
+    }
+
+    const isTokenValid = await bcrypt.compare(token, user.resetPasswordToken!);
+    if (!isTokenValid) {
+      return res.status(400).json({ message: 'Invalid or expired token' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Password has been reset' });
+  } catch (error) {
+    console.error('Error in reset-password:', error);
+    res.status(500).json({ message: 'Something went wrong' });
+  }
+});
 
 
 

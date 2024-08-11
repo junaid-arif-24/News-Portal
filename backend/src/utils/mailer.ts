@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const brevoApiKey = process.env.BREVO_API_KEY;
-
+const appUrl = process.env.APP_URL;
 export const sendRegistrationWelcomeEmail = async (email: string, name: string) => {
   try {
     const response = await axios.post(
@@ -69,3 +69,39 @@ export const sendLoginWelcomeEmail = async (email: string, name: string) => {
   }
 };
 
+export const sendResetPasswordEmail = async (email: string, name: string, resetToken: string) => {
+  try {
+    const resetUrl = `${appUrl}reset-password/${resetToken}`;
+    
+    const response = await axios.post(
+      'https://api.brevo.com/v3/smtp/email',
+      {
+        sender: { email: 'junaidarif7078@gmail.com', name: 'Shot News' },
+        to: [{ email, name }],
+        subject: 'Reset Your Password - Shot News',
+        textContent: `Hello ${name},\n\nIt seems like you requested a password reset. Please click the link below to reset your password:\n\n${resetUrl}\n\nIf you did not request this, please ignore this email.\n\nBest regards,\nShot News Team`,
+        htmlContent: `
+          <div style="font-family: Arial, sans-serif; color: #333;">
+            <h2 style="color: #0044cc;">Hello ${name},</h2>
+            <p>It seems like you requested a password reset. Please click the link below to reset your password:</p>
+            <p><a href="${resetUrl}" style="color: #0044cc;">Reset Password</a></p>
+            <p>If you did not request this, please ignore this email.</p>
+            <p>Best regards,<br>Shot News Team</p>
+            <hr style="border: 0; border-top: 1px solid #ccc;">
+            <footer style="font-size: 0.8em; color: #888;">You are receiving this email because you requested a password reset on Shot News.</footer>
+          </div>
+        `,
+      },
+      {
+        headers: {
+          'api-key': brevoApiKey,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    console.log('Reset password email sent successfully', response.data);
+  } catch (error) {
+    console.error('Error sending reset password email:', error);
+  }
+};

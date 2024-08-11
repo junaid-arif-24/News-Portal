@@ -10,6 +10,7 @@ interface INews extends Document {
   category: mongoose.Schema.Types.ObjectId;
   visibility: 'public' | 'private';
   views: number;
+  youtubeUrl: string;
 }
 
 const NewsSchema: Schema = new Schema({
@@ -21,7 +22,8 @@ const NewsSchema: Schema = new Schema({
   tags: [{ type: String }],
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
   visibility: { type: String, enum: ['public', 'private'], default: 'public' },
-  views: { type: Number, default: 0 }
+  views: { type: Number, default: 0 },
+  youtubeUrl: { type: String }
 });
 
 const News = mongoose.model<INews>('News', NewsSchema);

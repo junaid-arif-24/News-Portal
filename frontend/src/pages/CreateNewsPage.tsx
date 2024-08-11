@@ -22,6 +22,7 @@ interface News {
   tags: string[];
   category: string;
   visibility: string;
+  youtubeUrl: string;
 }
 
 const CreateNews: React.FC = () => {
@@ -39,6 +40,7 @@ const CreateNews: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [youtubeUrl, setYoutubeUrl] = useState<string>("");
 
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // Replace with your actual API base URL
   const location = useLocation();
@@ -55,6 +57,7 @@ const CreateNews: React.FC = () => {
       setTags(() => [...newsToEdit.tags]);
       setCategory(newsToEdit.category);
       setVisibility(newsToEdit.visibility as "public" | "private");
+      setYoutubeUrl(newsToEdit.youtubeUrl);
       setIsEdit(true);
       console.log(newsToEdit.tags);
     }
@@ -116,6 +119,7 @@ const CreateNews: React.FC = () => {
       formData.append("tags", tags.join(",")); // Send tags as a comma-separated string
       formData.append("category", category);
       formData.append("visibility", visibility);
+      formData.append("youtubeUrl", youtubeUrl);
 
       if (newsToEdit) {
         await axios.put(
@@ -147,6 +151,7 @@ const CreateNews: React.FC = () => {
       setTags([]);
       setCategory("");
       setVisibility("public");
+      setYoutubeUrl("");
       navigate("/admin/manage-news");
     } catch (error) {
       console.error("Error creating or updating news", error);
@@ -310,6 +315,24 @@ const CreateNews: React.FC = () => {
                 </div>
               ))}
             </div>
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="title"
+            >
+              YouTube URL
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="text"
+              placeholder="Youtube video url"
+              value={youtubeUrl}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setYoutubeUrl(e.target.value)
+              }
+              required
+            />
           </div>
           <div className="mb-4">
             <label

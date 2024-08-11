@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Comments from "../components/Comments";
 import { toast } from "react-toastify";
@@ -8,6 +8,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import parse from "html-react-parser";
 import Carousel from "react-material-ui-carousel";
+import YouTubeIcon from '@mui/icons-material/YouTube';
 
 interface Category {
   _id: string;
@@ -25,6 +26,7 @@ interface News {
   tags: string[];
   visibility: string;
   views: number;
+  youtubeUrl: string;
 }
 
 const fetchRelatableNews = async (
@@ -165,11 +167,16 @@ const NewsDetails: React.FC = () => {
           <div className="mb-4 flex justify-between items-center">
             <div>
               <h1 className=" text-2xl md:text-3xl font-bold">{news.title}</h1>
+            
               <p className="text-gray-600 mt-2">
                 {formatDate(news.date)} &bull; {news.time} &bull;{" "}
                 <span className="font-semibold">{news.views} views</span>
+              {news.youtubeUrl && <Link to={news.youtubeUrl} target="_blank"> <YouTubeIcon  style={{color:"red" ,cursor:"pointer",fontSize:"30px"}} /></Link>}
+
               </p>
-            </div>
+          
+             
+            </div> 
 
             <button
               onClick={handleSaveToggle}
@@ -288,6 +295,8 @@ const NewsDetails: React.FC = () => {
         </div>
       </div>
       <div className="w-full lg:w-1/3 p-4">
+      <h2 className="text-2xl font-bold mb-1">Trenidng News</h2>
+
         <div className="space-y-4 max-h-full overflow-y-auto">
           {trendingNews.slice(0, 4).map((newsItem) => (
             <div

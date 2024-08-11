@@ -24,7 +24,7 @@ router.post(
   upload.array('images', 12),
   async (req: Request, res: Response) => {
     console.log('Files received:', req.files); 
-    const { title, description, category, tags, visibility,time,date } = req.body;
+    const { title, description, category, tags, visibility,time,date ,youtubeUrl} = req.body;
     const files = req.files as Express.Multer.File[];
     if (!files) {
       return res.status(400).json({ message: 'No files were uploaded.' });
@@ -49,6 +49,7 @@ router.post(
         category,
         tags: tags.split(','),
         visibility,
+        youtubeUrl
       });
       await newNews.save();
       res.status(201).json(newNews);
@@ -131,12 +132,12 @@ router.get('/:id', async (req: Request, res: Response) => {
 // Update news
 router.put('/:id', auth, checkRole(['admin']),upload2.none(), async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { title, description, category, tags, visibility } = req.body;
+  const { title, description, category, tags, visibility ,youtubeUrl} = req.body;
 
   try {
     const updatedNews = await News.findByIdAndUpdate(
       id,
-      { title, description, category, tags: tags.split(','), visibility },
+      { title, description, category, tags: tags.split(','), visibility,youtubeUrl },
       { new: true }
     );
     res.status(200).json(updatedNews);

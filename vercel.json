@@ -1,19 +1,19 @@
 {
   "rewrites": [
     {
-      "source": "/static/(.*)",
-      "destination": "/static/$1"
+      "source": "/static/js/(.*)",
+      "destination": "/static/js/$1"
     },
     {
       "source": "/admin/(.*)",
       "destination": "/index.html"
     },
     {
-      "source": "/reset-password/(.*)",
+      "source": "/news/(.*)",
       "destination": "/index.html"
     },
     {
-      "source": "/news/(.*)",
+      "source": "/reset-password/(.*)",
       "destination": "/index.html"
     },
     {

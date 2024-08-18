@@ -69,9 +69,9 @@ export const sendLoginWelcomeEmail = async (email: string, name: string) => {
   }
 };
 
-export const sendResetPasswordEmail = async (email: string, name: string, resetToken: string) => {
+export const sendResetPasswordEmail = async (email: string, name: string) => {
   try {
-    const resetUrl = `${appUrl}reset-password/${resetToken}`;
+    const resetUrl = `${appUrl}reset-password`;
     
     const response = await axios.post(
       'https://api.brevo.com/v3/smtp/email',

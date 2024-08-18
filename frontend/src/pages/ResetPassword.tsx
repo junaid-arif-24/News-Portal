@@ -6,7 +6,7 @@ const ResetPassword: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const { token } = useParams<{ token: string }>(); 
+  const token = localStorage.getItem('reset-token');
   const navigate = useNavigate();
   const location = useLocation();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -27,10 +27,15 @@ const ResetPassword: React.FC = () => {
         return;
       }
 
-      const response = await axios.post(`${API_BASE_URL}/auth/reset-password`, {
-        token,
-        password,
-      });
+      const response = await axios.post(
+        `${API_BASE_URL}/auth/reset-password`,
+        { password }, // Only send the new password in the body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+          },
+        }
+      );
 
       if (response.status === 200) {
         navigate('/login');

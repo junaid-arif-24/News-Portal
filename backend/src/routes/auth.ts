@@ -57,9 +57,9 @@ router.post('/forgot-password', async (req: ForgotPasswordRequest, res: Response
 
     await user.save();
 
-    await sendResetPasswordEmail(email,user.name, resetToken);
+    await sendResetPasswordEmail(email,user.name);
 
-    res.status(200).json({ message: 'Password reset token sent to email' });
+    res.status(200).json({ message: 'Password reset token sent to email',resetToken});
   } catch (error) {
     console.error('Error in forgot-password:', error);
     res.status(500).json({ message: 'Something went wrong' });
@@ -68,8 +68,12 @@ router.post('/forgot-password', async (req: ForgotPasswordRequest, res: Response
 
 // Reset Password - Update the password
 router.post('/reset-password', async (req: ResetPasswordRequest, res: Response) => {
-  const { token, password } = req.body;
+  const {  password } = req.body;
+  const token = req.headers.authorization?.split(' ')[1];
   try {
+    if (!token) {
+      return res.status(400).json({ message: 'Token not provided' });
+    }
     const user = await User.findOne({
       resetPasswordToken: { $exists: true },
       resetPasswordExpires: { $gt: Date.now() },

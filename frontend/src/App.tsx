@@ -40,7 +40,7 @@ function App() {
           <Route path="/category" element={<CategoryPage />} />
           <Route path="/all-news" element={<AllNews />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
 
           {/* <Route path="profile" element={<UserProfile />} /> */}
@@ -51,24 +51,14 @@ function App() {
             path="/admin/*"
             element={<AdminRoute><AdminDashboard /></AdminRoute>}
           />
-          
-          {/* <Route path="/create-news" element={<AdminRoute><CreateNewsPage /></AdminRoute>} />
-          <Route path="/manage-news" element={ <AdminRoute><ManageNews /></AdminRoute>} />
-          <Route
-            path="/manage-category"
-            element={<AdminRoute><ManageCategories /></AdminRoute>}
-          />
-          <Route path="/manage-comments" element={<AdminRoute><ManageCommentsPage /></AdminRoute>} /> */}
+   
 
           <Route
             path="/profile"
             element={<ProtectedRoute><UserProfile /></ProtectedRoute>}
           />
 
-          {/* <Route
-            path="/profile"
-            element={<UserProfile />}
-          /> */}
+       
 
           {/* Catch-all Route */}
           <Route path="*" element={<NotFound />} />

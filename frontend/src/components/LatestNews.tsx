@@ -79,7 +79,7 @@ const LatestNews: React.FC = () => {
                 <Paper
                   key={news._id}
                   onClick={() => navigate(`/news/${news._id}`)}
-                  className="bg-white md:h-[calc(100vh-30px)] p-0 rounded-lg shadow-md cursor-pointer"
+                  className="bg-white md:h-max-[calc(100vh-30px)] p-0 rounded-lg shadow-md cursor-pointer"
                 >
                   {news.images.length > 0 && (
                     <img
@@ -105,12 +105,12 @@ const LatestNews: React.FC = () => {
             </Carousel>
           </div>
           {/* Side News */}
-          <div className="w-full md:w-1/3 p-4 space-y-4 max-h-full overflow-y-auto">
+          <div className="w-full md:w-1/3 p-4 space-y-4 max-h-full md:h-[calc(100vh-50px)]  overflow-y-auto">
             {latestNews.slice(4, 8).map((news) => (
               <div
                 onClick={() => navigate(`/news/${news._id}`)}
                 key={news._id}
-                className="bg-white p-1 rounded-lg cursor-pointer shadow-md flex h-36"
+                className="bg-white  rounded-lg cursor-pointer shadow-md flex h-36"
               >
                 {news.images.length > 0 && (
                   <img
@@ -124,12 +124,12 @@ const LatestNews: React.FC = () => {
                     {news.title}
                   </h3>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-500 text-xs">
+                    <span className="font-bold text-blue-600 text-xs">
                       &bull; {formatDate(news.date)} at {formatTime(news.time)}
                     </span>
                   </div>
                   <p className="text-gray-600 text-sm line-clamp-2">
-                    {news.description.substring(0, 100)}....
+                  {parse(news.description.substring(0, 100))}....
                   </p>
                 </div>
               </div>

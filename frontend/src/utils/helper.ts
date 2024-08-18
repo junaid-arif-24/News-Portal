@@ -1,10 +1,11 @@
-export  function formatDate(date: string) {
+export function formatDate(date: string) {
   const d = new Date(date);
-  const day = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = d.getDate(); // No need to pad the day with leading zero
+  const month = d.toLocaleString('default', { month: 'long' }); // Get the full month name
   const year = d.getFullYear();
-  return `${day}-${month}-${year}`;
+  return `${day} ${month}, ${year}`;
 }
+
 
 export const formatTime = (time: string): string => {
   const [hours, minutes] = time.split(':').map(Number);

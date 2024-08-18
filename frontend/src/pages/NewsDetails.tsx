@@ -8,7 +8,8 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import parse from "html-react-parser";
 import Carousel from "react-material-ui-carousel";
-import YouTubeIcon from '@mui/icons-material/YouTube';
+import YouTube from "react-youtube";
+import { formatDate } from "../utils/helper";
 
 interface Category {
   _id: string;
@@ -108,12 +109,12 @@ const NewsDetails: React.FC = () => {
     fetchTrendingNews(setTrendingNews);
   }, []);
 
-  function formatDate(date: string) {
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const year = d.getFullYear();
-    return `${day}-${month}-${year}`;
+  // Function to extract the video ID from a YouTube URL
+  function extractVideoId(url: string ) {
+    const regex =
+      /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
   }
 
   const handleSaveToggle = async () => {
@@ -167,16 +168,13 @@ const NewsDetails: React.FC = () => {
           <div className="mb-4 flex justify-between items-center">
             <div>
               <h1 className=" text-2xl md:text-3xl font-bold">{news.title}</h1>
-            
+
               <p className="text-gray-600 mt-2">
                 {formatDate(news.date)} &bull; {news.time} &bull;{" "}
                 <span className="font-semibold">{news.views} views</span>
-              {news.youtubeUrl && <Link to={news.youtubeUrl} target="_blank"> <YouTubeIcon  style={{color:"red" ,cursor:"pointer",fontSize:"30px"}} /></Link>}
-
+               
               </p>
-          
-             
-            </div> 
+            </div>
 
             <button
               onClick={handleSaveToggle}
@@ -252,6 +250,22 @@ const NewsDetails: React.FC = () => {
             <span className="font-semibold">Visibility:</span> {news.visibility}
           </div>
 
+          {/* YouTube Video Player */}
+          {news.youtubeUrl && (
+            <div className="mb-4">
+              <YouTube
+                videoId={extractVideoId(news.youtubeUrl)|| undefined} // Extract the video ID
+                opts={{
+                  height: "390",
+                  width: "840",
+                  // playerVars: {
+                  //   autoplay: 1,
+                  // },
+                }}
+              />
+            </div>
+          )}
+
           {/* Relatable News Section */}
           <div className="mt-8">
             <h2 className="text-2xl font-bold mb-4">Relatable News</h2>
@@ -295,7 +309,7 @@ const NewsDetails: React.FC = () => {
         </div>
       </div>
       <div className="w-full lg:w-1/3 p-4">
-      <h2 className="text-2xl font-bold mb-1">Trenidng News</h2>
+        <h2 className="text-2xl font-bold mb-1">Trenidng News</h2>
 
         <div className="space-y-4 max-h-full overflow-y-auto">
           {trendingNews.slice(0, 4).map((newsItem) => (

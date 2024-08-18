@@ -69,8 +69,8 @@ const TrendingNews: React.FC = () => {
               className="w-full h-40 object-cover mb-1"
             />
             <div className="p-2 pt-0">
-            <div className="text-gray-500 text-xs text-right ">
-                  <p>&bull; {formatDate(news.date)} at {formatTime(news.time)}</p>
+            <div className="text-xs text-right ">
+                  <p className='font-bold text-blue-600'>&bull; {formatDate(news.date)} at {formatTime(news.time)}</p>
                 </div>
               <h3 className="text-lg font-semibold mb-2">{news.title}</h3>
               <p className="text-gray-600 text-sm mb-2">

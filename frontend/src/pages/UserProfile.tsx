@@ -211,7 +211,8 @@ const UserProfile: React.FC = () => {
               {profile.savedNews.map((news) => (
                 <div
                   key={news._id}
-                  className="w-full md:w-1/2 lg:w-1/3 px-2 mb-4"
+                  className="w-full md:w-1/2 lg:w-1/3 px-2 mb-4 cursor-pointer"
+                  onClick={() => navigate(`/news/${news._id}`)}
                 >
                   <div className="rounded-lg shadow-md bg-gray-100 overflow-hidden">
                     <img

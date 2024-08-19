@@ -110,7 +110,7 @@ const NewsDetails: React.FC = () => {
   }, []);
 
   // Function to extract the video ID from a YouTube URL
-  function extractVideoId(url: string ) {
+  function extractVideoId(url: string) {
     const regex =
       /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regex);
@@ -169,10 +169,9 @@ const NewsDetails: React.FC = () => {
             <div>
               <h1 className=" text-2xl md:text-3xl font-bold">{news.title}</h1>
 
-              <p className="text-gray-600 mt-2">
-                {formatDate(news.date)} &bull; {news.time} &bull;{" "}
-                <span className="font-semibold">{news.views} views</span>
-               
+              <p className="text-blue-500 mt-2 font-bold">
+                {formatDate(news.date)} &bull; {news.time} 
+                <span className=" text-orange-600"> &bull;{" "}{news.views} views</span>
               </p>
             </div>
 
@@ -238,7 +237,7 @@ const NewsDetails: React.FC = () => {
                 {news.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                    className="inline-block bg-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
                   >
                     #{tag}
                   </span>
@@ -254,7 +253,7 @@ const NewsDetails: React.FC = () => {
           {news.youtubeUrl && (
             <div className="mb-4">
               <YouTube
-                videoId={extractVideoId(news.youtubeUrl)|| undefined} // Extract the video ID
+                videoId={extractVideoId(news.youtubeUrl) || undefined} // Extract the video ID
                 opts={{
                   height: "390",
                   width: "840",
@@ -267,42 +266,47 @@ const NewsDetails: React.FC = () => {
           )}
 
           {/* Relatable News Section */}
+          {/* Relatable News Section */}
           <div className="mt-8">
             <h2 className="text-2xl font-bold mb-4">Relatable News</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatableNews.map((newsItem) => (
-                <div
-                  key={newsItem._id}
-                  onClick={() => {
-                    setIsDescriptionExpanded(false);
-                    navigate(`/news/${newsItem._id}`);
-                  }}
-                  className="bg-white cursor-pointer rounded-md shadow-md flex flex-col gap-1 transition-transform transform hover:scale-105"
-                >
-                  <img
-                    src={newsItem.images[0]}
-                    alt={newsItem.title}
-                    className="w-full h-40 object-cover mb-1"
-                  />
-                  <div className="p-2 pt-0">
-                    <div className="text-gray-500 text-xs text-right ">
-                      <p>
-                        &bull; {formatDate(newsItem.date)} at {newsItem.time}
+            {relatableNews.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {relatableNews.map((newsItem) => (
+                  <div
+                    key={newsItem._id}
+                    onClick={() => {
+                      setIsDescriptionExpanded(false);
+                      navigate(`/news/${newsItem._id}`);
+                    }}
+                    className="bg-white cursor-pointer rounded-md shadow-md flex flex-col gap-1 transition-transform transform hover:scale-105"
+                  >
+                    <img
+                      src={newsItem.images[0]}
+                      alt={newsItem.title}
+                      className="w-full h-40 object-cover mb-1"
+                    />
+                    <div className="p-2 pt-0">
+                      <div className="text-gray-500 text-xs text-right">
+                        <p>
+                          &bull; {formatDate(newsItem.date)} at {newsItem.time}
+                        </p>
+                      </div>
+                      <h3 className="text-lg font-semibold mb-2">
+                        {newsItem.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm mb-2">
+                        {parse(newsItem.description.substring(0, 100))}....
                       </p>
+                      <span className="text-blue-500 hover:underline text-sm mt-2 block">
+                        Read more
+                      </span>
                     </div>
-                    <h3 className="text-lg font-semibold mb-2">
-                      {newsItem.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-2">
-                      {parse(newsItem.description.substring(0, 100))}....
-                    </p>
-                    <span className="text-blue-500 hover:underline text-sm mt-2 block">
-                      Read more
-                    </span>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500 text-center font-bold text-xl">No relatable news available.</p>
+            )}
           </div>
 
           <div className="mt-8">{id ? <Comments newsId={id} /> : null}</div>
@@ -338,7 +342,7 @@ const NewsDetails: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-gray-600 text-sm line-clamp-2">
-                  {newsItem.description.substring(0, 100)}....
+                  {parse(newsItem.description.substring(0, 100))}....
                 </p>
               </div>
             </div>

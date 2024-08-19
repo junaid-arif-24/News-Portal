@@ -64,7 +64,7 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
     <div className="mt-8">
       <h2 className="text-2xl font-bold mb-4">Comments</h2>
       {comments.length === 0 ? (
-        <div className="text-center text-gray-600 mb-4">No Comments Yet</div>
+        <div className="text-center text-gray-600 mb-4  font-bold text-xl">No Comments Yet</div>
       ) : (
         <ul className="space-y-4 mb-4">
           {comments.map((comment) => (

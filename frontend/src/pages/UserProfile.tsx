@@ -221,12 +221,12 @@ const UserProfile: React.FC = () => {
                       className="w-full h-40 object-cover"
                     />
                     <div className="p-4">
-                      <a
-                        href={`/news/${news._id}`}
+                      <p
+                       
                         className="text-blue-500 hover:underline text-lg font-semibold"
                       >
                         {news.title}
-                      </a>
+                      </p>
                       <p className="text-gray-500 text-sm">
                         {formatDate(news.date)} at {formatTime(news.time)}
                       </p>

@@ -110,7 +110,7 @@ const LatestNews: React.FC = () => {
               <div
                 onClick={() => navigate(`/news/${news._id}`)}
                 key={news._id}
-                className="bg-white  rounded-lg cursor-pointer shadow-md flex h-36"
+                className="bg-white  rounded-lg cursor-pointer shadow-md flex h-36 transition-transform transform hover:scale-105"
               >
                 {news.images.length > 0 && (
                   <img

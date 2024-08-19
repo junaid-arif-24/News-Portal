@@ -172,7 +172,7 @@ const AdminDashboard: React.FC = () => {
         </Drawer>
       )}
       <main className="w-full">
-        <Toolbar />
+        {/* <Toolbar /> */}
         <Routes>
           <Route path="profile" element={<UserProfile />} />
           <Route path="create-news" element={<CreateNews />} />

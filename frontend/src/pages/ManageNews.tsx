@@ -185,7 +185,7 @@ const ManageNews: React.FC = () => {
   ) : newsList && newsList.length > 0 ? (
     newsList.map((news) => (
       <div key={news._id} className="bg-white flex flex-col md:flex-row gap-5 justify-between rounded shadow">
-        <div className='w-[30%] max-h-[400px]'>
+        <div className='w-[30%] max-h-[330px]'>
           <img
             src={news.images[0]}
             alt={news.title}

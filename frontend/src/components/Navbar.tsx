@@ -34,6 +34,8 @@ const Navbar: React.FC = () => {
           <button onClick={() => handleCategoryClick('Tech')} className="hover:underline">Technology</button>
           <button onClick={() => handleCategoryClick('Sports')} className="hover:underline">Sports</button>
           <button onClick={() => navigate('/category')} className="hover:underline">All Categories</button>
+          <button onClick={() => navigate('/all-news')} className="hover:underline">All News</button>
+
         </nav>
         <div className="hidden md:flex space-x-4 items-center">
           {isAuthenticated ? (

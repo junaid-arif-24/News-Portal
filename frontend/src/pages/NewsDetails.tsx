@@ -286,7 +286,7 @@ const NewsDetails: React.FC = () => {
                       className="w-full h-40 object-cover mb-1"
                     />
                     <div className="p-2 pt-0">
-                      <div className="text-gray-500 text-xs text-right">
+                      <div className="text-blue-500 font-bold text-xs text-right">
                         <p>
                           &bull; {formatDate(newsItem.date)} at {newsItem.time}
                         </p>
@@ -297,9 +297,7 @@ const NewsDetails: React.FC = () => {
                       <p className="text-gray-600 text-sm mb-2">
                         {parse(newsItem.description.substring(0, 100))}....
                       </p>
-                      <span className="text-blue-500 hover:underline text-sm mt-2 block">
-                        Read more
-                      </span>
+                     
                     </div>
                   </div>
                 ))}
@@ -323,7 +321,7 @@ const NewsDetails: React.FC = () => {
                 navigate(`/news/${newsItem._id}`);
                 setIsDescriptionExpanded(false);
               }}
-              className="bg-white p-1 rounded-lg cursor-pointer shadow-md flex h-36"
+              className="bg-white  rounded-lg cursor-pointer shadow-md flex h-36"
             >
               {newsItem.images.length > 0 && (
                 <img
@@ -337,7 +335,7 @@ const NewsDetails: React.FC = () => {
                   {newsItem.title}
                 </h3>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-gray-500 text-xs">
+                  <span className="text-blue-500 font-bold text-xs">
                     &bull; {formatDate(newsItem.date)} at {newsItem.time}
                   </span>
                 </div>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Comments from '../components/Comments';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
-
+import { formatDate } from '../utils/helper';
+import parse from 'html-react-parser';
 interface Category {
   _id: string;
   name: string;
@@ -82,15 +82,7 @@ const ManageNews: React.FC = () => {
     }
   };
 
-  function formatDate(date :string) {
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    const year = d.getFullYear();
-  
-    return `${day}-${month}-${year}`;
-  }
-  
+
   
     
   
@@ -202,23 +194,23 @@ const ManageNews: React.FC = () => {
         </div>
         <div className='w-[70%] p-4'>
           <h2 className="text-2xl font-bold">{news.title}</h2>
-          <p className="text-gray-600">{news.description.substring(0, 300)}.....</p>
+          <p className="text-gray-600">{parse(news.description.substring(0, 300))}.....</p>
           <div className="mt-2 flex flex-wrap">
             {news.tags.map((tag, index) => (
               <span
                 key={index}
-                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                className="inline-block bg-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
               >
                 #{tag}
               </span>
             ))}
           </div>
-          <div className="text-gray-500 text-sm">
+          <div className="text-blue-500 font-bold text-sm">
             {formatDate(news.date)} at {news.time} | {news.category.name} | {news.visibility}
           </div>
           <div className="mt-4 flex justify-end space-x-2">
             <button
-              className="bg-yellow-500 text-white px-4 py-2 rounded"
+              className="bg-green-500 text-white px-4 py-2 rounded"
               onClick={() => handleEdit(news)}
             >
               Edit

@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
     <header className="bg-black text-white p-4">
       <div className="flex justify-between items-center">
         <div className="text-2xl font-bold">
-          <Link to="/">Shot News</Link>
+          <button onClick={() => navigate('/')}>Shot News</button>
         </div>
         <nav className="hidden md:flex space-x-4">
           <button onClick={() => handleCategoryClick('Business')} className="hover:underline">Business</button>
@@ -41,9 +41,9 @@ const Navbar: React.FC = () => {
           {isAuthenticated ? (
             <>
               {user?.role === 'admin' && (
-                <Link to="/admin/profile" className="hover:underline">Admin Dashboard</Link>
+                <button onClick={() => navigate('/admin/profile')} className="hover:underline">Admin Dashboard</button>
               )}
-             {user?.role === 'subscriber' && <Link to="/profile" className="hover:underline">Profile</Link>}
+             {user?.role === 'subscriber' && <button onClick={() => navigate('/profile')} className="hover:underline">Profile</button>}
               <button onClick={handleLogout} className="hover:underline">Logout</button>
             </>
           ) : (
@@ -86,15 +86,15 @@ const Navbar: React.FC = () => {
             {isAuthenticated ? (
               <>
                 {user?.role === 'admin' && (
-                  <Link to="/admin/dashboard" className="hover:underline" onClick={toggleMenu}>Admin Dashboard</Link>
+                  <button  className="hover:underline" onClick={()=>{navigate('/admin/profile'); toggleMenu()}}>Admin Dashboard</button>
                 )}
-                <Link to="/profile" className="hover:underline" onClick={toggleMenu}>Profile</Link>
+                <button  className="hover:underline" onClick={()=>{navigate('/profile'); toggleMenu()}}>Profile</button>
                 <button onClick={() => { handleLogout(); toggleMenu(); }} className="hover:underline">Logout</button>
               </>
             ) : (
               <>
-                <Link to="/login" className="hover:underline" onClick={toggleMenu}>Login</Link>
-                <Link to="/register" className="hover:underline" onClick={toggleMenu}>Register</Link>
+                <button  className="hover:underline" onClick={()=>{navigate('/login'); toggleMenu()}}>Login</button>
+                <button className="hover:underline" onClick={()=>{navigate('/register'); toggleMenu()}}>Register</button>
               </>
             )}
           </nav>

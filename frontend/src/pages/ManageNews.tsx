@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Comments from '../components/Comments';
 import { toast } from 'react-toastify';
+import Loader from '../components/Loader';
 
 interface Category {
   _id: string;
@@ -29,6 +30,7 @@ const ManageNews: React.FC = () => {
   const [searchCategory, setSearchCategory] = useState<string>('');
   const [searchVisibility, setSearchVisibility] = useState<string>('public');
   const [selectedNews, ] = useState<News | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -38,6 +40,7 @@ const ManageNews: React.FC = () => {
 
   const fetchNews = async () => {
     try {
+      setLoading(true);
       const response = await axios.get<News[]>(`${API_BASE_URL}/api/news`, {
         params: {
           title: searchTitle,
@@ -51,6 +54,9 @@ const ManageNews: React.FC = () => {
       setNewsList(response.data);
     } catch (error) {
       console.error('Error fetching news', error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -84,6 +90,9 @@ const ManageNews: React.FC = () => {
   
     return `${day}-${month}-${year}`;
   }
+  
+  
+    
   
   return (
     <div className="container mx-auto p-4">
@@ -179,47 +188,49 @@ const ManageNews: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-4">
-  {newsList && newsList.length > 0 ? (
+  {loading ? (
+    <Loader loading={loading} />
+  ) : newsList && newsList.length > 0 ? (
     newsList.map((news) => (
-      <div key={news._id} className="bg-white flex flex-col md:flex-row gap-5 justify-between  rounded shadow">
+      <div key={news._id} className="bg-white flex flex-col md:flex-row gap-5 justify-between rounded shadow">
         <div className='w-[30%] max-h-[400px]'>
           <img
             src={news.images[0]}
             alt={news.title}
-            className=" w-full h-full object-cover rounded-l-lg mb-4"
+            className="w-full h-full object-cover rounded-l-lg mb-4"
           />
         </div>
-      <div className='w-[70%] p-4'>
-      <h2 className="text-2xl font-bold">{news.title}</h2>
-        <p className="text-gray-600 ">{news.description.substring(0, 300)}.....</p>
-        <div className="mt-2 flex flex-wrap">
-          {news.tags.map((tag, index) => (
-            <span
-              key={index}
-              className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+        <div className='w-[70%] p-4'>
+          <h2 className="text-2xl font-bold">{news.title}</h2>
+          <p className="text-gray-600">{news.description.substring(0, 300)}.....</p>
+          <div className="mt-2 flex flex-wrap">
+            {news.tags.map((tag, index) => (
+              <span
+                key={index}
+                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+          <div className="text-gray-500 text-sm">
+            {formatDate(news.date)} at {news.time} | {news.category.name} | {news.visibility}
+          </div>
+          <div className="mt-4 flex justify-end space-x-2">
+            <button
+              className="bg-yellow-500 text-white px-4 py-2 rounded"
+              onClick={() => handleEdit(news)}
             >
-              #{tag}
-            </span>
-          ))}
+              Edit
+            </button>
+            <button
+              className="bg-red-500 text-white px-4 py-2 rounded"
+              onClick={() => handleDelete(news._id)}
+            >
+              Delete
+            </button>
+          </div>
         </div>
-        <div className="text-gray-500 text-sm">
-          {formatDate(news.date)} at {news.time} | {news.category.name} | {news.visibility}
-        </div>
-        <div className="mt-4 flex justify-end space-x-2">
-          <button
-            className="bg-yellow-500 text-white px-4 py-2 rounded"
-            onClick={() => handleEdit(news)}
-          >
-            Edit
-          </button>
-          <button
-            className="bg-red-500 text-white px-4 py-2 rounded"
-            onClick={() => handleDelete(news._id)}
-          >
-            Delete
-          </button>
-        </div>
-      </div>
       </div>
     ))
   ) : (
@@ -228,6 +239,7 @@ const ManageNews: React.FC = () => {
     </div>
   )}
 </div>
+
 
       {/* {selectedNews && <Comments newsId={selectedNews._id} />} */}
     </div>

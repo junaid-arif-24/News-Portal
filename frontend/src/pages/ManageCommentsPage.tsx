@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { formatDate } from '../utils/helper';
+import Loader from '../components/Loader';
 
 interface Comment {
   _id: string;
@@ -53,9 +54,7 @@ const ManageCommentsPage: React.FC = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6 text-center">Manage Comments</h1>
       {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="loader">Loading...</div>
-        </div>
+        <Loader loading={loading} />
       ) : (
         <>
           {/* Desktop View */}

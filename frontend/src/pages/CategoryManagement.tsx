@@ -2,7 +2,7 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Loader from '../components/Loader';
 interface Category {
   _id: string;
   name: string;
@@ -14,10 +14,12 @@ const ManageCategories: React.FC = () => {
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        setLoading(true);
         const token = localStorage.getItem('token');
         const response = await axios.get(`${API_BASE_URL}/api/categories`, {
           headers: { Authorization: `Bearer ${token}` }
@@ -26,6 +28,8 @@ const ManageCategories: React.FC = () => {
       } catch (error) {
         console.error('Error fetching categories', error);
         toast.error('Error fetching categories');
+      }finally {
+        setLoading(false);
       }
     };
     fetchCategories();
@@ -150,37 +154,40 @@ const ManageCategories: React.FC = () => {
         </form>
       )}
 
-      <div className="bg-white shadow-xl rounded p-4">
-        <h2 className="text-lg  font-semibold mb-4">All Categories</h2>
-        {categories.length === 0 ? (
-          <p className="text-center text-5xl py-10">No categories</p>
-        ) : (
-          <ul>
-            {categories.map(category => (
-              <li key={category._id} className="mb-2 p-2 border-b flex items-center justify-between">
-                <div>
-                  <p className="font-semibold">{category.name}</p>
-                  <p>{category.description}</p>
-                </div>
-                <div>
-                  <button
-                    className="mr-2 px-4 py-2 bg-yellow-500 text-white rounded"
-                    onClick={() => handleEditClick(category)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="px-4 py-2 bg-red-500 text-white rounded"
-                    onClick={() => deleteCategory(category._id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+<div className="bg-white shadow-xl rounded p-4">
+  <h2 className="text-lg font-semibold mb-4">All Categories</h2>
+  {loading ? (
+    <Loader loading={loading} />
+  ) : categories.length === 0 ? (
+    <p className="text-center text-5xl py-10">No categories</p>
+  ) : (
+    <ul>
+      {categories.map(category => (
+        <li key={category._id} className="mb-2 p-2 border-b flex items-center justify-between">
+          <div>
+            <p className="font-semibold">{category.name}</p>
+            <p>{category.description}</p>
+          </div>
+          <div>
+            <button
+              className="mr-2 px-4 py-2 bg-yellow-500 text-white rounded"
+              onClick={() => handleEditClick(category)}
+            >
+              Edit
+            </button>
+            <button
+              className="px-4 py-2 bg-red-500 text-white rounded"
+              onClick={() => deleteCategory(category._id)}
+            >
+              Delete
+            </button>
+          </div>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
+
     </div>
   );
 };

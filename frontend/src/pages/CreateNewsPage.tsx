@@ -331,7 +331,7 @@ const CreateNews: React.FC = () => {
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setYoutubeUrl(e.target.value)
               }
-              required
+              
             />
           </div>
           <div className="mb-4">

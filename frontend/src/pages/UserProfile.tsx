@@ -5,6 +5,7 @@ import {icons}  from "../utils/icons";
 import { formatDate, formatTime } from "../utils/helper"; // Adjust the import according to your project structure
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
 interface Subscription {
   _id: string;
   name: string;
@@ -85,9 +86,7 @@ const UserProfile: React.FC = () => {
 
   if (!profile)
     return (
-      <div className="flex justify-center items-center h-screen">
-        Loading...
-      </div>
+     <Loader loading={!profile}/>
     );
 
   return (

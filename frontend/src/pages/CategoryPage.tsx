@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Loader from '../components/Loader';  // Adjust the path as necessary
+import Loader from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { icons } from '../utils/icons'; // Adjust the import path
+
 interface Category {
   _id: string;
   name: string;
@@ -16,7 +18,7 @@ const CategoryPage: React.FC = () => {
   const [subscribedCategories, setSubscribedCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-  const {isAuthenticated} = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,13 +53,12 @@ const CategoryPage: React.FC = () => {
   };
 
   const handleSubscribe = async (categoryId: string) => {
-    if(!isAuthenticated) {
+    if (!isAuthenticated) {
       toast.error('Please login to subscribe');
       navigate('/login');
       return;
     }
     try {
-      
       await axios.post(
         `${API_BASE_URL}/api/user/subscribe`,
         { categoryId },
@@ -75,7 +76,7 @@ const CategoryPage: React.FC = () => {
   };
 
   const handleUnsubscribe = async (categoryId: string) => {
-    if(!isAuthenticated) {
+    if (!isAuthenticated) {
       toast.error('Please login to unsubscribe');
       navigate('/login');
       return;
@@ -117,22 +118,28 @@ const CategoryPage: React.FC = () => {
           {categories.map((category) => (
             <div key={category._id} className="w-full md:w-1/2 lg:w-1/3 px-2 mb-4">
               <div className="rounded-lg shadow-md bg-white p-4 flex flex-col justify-between">
-                <div>
-                  <h2 className="text-xl font-semibold mb-2">{category.name}</h2>
-                  <p className="text-gray-700">{category.description}</p>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-xl font-semibold mb-2">{category.name}</h2>
+                    <p className="text-gray-700">{category.description}</p>
+                  </div>
+                  <div className="bg-white shadow-lg p-2 rounded-full  self-center">
+                    {/* Render the icon with size h-12 w-12 */}
+                    {icons[category.name] ? icons[category.name]({ size: 'h-10 w-10' }) :  icons['Default']({ size: " h-10 w-10" })}
+                  </div>
                 </div>
                 <div className="flex justify-between mt-4">
                   {subscribedCategories.includes(category._id) ? (
                     <button
                       onClick={() => handleUnsubscribe(category._id)}
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                      className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
                     >
                       Unsubscribe
                     </button>
                   ) : (
                     <button
                       onClick={() => handleSubscribe(category._id)}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      className=" bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                     >
                       Subscribe
                     </button>

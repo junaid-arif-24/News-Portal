@@ -176,12 +176,7 @@ const UserProfile: React.FC = () => {
         <div key={sub._id} className="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
           <div className="flex items-center">
             <div className="bg-gray-100 p-2 rounded-full mr-4">
-              {icons[sub.name] || (
-                <svg className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 18v-6a9 9 0 0118 0v6" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 13h18" />
-                </svg>
-              )}
+            {icons[sub.name] ? icons[sub.name]({ size: 'h-6 w-6' }) : icons['Default']({ size: " h-6 w-6" })}
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-1">{sub.name}</h3>

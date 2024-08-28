@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const handleLogout = () => {
     logout();
@@ -17,25 +18,88 @@ const Navbar: React.FC = () => {
   };
 
   const handleCategoryClick = (category: string) => {
+    setActiveCategory(category);
     navigate('/all-news', { state: { category } });
     toggleMenu();
+  };
+
+  const getNavButtonClass = (category: string | null) => {
+    // Highlight the button if it's the active category
+    return activeCategory === category ? 'border-b-2 border-white' : 'hover:underline';
   };
 
   return (
     <header className="bg-black text-white p-4">
       <div className="flex justify-between items-center">
         <div className="text-2xl font-bold">
-          <button onClick={() => navigate('/')}>Shot News</button>
+          <button
+            onClick={() => {
+              // setActiveCategory(null); // Clear active category when going to home
+              navigate('/');
+            }}
+            // className={activeCategory === null ? 'border-b-2 border-white' : 'hover:underline'}
+          >
+            Shot News
+          </button>
         </div>
         <nav className="hidden md:flex space-x-4">
-          <button onClick={() => handleCategoryClick('Business')} className="hover:underline">Business</button>
-          <button onClick={() => handleCategoryClick('Travel')} className="hover:underline">Travel</button>
-          <button onClick={() => handleCategoryClick('Hollywood')} className="hover:underline">Hollywood</button>
-          <button onClick={() => handleCategoryClick('Tech')} className="hover:underline">Technology</button>
-          <button onClick={() => handleCategoryClick('Sports')} className="hover:underline">Sports</button>
-          <button onClick={() => navigate('/category')} className="hover:underline">All Categories</button>
-          <button onClick={() => navigate('/all-news')} className="hover:underline">All News</button>
-
+          <button
+            onClick={() => {
+              setActiveCategory(null);
+              navigate('/');
+            }}
+            className={activeCategory === null ? 'border-b-2 border-white' : 'hover:underline'}
+          >
+            Home
+          </button>
+          <button
+            onClick={() => {
+              setActiveCategory('All News');
+              navigate('/all-news');
+            }}
+            className={activeCategory === 'All News' ? 'border-b-2 border-white' : 'hover:underline'}
+          >
+            All News
+          </button>
+          <button
+            onClick={() => handleCategoryClick('Business')}
+            className={getNavButtonClass('Business')}
+          >
+            Business
+          </button>
+          <button
+            onClick={() => handleCategoryClick('Travel')}
+            className={getNavButtonClass('Travel')}
+          >
+            Travel
+          </button>
+          <button
+            onClick={() => handleCategoryClick('Hollywood')}
+            className={getNavButtonClass('Hollywood')}
+          >
+            Hollywood
+          </button>
+          <button
+            onClick={() => handleCategoryClick('Tech')}
+            className={getNavButtonClass('Tech')}
+          >
+            Technology
+          </button>
+          <button
+            onClick={() => handleCategoryClick('Sports')}
+            className={getNavButtonClass('Sports')}
+          >
+            Sports
+          </button>
+          <button
+            onClick={() => {
+              setActiveCategory('All Categories');
+              navigate('/category');
+            }}
+            className={activeCategory === 'All Categories' ? 'border-b-2 border-white' : 'hover:underline'}
+          >
+            All Categories
+          </button>
         </nav>
         <div className="hidden md:flex space-x-4 items-center">
           {isAuthenticated ? (
@@ -43,7 +107,7 @@ const Navbar: React.FC = () => {
               {user?.role === 'admin' && (
                 <button onClick={() => navigate('/admin/profile')} className="hover:underline">Admin Dashboard</button>
               )}
-             {user?.role === 'subscriber' && <button onClick={() => navigate('/profile')} className="hover:underline">Profile</button>}
+              {user?.role === 'subscriber' && <button onClick={() => navigate('/profile')} className="hover:underline">Profile</button>}
               <button onClick={handleLogout} className="hover:underline">Logout</button>
             </>
           ) : (
@@ -77,24 +141,75 @@ const Navbar: React.FC = () => {
       {menuOpen && (
         <div className="md:hidden mt-4">
           <nav className="flex flex-col space-y-2">
-            <button onClick={() => handleCategoryClick('Business')} className="hover:underline">Business</button>
-            <button onClick={() => handleCategoryClick('Travel')} className="hover:underline">Travel</button>
-            <button onClick={() => handleCategoryClick('Hollywood')} className="hover:underline">Hollywood</button>
-            <button onClick={() => handleCategoryClick('Tech')} className="hover:underline">Technology</button>
-            <button onClick={() => handleCategoryClick('Sports')} className="hover:underline">Sports</button>
-            <button onClick={() => navigate('/category')} className="hover:underline">All Categories</button>
+            <button
+              onClick={() => {
+                setActiveCategory(null);
+                navigate('/');
+              }}
+              className={activeCategory === null ? 'border-b-2 border-white' : 'hover:underline'}
+            >
+              Home
+            </button>
+            <button
+              onClick={() => {
+                setActiveCategory('All News');
+                navigate('/all-news');
+              }}
+              className={activeCategory === 'All News' ? 'border-b-2 border-white' : 'hover:underline'}
+            >
+              All News
+            </button>
+            <button
+              onClick={() => handleCategoryClick('Business')}
+              className={getNavButtonClass('Business')}
+            >
+              Business
+            </button>
+            <button
+              onClick={() => handleCategoryClick('Travel')}
+              className={getNavButtonClass('Travel')}
+            >
+              Travel
+            </button>
+            <button
+              onClick={() => handleCategoryClick('Hollywood')}
+              className={getNavButtonClass('Hollywood')}
+            >
+              Hollywood
+            </button>
+            <button
+              onClick={() => handleCategoryClick('Tech')}
+              className={getNavButtonClass('Tech')}
+            >
+              Technology
+            </button>
+            <button
+              onClick={() => handleCategoryClick('Sports')}
+              className={getNavButtonClass('Sports')}
+            >
+              Sports
+            </button>
+            <button
+              onClick={() => {
+                setActiveCategory('All Categories');
+                navigate('/category');
+              }}
+              className={activeCategory === 'All Categories' ? 'border-b-2 border-white' : 'hover:underline'}
+            >
+              All Categories
+            </button>
             {isAuthenticated ? (
               <>
                 {user?.role === 'admin' && (
-                  <button  className="hover:underline" onClick={()=>{navigate('/admin/profile'); toggleMenu()}}>Admin Dashboard</button>
+                  <button className="hover:underline" onClick={() => navigate('/admin/profile')}>Admin Dashboard</button>
                 )}
-                <button  className="hover:underline" onClick={()=>{navigate('/profile'); toggleMenu()}}>Profile</button>
-                <button onClick={() => { handleLogout(); toggleMenu(); }} className="hover:underline">Logout</button>
+                <button className="hover:underline" onClick={() => navigate('/profile')}>Profile</button>
+                <button onClick={() => handleLogout()} className="hover:underline">Logout</button>
               </>
             ) : (
               <>
-                <button  className="hover:underline" onClick={()=>{navigate('/login'); toggleMenu()}}>Login</button>
-                <button className="hover:underline" onClick={()=>{navigate('/register'); toggleMenu()}}>Register</button>
+                <button className="hover:underline" onClick={() => navigate('/login')}>Login</button>
+                <button className="hover:underline" onClick={() => navigate('/register')}>Register</button>
               </>
             )}
           </nav>

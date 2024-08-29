@@ -41,7 +41,6 @@ const Navbar: React.FC = () => {
         <div className="text-2xl font-bold">
           <button
             onClick={() => handleNavigation('/', null)}
-            className={activeCategory === null ? 'border-b-2 border-white' : 'hover:underline'}
           >
             Shot News
           </button>

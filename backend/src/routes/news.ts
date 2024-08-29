@@ -94,7 +94,7 @@ router.get('/', async (req, res) => {
   if (date) query.date = new Date(date as string);
   if (typeof tags === 'string' && tags !== '') query.tags = { $in: tags.split(',') };
   if (category) {
-    // Assuming `Category` is your category model
+    
     const categoryDoc = await Category.findOne({ name: category });
     if (categoryDoc) {
       query.category = categoryDoc._id;

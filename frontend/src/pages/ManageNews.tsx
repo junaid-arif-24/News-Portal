@@ -5,10 +5,12 @@ import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
 import { formatDate } from '../utils/helper';
 import parse from 'html-react-parser';
+
 interface Category {
   _id: string;
   name: string;
 }
+
 interface News {
   _id: string;
   title: string;
@@ -28,15 +30,26 @@ const ManageNews: React.FC = () => {
   const [searchDate, setSearchDate] = useState<string>('');
   const [searchTags, setSearchTags] = useState<string>('');
   const [searchCategory, setSearchCategory] = useState<string>('');
+  const [categories, setCategories] = useState<Category[]>([]);
   const [searchVisibility, setSearchVisibility] = useState<string>('public');
-  const [selectedNews, ] = useState<News | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
+  // Fetch categories when the component mounts
   useEffect(() => {
+    fetchCategories();
     fetchNews();
   }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/categories`);
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Error fetching categories', error);
+    }
+  };
 
   const fetchNews = async () => {
     try {
@@ -54,14 +67,13 @@ const ManageNews: React.FC = () => {
       setNewsList(response.data);
     } catch (error) {
       console.error('Error fetching news', error);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
 
   const handleEdit = (news: News) => {
-    navigate('/admin/create-news', { state: news  });
+    navigate('/admin/create-news', { state: news });
   };
 
   const handleDelete = async (id: string) => {
@@ -72,8 +84,7 @@ const ManageNews: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      
-  
+
       fetchNews();
       toast.success("News deleted successfully");
     } catch (error) {
@@ -82,10 +93,6 @@ const ManageNews: React.FC = () => {
     }
   };
 
-
-  
-    
-  
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
@@ -150,15 +157,20 @@ const ManageNews: React.FC = () => {
             }
             className="p-2 border rounded"
           />
-          <input
-            type="text"
-            placeholder="Category"
+          <select
             value={searchCategory}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            onChange={(e: ChangeEvent<HTMLSelectElement>) =>
               setSearchCategory(e.target.value)
             }
             className="p-2 border rounded"
-          />
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat) => (
+              <option key={cat._id} value={cat.name}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
           <select
             value={searchVisibility}
             onChange={(e: ChangeEvent<HTMLSelectElement>) =>
@@ -180,66 +192,69 @@ const ManageNews: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-4">
-  {loading ? (
-    <Loader loading={loading} />
-  ) : newsList && newsList.length > 0 ? (
-    newsList.map((news) => (
-      <div key={news._id} className="bg-white flex flex-col md:flex-row gap-5 justify-between rounded shadow">
-        <div className='w-[30%] max-h-[330px]'>
-          <img
-            src={news.images[0]}
-            alt={news.title}
-            className="w-full h-full object-cover rounded-l-lg mb-4"
-          />
-        </div>
-        <div className='w-[70%] p-4'>
-          <h2 className="text-2xl font-bold">{news.title}</h2>
-          <p className="text-gray-600">{parse(news.description.substring(0, 300))}.....</p>
-          <div className="mt-2 flex flex-wrap">
-            {news.tags.map((tag, index) => (
-              <span
-                key={index}
-                className="inline-block bg-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
-          <div className="text-blue-500 font-bold text-sm">
-            {formatDate(news.date)} at {news.time} | {news.category.name} | {news.visibility}
-          </div>
-          <div className="mt-4 flex justify-end space-x-2">
-          <button
-              className="bg-yellow-500 text-white px-4 py-2 rounded"
-              onClick={() => navigate(`/news/${news._id}`)}
+        {loading ? (
+          <Loader loading={loading} />
+        ) : newsList && newsList.length > 0 ? (
+          newsList.map((news) => (
+            <div
+              key={news._id}
+              className="bg-white flex flex-col md:flex-row gap-5 justify-between rounded shadow"
             >
-              Preview
-            </button>
-            <button
-              className="bg-green-500 text-white px-4 py-2 rounded"
-              onClick={() => handleEdit(news)}
-            >
-              Edit
-            </button>
-            <button
-              className="bg-red-500 text-white px-4 py-2 rounded"
-              onClick={() => handleDelete(news._id)}
-            >
-              Delete
-            </button>
+              <div className="w-[30%] max-h-[330px]">
+                <img
+                  src={news.images[0]}
+                  alt={news.title}
+                  className="w-full h-full object-cover rounded-l-lg mb-4"
+                />
+              </div>
+              <div className="w-[70%] p-4">
+                <h2 className="text-2xl font-bold">{news.title}</h2>
+                <p className="text-gray-600">
+                  {parse(news.description.substring(0, 300))}.....
+                </p>
+                <div className="mt-2 flex flex-wrap">
+                  {news.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="inline-block bg-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="text-blue-500 font-bold text-sm">
+                  {formatDate(news.date)} at {news.time} | {news.category.name} |{' '}
+                  {news.visibility}
+                </div>
+                <div className="mt-4 flex justify-end space-x-2">
+                  <button
+                    className="bg-yellow-500 text-white px-4 py-2 rounded"
+                    onClick={() => navigate(`/news/${news._id}`)}
+                  >
+                    Preview
+                  </button>
+                  <button
+                    className="bg-green-500 text-white px-4 py-2 rounded"
+                    onClick={() => handleEdit(news)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 rounded"
+                    onClick={() => handleDelete(news._id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="flex items-center justify-center h-64 bg-white p-4 rounded shadow">
+            <h2 className="text-2xl font-bold text-gray-700">No News Available</h2>
           </div>
-        </div>
+        )}
       </div>
-    ))
-  ) : (
-    <div className="flex items-center justify-center h-64 bg-white p-4 rounded shadow">
-      <h2 className="text-2xl font-bold text-gray-700">No News Available</h2>
-    </div>
-  )}
-</div>
-
-
-      {/* {selectedNews && <Comments newsId={selectedNews._id} />} */}
     </div>
   );
 };

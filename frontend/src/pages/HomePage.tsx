@@ -5,6 +5,7 @@ import axios from "axios";
 import TrendingNews from "../components/TrendingNews";
 import { useNavigate } from "react-router-dom";
 import Marquee from "react-fast-marquee";
+
 interface News {
   _id: string;
   title: string;
@@ -22,8 +23,7 @@ const HomePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const navigate = useNavigate();
-  const latestMessage =
-    "New Feature: Customize your news feed by following your favorite categories and topics!";
+
   const fetchFilteredNews = async () => {
     setIsLoading(true);
     try {
@@ -40,16 +40,33 @@ const HomePage: React.FC = () => {
     fetchFilteredNews();
   }, []);
 
+  // Extract the titles of the last 5 news items
+  const lastFiveNewsTitles = newsList.slice(0, 5).map((news) => news.title);
+
   return (
     <div className="m-0 p-0">
-      <Marquee gradient={false} speed={50} direction="left" style={{ backgroundColor: "grey", color: "white" , padding: "10px",fontWeight: "bold", fontSize: "20px"}}>
-      &bull; {latestMessage}
+      <Marquee
+        gradient={false}
+        speed={50}
+        direction="left"
+        style={{
+          backgroundColor: "#9DBDFF", 
+          color: "black", 
+          padding: "10px",
+          fontWeight: "bold",
+          fontSize: "20px",
+        }}
+      >
+        {lastFiveNewsTitles.map((title, index) => (
+          <span key={index} style={{ marginRight: "40px" }}>
+            &bull; {title}
+          </span>
+        ))}
       </Marquee>
 
       <LatestNews />
       <TrendingNews />
 
-      {/* <SearchFilters setNewsList={setNewsList} /> */}
       <NewsList newsList={newsList} isLoading={isLoading} />
       <p
         onClick={() => {

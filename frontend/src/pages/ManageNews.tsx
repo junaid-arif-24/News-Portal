@@ -209,6 +209,12 @@ const ManageNews: React.FC = () => {
             {formatDate(news.date)} at {news.time} | {news.category.name} | {news.visibility}
           </div>
           <div className="mt-4 flex justify-end space-x-2">
+          <button
+              className="bg-yellow-500 text-white px-4 py-2 rounded"
+              onClick={() => navigate(`/news/${news._id}`)}
+            >
+              Preview
+            </button>
             <button
               className="bg-green-500 text-white px-4 py-2 rounded"
               onClick={() => handleEdit(news)}

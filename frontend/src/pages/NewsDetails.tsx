@@ -198,7 +198,7 @@ const NewsDetails: React.FC = () => {
                     key={index}
                     src={image}
                     alt={`news-${index}`}
-                    className="w-full rounded mb-4 object-cover"
+                    className="w-full rounded mb-4 object-fill h-[400px] object-center"
                   />
                 ))}
               </Carousel>
@@ -206,7 +206,7 @@ const NewsDetails: React.FC = () => {
               <img
                 src={news.images[0]}
                 alt={`news-0`}
-                className="w-full rounded mb-4"
+                className="w-full rounded mb-4 object-fill h-[400px] object-center"
               />
             )}
           </div>

@@ -1,5 +1,6 @@
 import { Route,  Routes,useLocation } from 'react-router-dom';
 import './App.css';
+import { useEffect } from 'react';
 
 // Import components
 import HomePage from './pages/HomePage';
@@ -25,6 +26,30 @@ import ResetPassword from './pages/ResetPassword';
 
 function App() {
   const location = useLocation();
+  useEffect(() => {
+    if (location.pathname === "/") {
+      document.title = "Home - Shot News";
+    }  else if (location.pathname.includes( "/admin")) {
+      document.title = "Admin Dashboard - Shot News";
+    }
+    else if (location.pathname === "/login") {
+      document.title = "Login - Shot News";
+    }
+    else if (location.pathname === "/register") {
+      document.title = "Register - Shot News";
+    }
+    else if (location.pathname === "/category") {
+      document.title = "Category - Shot News";
+    }
+    else if (location.pathname === "/all-news") {
+      document.title = "All News - Shot News";
+    }
+    
+    else {
+      document.title = "Shot News"; // Default title
+    }
+  }, [location]);
+
 
   return (
     <div className='bg-gray-100'>

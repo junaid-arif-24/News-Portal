@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom"; 
 import axios from "axios";
 import Comments from "../components/Comments";
 import { toast } from "react-toastify";
@@ -59,16 +59,20 @@ const fetchTrendingNews = async (
 
 const NewsDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
   const [news, setNews] = useState<News | null>(null);
   const [relatableNews, setRelatableNews] = useState<News[]>([]);
   const [trendingNews, setTrendingNews] = useState<News[]>([]);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] =
     useState<boolean>(false);
+  const [readingTime, setReadingTime] = useState<number | null>(null);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const token = localStorage.getItem("token");
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+ 
 
   useEffect(() => {
     const fetchNewsDetails = async () => {
@@ -91,6 +95,11 @@ const NewsDetails: React.FC = () => {
         const savedNewsIds = savedResponse.data.savedNews.map(
           (news: any) => news._id
         );
+        if (response.data.description) {
+          const words = response.data.description.split(/\s+/).length; // Count the number of words
+          const timeToRead = Math.ceil(words / 200); // Assuming 200 words per minute
+          setReadingTime(timeToRead);
+        }
         setIsSaved(savedNewsIds.includes(id));
       } catch (error) {
         console.error("Error fetching news details", error);
@@ -108,6 +117,14 @@ const NewsDetails: React.FC = () => {
   useEffect(() => {
     fetchTrendingNews(setTrendingNews);
   }, []);
+  
+  useEffect(() => {
+    if (news && location.pathname.startsWith("/news/")) {
+      document.title = `${news.title} - Shot News`;
+    } else {
+      document.title = "Shot News"; // Default title
+    }
+  }, [news, location]);
 
   // Function to extract the video ID from a YouTube URL
   function extractVideoId(url: string) {
@@ -170,6 +187,9 @@ const NewsDetails: React.FC = () => {
               <h1 className=" text-2xl md:text-3xl font-bold">{news.title}</h1>
 
               <p className="text-blue-500 mt-2 font-bold">
+              {readingTime && (
+                  <span className="text-gray-600">{readingTime} min read &bull; </span>
+                )}
                 {formatDate(news.date)} &bull; {news.time} 
                 <span className=" text-orange-600"> &bull;{" "}{news.views} views</span>
               </p>

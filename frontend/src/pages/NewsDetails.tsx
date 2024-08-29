@@ -330,10 +330,10 @@ const NewsDetails: React.FC = () => {
           <div className="mt-8">{id ? <Comments newsId={id} /> : null}</div>
         </div>
       </div>
-      <div className="w-full lg:w-1/3 p-4">
-        <h2 className="text-2xl font-bold mb-1">Trenidng News</h2>
+      <div className="w-full lg:w-1/3 p-4 space-y-4">
+        <h2 className="text-2xl font-bold mb-1 underline">Trenidng News</h2>
 
-        <div className="space-y-4 max-h-full overflow-y-auto">
+        
           {trendingNews.slice(0, 4).map((newsItem) => (
             <div
               key={newsItem._id}
@@ -341,7 +341,7 @@ const NewsDetails: React.FC = () => {
                 navigate(`/news/${newsItem._id}`);
                 setIsDescriptionExpanded(false);
               }}
-              className="bg-white  rounded-lg cursor-pointer shadow-md flex h-36"
+              className="bg-white   rounded-lg cursor-pointer shadow-md flex h-36 transition-transform transform hover:scale-105"
             >
               {newsItem.images.length > 0 && (
                 <img
@@ -378,7 +378,6 @@ const NewsDetails: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
   );
 };
 

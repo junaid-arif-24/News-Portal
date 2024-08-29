@@ -173,7 +173,7 @@ const UserProfile: React.FC = () => {
   ) : (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {profile.subscriptions.map((sub) => (
-        <div key={sub._id} className="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
+        <div key={sub._id} onClick={() => navigate(`/all-news`, { state: { 'category': sub.name } })} className="bg-white p-6 rounded-lg shadow-md flex items-center cursor-pointer justify-between">
           <div className="flex items-center">
             <div className="bg-gray-100 p-2 rounded-full mr-4">
             {icons[sub.name] ? icons[sub.name]({ size: 'h-6 w-6' }) : icons['Default']({ size: " h-6 w-6" })}

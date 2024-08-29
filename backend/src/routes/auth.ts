@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import User from '../models/User';
 import auth from '../middleware/authMiddleware';
 import { sendRegistrationWelcomeEmail,sendLoginWelcomeEmail,sendResetPasswordEmail } from '../utils/mailer';
+import checkBlocked from '../middleware/accessMiddleware';
 const router = express.Router();
 const SecretKey = process.env.JWT_SECRET || 'secretkey';
 
@@ -18,10 +19,13 @@ interface RegisterRequest extends Request {
 }
 
 interface LoginRequest extends Request {
+  
   body: {
     email: string;
     password: string;
   };
+
+  userId?: string | undefined;
 }
 
 
@@ -143,14 +147,20 @@ router.post('/login', async (req: LoginRequest, res: Response) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, SecretKey, { expiresIn: '12h' });
-    await sendLoginWelcomeEmail(email, existingUser.name);
-    res.status(200).json({ result: existingUser, token });
+    // Check if the user is blocked
+    req.userId = existingUser._id as string; // Set the userId in the request for the middleware
+    await checkBlocked(req, res, async () => {
+      const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, SecretKey, { expiresIn: '12h' });
+      await sendLoginWelcomeEmail(email, existingUser.name);
+      res.status(200).json({ result: existingUser, token });
+    });
+
   } catch (error) {
     console.error("Error during login:", error);  // Log the error for debugging
     res.status(500).json({ message: 'Something went wrong' });
   }
 });
+
 
 //logout endpoint
 router.post('/logout', (req: Request, res: Response) => {

@@ -9,6 +9,7 @@ interface IUser extends Document {
   savedNews: mongoose.Types.ObjectId[];
   resetPasswordToken?: string;
   resetPasswordExpires?: number;
+  isBlocked: boolean; 
 }
 
 const UserSchema: Schema = new Schema({
@@ -19,7 +20,8 @@ const UserSchema: Schema = new Schema({
   subscriptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
   savedNews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'News' }],
   resetPasswordToken: { type: String },
-  resetPasswordExpires: { type: Number }
+  resetPasswordExpires: { type: Number },
+  isBlocked: { type: Boolean, default: false }
 });
 
 const User: Model<IUser> = mongoose.model<IUser>('User', UserSchema);

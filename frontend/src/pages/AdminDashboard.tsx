@@ -19,6 +19,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import ArticleIcon from "@mui/icons-material/Article";
 import CategoryIcon from "@mui/icons-material/Category";
 import CommentIcon from "@mui/icons-material/Comment";
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ManageNews from "./ManageNews";
 import UserProfile from "./UserProfile";
@@ -29,6 +30,7 @@ import NotFound from "./NotFound";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import WidgetsIcon from '@mui/icons-material/Widgets';
+import AllUsers from "./AllUsers";
 
 const drawerWidth = 240;
 
@@ -109,8 +111,19 @@ const AdminDashboard: React.FC = () => {
           </ListItemIcon>
           <ListItemText primary="Manage Comments" />
         </ListItem>
-      </List>
+      
       <Divider />
+      <ListItem
+          button
+          onClick={() => navigate("/admin/all-users")}
+          className={getLinkClass("/admin/all-users")}
+        >
+          <ListItemIcon>
+            <PeopleAltIcon />
+          </ListItemIcon>
+          <ListItemText primary="All Users" />
+        </ListItem>
+      </List>
     </Box>
   );
 
@@ -179,6 +192,7 @@ const AdminDashboard: React.FC = () => {
           <Route path="manage-news" element={<ManageNews />} />
           <Route path="manage-category" element={<ManageCategories />} />
           <Route path="manage-comments" element={<ManageCommentsPage />} />
+          <Route path="all-users" element={<AllUsers />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

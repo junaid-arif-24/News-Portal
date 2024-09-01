@@ -63,7 +63,7 @@ router.post(
   // Get trending news
   router.get('/trending', async (req, res) => {
     try {
-      const trendingNews = await News.find({ visibility: 'public' }).sort().limit(5);
+      const trendingNews = await News.find({ visibility: 'public' }).populate('category', 'name').sort().limit(5);
       res.status(200).json(trendingNews);
     } catch (error) {
       res.status(400).json({ message: 'Error fetching trending news', error });

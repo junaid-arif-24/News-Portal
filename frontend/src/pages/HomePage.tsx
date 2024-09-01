@@ -11,7 +11,10 @@ interface News {
   title: string;
   description: string;
   images: string[];
-  category: string;
+  category: {
+    _id: string;
+    name: string;
+  };
   time: string;
   tags: string[];
   visibility: string;

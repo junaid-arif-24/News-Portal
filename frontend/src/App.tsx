@@ -23,9 +23,29 @@ import CategoryPage from './pages/CategoryPage';
 import AllNews from './pages/AllNews';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
-
+import { useNavigate } from 'react-router-dom';
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+ 
+  // useEffect(() => {
+    // localStorage.setItem('url', location.pathname);
+
+    // const path = localStorage.getItem('url');
+
+    // if (path && path.includes('/news')) {
+    //   const newPath = path.replace('/news/', '');
+    //   navigate(`/news/${newPath}`);
+    //   console.log('App useEffect Navigate');
+    // } else if (path && path.includes('/admin')) {
+    //   navigate(path);
+    // }
+    // if(path)
+    // navigate('/news/66b64c8686630327b946f605');
+  // }, [location.pathname, navigate]);  
+
+
   useEffect(() => {
     if (location.pathname === "/") {
       document.title = "Home - Shot News";

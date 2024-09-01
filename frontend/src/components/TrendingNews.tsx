@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { formatDate, formatTime } from '../utils/helper';
 import parse from 'html-react-parser';
 import { TrendingNewsSkeleton } from './Skeletons';
+import CategoryIcon from '@mui/icons-material/Category';
+import EventIcon from '@mui/icons-material/Event';
 
 interface News {
   _id: string;
@@ -13,7 +15,10 @@ interface News {
   date: string;
   time: string; // Include time in the News interface
   tags: string[];
-  category: string;
+  category: {
+    _id: string;
+    name: string;
+  };
 }
 
 const TrendingNews: React.FC = () => {
@@ -69,8 +74,9 @@ const TrendingNews: React.FC = () => {
               className="w-full h-40 object-cover mb-1"
             />
             <div className="p-2 pt-0">
-            <div className="text-xs text-right ">
-                  <p className='font-bold text-blue-600'>&bull; {formatDate(news.date)} at {formatTime(news.time)}</p>
+            <div className="flex justify-between text-xs text-right ">
+              <p className='text-orange-600 font-bold text-xs'> <CategoryIcon  sx={{ fontSize: 16}}/> {news.category.name && news.category.name}</p>
+                  <p className='font-bold text-blue-600'><EventIcon  sx={{ fontSize: 16 }} /> {formatDate(news.date)} at {formatTime(news.time)}</p>
                 </div>
               <h3 className="text-lg font-semibold mb-2">{news.title}</h3>
               <p className="text-gray-600 text-sm mb-2">

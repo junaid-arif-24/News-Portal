@@ -12,7 +12,10 @@ interface News {
   date: string;
   time: string;
   tags: string[];
-  category: string;
+  category: {
+    _id: string;
+    name: string;
+  };
 }
 
 interface NewsListProps {
@@ -54,7 +57,9 @@ const NewsList: React.FC<NewsListProps> = ({ newsList, isLoading }) => {
         className="w-full h-40 object-cover mb-1"
       />
       <div className="p-2 pt-0">
-        <div className="text-xs text-right">
+        <div className=" flex justify-between text-xs text-right">
+        <p className='text-orange-600 font-bold'> {news.category.name && news.category.name}</p>
+
           <p className="font-bold text-blue-600">&bull; {formatDate(news.date)} at {formatTime(news.time)}</p>
         </div>
         <h3 className="text-lg font-semibold mb-2">{news.title}</h3>

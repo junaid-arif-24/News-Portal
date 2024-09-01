@@ -88,7 +88,7 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
           placeholder="Add a comment..."
         />
         <button
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
+          className="mt-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
           onClick={addComment}
         >
           Add Comment

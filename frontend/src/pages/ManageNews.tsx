@@ -98,7 +98,7 @@ const ManageNews: React.FC = () => {
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-bold">Manage News</h1>
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"
+          className="bg-green-500 text-white px-4 py-2 rounded flex items-center"
           onClick={() => navigate('/admin/create-news')}
         >
           <svg
@@ -185,7 +185,7 @@ const ManageNews: React.FC = () => {
         </div>
         <button
           onClick={fetchNews}
-          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+          className="mt-4 bg-green-500 text-white px-4 py-2 rounded"
         >
           Search
         </button>

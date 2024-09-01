@@ -107,7 +107,7 @@ const ManageCategories: React.FC = () => {
 
       {!editingCategoryId && (
         <button
-          className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
+          className="mb-4 px-4 py-2 bg-green-500 text-white rounded"
           onClick={() => setEditingCategoryId('')}
         >
           + Add Category

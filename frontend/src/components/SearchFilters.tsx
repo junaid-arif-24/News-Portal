@@ -114,13 +114,13 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
       <div className="flex items-center space-x-2">
         <button
           onClick={fetchFilteredNews}
-          className="bg-blue-500 text-white rounded-md px-4 py-2"
+          className="bg-green-500 text-white rounded-md px-4 py-2"
         >
           Go
         </button>
         <button
           onClick={handleRefresh}
-          className="bg-blue-500 text-white rounded-md px-4 py-2"
+          className="bg-green-500 text-white rounded-md px-4 py-2"
         >
           Refresh
         </button>

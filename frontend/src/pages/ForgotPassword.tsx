@@ -36,10 +36,10 @@ const ForgotPassword: React.FC = () => {
             required
           />
         </div>
-        <button type="submit" className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button type="submit" className="w-full py-2 bg-green-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
           Submit
         </button>
-        {message && <p className="text-center mt-4 text-green-500">{message}</p>}
+        {message && <p className="text-center mt-4 text-green-600">{message}</p>}
       </form>
     </div>
   );

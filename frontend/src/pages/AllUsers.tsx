@@ -14,8 +14,8 @@ interface User {
 
 const AllUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<string | null>(null); // Tracks user ID for block/unblock
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   // Use the useMediaQuery hook to check if the screen is small
@@ -40,7 +40,7 @@ const AllUsers: React.FC = () => {
 
   const handleBlock = async (userId: string) => {
     try {
-      setIsLoading(true);
+      setIsLoading(userId);
       await axios.patch(`${API_BASE_URL}/api/user/block/${userId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -51,17 +51,17 @@ const AllUsers: React.FC = () => {
     } catch (error) {
       console.error('Error blocking user', error);
       toast.error('Error blocking user');
-      setIsLoading(false);
+      setIsLoading(null);
 
     }finally{
-      setIsLoading(false);
+      setIsLoading(null);
     }
 
   };
 
   const handleUnblock = async (userId: string) => {
     try {
-      setIsLoading(true);
+      setIsLoading(userId);
       await axios.patch(`${API_BASE_URL}/api/user/unblock/${userId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -72,17 +72,17 @@ const AllUsers: React.FC = () => {
     } catch (error) {
       console.error('Error unblocking user', error);
       toast.error('Error unblocking user');
-      setIsLoading(false);
+      setIsLoading(null);
 
     }
     finally{
-      setIsLoading(false);
+      setIsLoading(null);
     }
   };
 
   const handleDelete = async (userId: string) => {
     try {
-      setIsDeleting(true);
+      setIsDeleting(userId);
       await axios.delete(`${API_BASE_URL}/api/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -93,11 +93,11 @@ const AllUsers: React.FC = () => {
     } catch (error) {
       console.error('Error deleting user', error);
       toast.error('Error deleting user');
-      setIsDeleting(false);
+      setIsDeleting(null);
 
     }
     finally{
-      setIsDeleting(false);
+      setIsDeleting(null);
     }
   };
 
@@ -120,21 +120,21 @@ const AllUsers: React.FC = () => {
                     onClick={() => handleUnblock(user._id)}
                     className="bg-green-500 text-white px-4 py-2 rounded"
                   >
-                   {<Loader loading={true} size={20} />}   Unblock
+                   {isLoading === user._id && <Loader loading={true} size={20} />}   Unblock
                   </button>
                 ) : (
                   <button
                     onClick={() => handleBlock(user._id)}
                     className="bg-yellow-500 text-white px-4 py-2 rounded"
                   >
-                  {<Loader loading={isLoading} size={20} />}  Block
+                 {isLoading === user._id && <Loader loading={true} size={20} />} Block
                   </button>
                 )}
                 <button
                   onClick={() => handleDelete(user._id)}
                   className="bg-red-500 text-white px-4 py-2 rounded"
                 >
-                  Delete
+                {isDeleting === user._id && <Loader loading={true} size={20} />}   Delete
                 </button>
               </div>
             </div>
@@ -164,21 +164,21 @@ const AllUsers: React.FC = () => {
                       onClick={() => handleUnblock(user._id)}
                       className="bg-green-500 text-white px-4 py-2 rounded flex gap-1"
                     >
-                     {<Loader loading={isLoading} size={20} />}   Unblock 
+                    {isLoading === user._id && <Loader loading={true} size={20} />}  Unblock 
                     </button>
                   ) : (
                     <button
                       onClick={() => handleBlock(user._id)}
                       className="bg-yellow-500 text-white px-4 py-2 rounded flex gap-1"
                     >
-                    {<Loader loading={isLoading} size={20} />}     Block
+                    {isLoading === user._id && <Loader loading={true} size={20} />}    Block
                     </button>
                   )}
                   <button
                     onClick={() => handleDelete(user._id)}
                     className="bg-red-500 text-white px-4 py-2 rounded flex gap-1"
                   >
-                    {<Loader loading={isDeleting} size={20} />}  Delete
+                   {isDeleting === user._id && <Loader loading={true} size={20} />}  Delete
                   </button>
                 </td>
               </tr>

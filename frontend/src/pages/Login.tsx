@@ -41,11 +41,19 @@ const Login: React.FC = () => {
       navigate('/');
       toast.success('Login successfully!');
     } catch (error) {
-      console.error('Login failed:', error);
-      toast.error('Login failed. Please try again.');
+      console.log(error);
+    
+      // Check the error message
+      if (error instanceof Error && error.message === 'Your account is blocked') {
+        toast.error(error.message);
+      } else {
+        console.error('Login failed:', error);
+        toast.error('Login failed. Please try again.');
+      }
     } finally {
       setLoading(false); // Hide loader
     }
+    
   };
 
   return (

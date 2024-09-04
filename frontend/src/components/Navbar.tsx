@@ -212,7 +212,7 @@ const Navbar: React.FC = () => {
                               onClick={() => handleNavigation('/profile', 'Profile')}
                               className={activeCategory === 'Profile' ? 'border-b-2 border-white' : 'hover:underline'}
                             >
-                              Profile
+                             Your Profile
                             </button>
                           )}
                           {isAuthenticated ? (

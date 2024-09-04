@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 // Base URL for the API
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // Adjust the base URL as needed
@@ -10,8 +11,16 @@ export const login = async (email: string, password: string) => {
     localStorage.setItem('token', response.data.token);
     setAuthToken(response.data.token);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
+    console.log(error, 'Error API.ts');
+    if (error.response && error.response.data && error.response.data.message === 'Your account is blocked') {
+      // toast.error('Your account is blocked');
+      throw new Error('Your account is blocked');
+    }
+    else{
     throw new Error('Login failed');
+
+    }
   }
 };
 

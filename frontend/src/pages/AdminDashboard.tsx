@@ -11,15 +11,13 @@ import {
   Box,
   IconButton,
   AppBar,
-  Typography,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
 import CreateIcon from "@mui/icons-material/Create";
 import ArticleIcon from "@mui/icons-material/Article";
 import CategoryIcon from "@mui/icons-material/Category";
 import CommentIcon from "@mui/icons-material/Comment";
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ManageNews from "./ManageNews";
 import UserProfile from "./UserProfile";
@@ -29,13 +27,13 @@ import ManageCategories from "./CategoryManagement";
 import NotFound from "./NotFound";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import WidgetsIcon from '@mui/icons-material/Widgets';
+import WidgetsIcon from "@mui/icons-material/Widgets";
 import AllUsers from "./AllUsers";
 
 const drawerWidth = 240;
 
 const AdminDashboard: React.FC = () => {
-  const location = useLocation();
+  const location = useLocation(); // Hook to get current route
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -45,9 +43,15 @@ const AdminDashboard: React.FC = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const getLinkClass = (path: string) => {
-    return location.pathname === path ? "bg-gray-200" : "";
-  };
+  // Define your drawer items and paths
+  const drawerItems = [
+    { text: "User Profile", path: "/admin/profile", icon: <PersonIcon /> },
+    { text: "Create News", path: "/admin/create-news", icon: <CreateIcon /> },
+    { text: "Manage News", path: "/admin/manage-news", icon: <ArticleIcon /> },
+    { text: "Manage Category", path: "/admin/manage-category", icon: <CategoryIcon /> },
+    { text: "Manage Comments", path: "/admin/manage-comments", icon: <CommentIcon /> },
+    { text: "All Users", path: "/admin/all-users", icon: <PeopleAltIcon /> },
+  ];
 
   const drawerContent = (
     <Box sx={{ width: drawerWidth }} role="presentation">
@@ -56,73 +60,36 @@ const AdminDashboard: React.FC = () => {
           Shot News
         </p>
       </div>
-      <List>
-        <ListItem
-          button
-          onClick={() => navigate("/admin/profile")}
-          className={getLinkClass("/admin/profile")}
-        >
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-          <ListItemText primary="User Profile" />
-        </ListItem>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => navigate("/admin/create-news")}
-          className={getLinkClass("/admin/create-news")}
-        >
-          <ListItemIcon>
-            <CreateIcon />
-          </ListItemIcon>
-          <ListItemText primary="Create News" />
-        </ListItem>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => navigate("/admin/manage-news")}
-          className={getLinkClass("/admin/manage-news")}
-        >
-          <ListItemIcon>
-            <ArticleIcon />
-          </ListItemIcon>
-          <ListItemText primary="Manage News" />
-        </ListItem>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => navigate("/admin/manage-category")}
-          className={getLinkClass("/admin/manage-category")}
-        >
-          <ListItemIcon>
-            <CategoryIcon />
-          </ListItemIcon>
-          <ListItemText primary="Manage Category" />
-        </ListItem>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => navigate("/admin/manage-comments")}
-          className={getLinkClass("/admin/manage-comments")}
-        >
-          <ListItemIcon>
-            <CommentIcon />
-          </ListItemIcon>
-          <ListItemText primary="Manage Comments" />
-        </ListItem>
-      
-      <Divider />
-      <ListItem
-          button
-          onClick={() => navigate("/admin/all-users")}
-          className={getLinkClass("/admin/all-users")}
-        >
-          <ListItemIcon>
-            <PeopleAltIcon />
-          </ListItemIcon>
-          <ListItemText primary="All Users" />
-        </ListItem>
+      <List 
+      sx={{padding:"0px", borderTop: "1px solid white"}}>
+        {drawerItems.map((item, index) => (
+          <React.Fragment key={item.text}>
+            <ListItem
+              button
+              onClick={() => navigate(item.path)}
+              selected={location.pathname === item.path} // Highlight selected item
+              sx={{
+                "&.Mui-selected": {
+                  backgroundColor: "black", // Black background for selected item
+                  color: "white", // White text for selected item
+                  "& .MuiListItemIcon-root": {
+                    color: "white", // White icon color for selected item
+                  },
+                  "&:hover": {
+                    backgroundColor: "black", // Disable hover effect on selected item
+                  },
+                },
+                "&:hover": {
+                  backgroundColor: "rgba(0, 0, 0, 0.1)", // Hover effect for non-selected items
+                },
+              }}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItem>
+            {index !== drawerItems.length - 1 && <Divider />} {/* Divider between items */}
+          </React.Fragment>
+        ))}
       </List>
     </Box>
   );
@@ -132,23 +99,23 @@ const AdminDashboard: React.FC = () => {
       <CssBaseline />
       {isSmallScreen ? (
         <>
-          <AppBar position="fixed"  sx={{
-        width:"50px",
-       backgroundColor: "black",
-       marginRight: "170px",
-
-        }}>
+          <AppBar
+            position="fixed"
+            sx={{
+              width: "50px",
+              backgroundColor: "black",
+              marginRight: "170px",
+            }}
+          >
             <Toolbar>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
                 edge="start"
                 onClick={handleDrawerToggle}
-                
               >
-                <WidgetsIcon sx={{color:"white",fontSize:"30px",marginTop:"5px"}} />
+                <WidgetsIcon sx={{ color: "white", fontSize: "30px", marginTop: "5px" }} />
               </IconButton>
-            
             </Toolbar>
           </AppBar>
           <Drawer
@@ -185,7 +152,6 @@ const AdminDashboard: React.FC = () => {
         </Drawer>
       )}
       <main className="w-full">
-        {/* <Toolbar /> */}
         <Routes>
           <Route path="profile" element={<UserProfile />} />
           <Route path="create-news" element={<CreateNews />} />

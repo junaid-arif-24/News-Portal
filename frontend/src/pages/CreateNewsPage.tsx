@@ -17,8 +17,6 @@ interface News {
   title: string;
   description: string;
   images: string[];
-  date: string;
-  time: string;
   tags: string[];
   category: string;
   visibility: string;
@@ -29,10 +27,6 @@ const CreateNews: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
-  const [date, setDate] = useState<string>(
-    new Date().toISOString().slice(0, 10)
-  );
-  const [time, setTime] = useState<string>(new Date().toLocaleTimeString());
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState<string>("");
   const [category, setCategory] = useState<string>("");
@@ -42,7 +36,7 @@ const CreateNews: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [youtubeUrl, setYoutubeUrl] = useState<string>("");
 
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // Replace with your actual API base URL
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const location = useLocation();
   const navigate = useNavigate();
   const newsToEdit = location.state as News | null;
@@ -52,8 +46,6 @@ const CreateNews: React.FC = () => {
     if (newsToEdit) {
       setTitle(newsToEdit.title);
       setDescription(newsToEdit.description);
-      setDate(newsToEdit.date);
-      setTime(newsToEdit.time);
       setTags(() => [...newsToEdit.tags]);
       setCategory(newsToEdit.category);
       setVisibility(newsToEdit.visibility as "public" | "private");
@@ -114,8 +106,6 @@ const CreateNews: React.FC = () => {
       formData.append("title", title);
       formData.append("description", description);
       images.forEach((image) => formData.append("images", image));
-      formData.append("date", date);
-      formData.append("time", time);
       formData.append("tags", tags.join(",")); // Send tags as a comma-separated string
       formData.append("category", category);
       formData.append("visibility", visibility);
@@ -146,8 +136,6 @@ const CreateNews: React.FC = () => {
       setTitle("");
       setDescription("");
       setImages([]);
-      setDate(new Date().toISOString().slice(0, 10));
-      setTime(new Date().toLocaleTimeString());
       setTags([]);
       setCategory("");
       setVisibility("public");
@@ -246,46 +234,6 @@ const CreateNews: React.FC = () => {
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="date"
-            >
-              Date
-            </label>
-            <input
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                isEdit ? "bg-gray-300" : ""
-              }`}
-              type="date"
-              value={date}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setDate(e.target.value)
-              }
-              required
-              disabled={isEdit}
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="time"
-            >
-              Time
-            </label>
-            <input
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                isEdit ? "bg-gray-300" : ""
-              }`}
-              type="time"
-              value={time}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setTime(e.target.value)
-              }
-              required
-              disabled={isEdit}
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="tags"
             >
               Tags
@@ -331,7 +279,6 @@ const CreateNews: React.FC = () => {
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setYoutubeUrl(e.target.value)
               }
-              
             />
           </div>
           <div className="mb-4">

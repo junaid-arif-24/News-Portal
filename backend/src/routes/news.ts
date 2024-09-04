@@ -24,7 +24,7 @@ router.post(
   upload.array('images', 12),
   async (req: Request, res: Response) => {
     console.log('Files received:', req.files); 
-    const { title, description, category, tags, visibility,time,date ,youtubeUrl} = req.body;
+    const { title, description, category, tags, visibility, youtubeUrl } = req.body;
     const files = req.files as Express.Multer.File[];
     if (!files) {
       return res.status(400).json({ message: 'No files were uploaded.' });
@@ -39,6 +39,11 @@ router.post(
       );
       const uploadResults = await Promise.all(uploadPromises);
       const imageUrls = uploadResults.map(result => result.secure_url);
+
+      // Automatically use the current date and time
+      const currentDate = new Date();
+      const date = currentDate.toISOString().slice(0, 10); // yyyy-mm-dd format
+      const time = currentDate.toLocaleTimeString(); // current time
 
       const newNews = new News({
         title,
@@ -59,6 +64,7 @@ router.post(
     }
   }
 );
+
 
   // Get trending news
   router.get('/trending', async (req, res) => {

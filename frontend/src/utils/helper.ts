@@ -14,3 +14,14 @@ export const formatTime = (time: string): string => {
   const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
   return `${adjustedHours}:${formattedMinutes} ${period}`;
 };
+
+
+// Utility function to calculate reading time
+export const calculateReadingTime = (text: string, wordsPerMinute: number = 200): number => {
+  if (!text) return 0;
+
+  const words = text.split(/\s+/).length; // Split text into words
+  const readingTime = Math.ceil(words / wordsPerMinute); // Calculate reading time based on the average words per minute
+
+  return readingTime; // Return the reading time in minutes
+};

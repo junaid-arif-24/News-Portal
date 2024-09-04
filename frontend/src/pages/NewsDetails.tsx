@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import parse from "html-react-parser";
 import Carousel from "react-material-ui-carousel";
 import YouTube from "react-youtube";
-import { formatDate } from "../utils/helper";
+import { calculateReadingTime, formatDate } from "../utils/helper";
 
 interface Category {
   _id: string;
@@ -96,8 +96,7 @@ const NewsDetails: React.FC = () => {
           (news: any) => news._id
         );
         if (response.data.description) {
-          const words = response.data.description.split(/\s+/).length; // Count the number of words
-          const timeToRead = Math.ceil(words / 200); // Assuming 200 words per minute
+          const timeToRead = calculateReadingTime(response.data.description); // Use the utility function
           setReadingTime(timeToRead);
         }
         setIsSaved(savedNewsIds.includes(id));

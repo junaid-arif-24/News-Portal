@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { formatDate, formatTime } from '../utils/helper';
+import { calculateReadingTime, formatDate, formatTime } from '../utils/helper';
 import parse from 'html-react-parser';
 import { TrendingNewsSkeleton } from './Skeletons';
 import CategoryIcon from '@mui/icons-material/Category';
@@ -75,8 +75,10 @@ const TrendingNews: React.FC = () => {
             />
             <div className="p-2 pt-0">
             <div className="flex justify-between text-xs text-right ">
-              <p className='text-orange-600 font-bold text-xs'> <CategoryIcon  sx={{ fontSize: 16}}/> {news.category.name && news.category.name}</p>
-                  <p className='font-bold text-blue-600'><EventIcon  sx={{ fontSize: 16 }} /> {formatDate(news.date)} at {formatTime(news.time)}</p>
+              <p className='text-orange-600 font-bold text-xs flex'> <CategoryIcon  sx={{ fontSize: 16}}/> {news.category.name && news.category.name} {" "} <span className="text-gray-600 ml-1">   &bull;{" "}
+              {calculateReadingTime(news.description)} min read </span></p>
+                  <p className='font-bold text-blue-600'> &bull;{" "} {formatDate(news.date)} at {formatTime(news.time)} </p>
+                  
                 </div>
               <h3 className="text-lg font-semibold mb-2">{news.title}</h3>
               <p className="text-gray-600 text-sm mb-2">

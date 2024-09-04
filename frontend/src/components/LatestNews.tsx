@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { formatDate, formatTime } from "../utils/helper";
+import { calculateReadingTime, formatDate, formatTime } from "../utils/helper";
 import { useNavigate } from "react-router-dom";
 import parse from "html-react-parser";
 import Carousel from "react-material-ui-carousel";
@@ -20,7 +20,9 @@ interface News {
 
 const LatestNews: React.FC = () => {
   const [latestNews, setLatestNews] = useState<News[]>([]);
-  const [isLoading, setIsLoading] = useState(true); // State to manage loading
+  const [isLoading, setIsLoading] = useState(true); 
+  // State to manage loading
+  
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const navigate = useNavigate();
 
@@ -92,7 +94,8 @@ const LatestNews: React.FC = () => {
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-gray-500">
                         &bull; {formatDate(news.date)} at{" "}
-                        {formatTime(news.time)}
+                        {formatTime(news.time)} <span className="text-gray-600">   &bull;{" "}
+                        {calculateReadingTime(news.description)} min read </span>
                       </span>
                     </div>
                     <h2 className="text-2xl font-bold mb-2">{news.title}</h2>
@@ -125,7 +128,8 @@ const LatestNews: React.FC = () => {
                   </h3>
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-bold text-blue-600 text-xs">
-                      &bull; {formatDate(news.date)} at {formatTime(news.time)}
+                      &bull; {formatDate(news.date)} at {formatTime(news.time)} <span className="text-gray-600">  &bull;{" "}
+                      {calculateReadingTime(news.description)} min read</span> 
                     </span>
                   </div>
                   <p className="text-gray-600 text-sm line-clamp-2">

@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { formatDate, formatTime } from "../utils/helper";
+import { calculateReadingTime, formatDate, formatTime } from "../utils/helper";
 import parse from 'html-react-parser';
+import CategoryIcon from '@mui/icons-material/Category';
 import { NewsListSkeleton } from './Skeletons'; // Import the custom skeleton
 
 interface News {
@@ -58,9 +59,11 @@ const NewsList: React.FC<NewsListProps> = ({ newsList, isLoading }) => {
       />
       <div className="p-2 pt-0">
         <div className=" flex justify-between text-xs text-right">
-        <p className='text-orange-600 font-bold'> {news.category.name && news.category.name}</p>
+        <p className='text-orange-600 font-bold'><CategoryIcon  sx={{ fontSize: 16}}/> {news.category.name && news.category.name} <span className="text-gray-600 font-bold ">   &bull;{" "}
+        {calculateReadingTime(news.description)} min read </span></p>
 
-          <p className="font-bold text-blue-600">&bull; {formatDate(news.date)} at {formatTime(news.time)}</p>
+          <p className="font-bold text-blue-600">&bull; {formatDate(news.date)} at {formatTime(news.time)} </p>
+          
         </div>
         <h3 className="text-lg font-semibold mb-2">{news.title}</h3>
         <p className="text-gray-600 text-sm mb-2">

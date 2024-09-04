@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom"; 
+import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import Comments from "../components/Comments";
 import { toast } from "react-toastify";
@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom";
 import parse from "html-react-parser";
 import Carousel from "react-material-ui-carousel";
 import YouTube from "react-youtube";
-import { calculateReadingTime, formatDate } from "../utils/helper";
+import { calculateReadingTime, formatDate, formatTime } from "../utils/helper";
+import CategoryIcon from "@mui/icons-material/Category";
 
 interface Category {
   _id: string;
@@ -72,8 +73,6 @@ const NewsDetails: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
- 
-
   useEffect(() => {
     const fetchNewsDetails = async () => {
       try {
@@ -116,7 +115,7 @@ const NewsDetails: React.FC = () => {
   useEffect(() => {
     fetchTrendingNews(setTrendingNews);
   }, []);
-  
+
   useEffect(() => {
     if (news && location.pathname.startsWith("/news/")) {
       document.title = `${news.title} - Shot News`;
@@ -186,11 +185,16 @@ const NewsDetails: React.FC = () => {
               <h1 className=" text-2xl md:text-3xl font-bold">{news.title}</h1>
 
               <p className="text-blue-500 mt-2 font-bold">
-              {readingTime && (
-                  <span className="text-gray-600">{readingTime} min read &bull; </span>
+                {readingTime && (
+                  <span className="text-gray-600">
+                    {readingTime} min read &bull;{" "}
+                  </span>
                 )}
-                {formatDate(news.date)} &bull; {news.time} 
-                <span className=" text-orange-600"> &bull;{" "}{news.views} views</span>
+                {formatDate(news.date)} &bull; {news.time}
+                <span className=" text-orange-600">
+                  {" "}
+                  &bull; {news.views} views
+                </span>
               </p>
             </div>
 
@@ -305,24 +309,38 @@ const NewsDetails: React.FC = () => {
                       className="w-full h-40 object-cover mb-1"
                     />
                     <div className="p-2 pt-0">
-                      <div className="text-blue-500 font-bold text-xs text-right">
-                        <p>
-                          &bull; {formatDate(newsItem.date)} at {newsItem.time}
+                      <div className=" flex justify-between text-xs text-right">
+                        <p className="text-orange-600 font-bold flex">
+                          <CategoryIcon sx={{ fontSize: 16 }} />{" "}
+                          {news.category.name && news.category.name}{" "}
+                         
                         </p>
+                       
+                        <p className="text-blue-500 font-bold">
+                          &bull; {formatDate(newsItem.date)} at {formatTime(newsItem.date)}
+                        </p>
+                       
                       </div>
+                      <p className="text-gray-600 font-bold text-xs mb-1">
+                            {" "}
+                            &bull; {calculateReadingTime(news.description)} min
+                            read{" "}
+                          </p>
                       <h3 className="text-lg font-semibold mb-2">
                         {newsItem.title}
                       </h3>
                       <p className="text-gray-600 text-sm mb-2">
                         {parse(newsItem.description.substring(0, 100))}....
                       </p>
-                     
+                      
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 text-center font-bold text-xl">No relatable news available.</p>
+              <p className="text-gray-500 text-center font-bold text-xl">
+                No relatable news available.
+              </p>
             )}
           </div>
 
@@ -332,51 +350,51 @@ const NewsDetails: React.FC = () => {
       <div className="w-full lg:w-1/3 p-4 space-y-4">
         <h2 className="text-2xl font-bold mb-1 underline">Trenidng News</h2>
 
-        
-          {trendingNews.slice(0, 4).map((newsItem) => (
-            <div
-              key={newsItem._id}
-              onClick={() => {
-                navigate(`/news/${newsItem._id}`);
-                setIsDescriptionExpanded(false);
-              }}
-              className="bg-white   rounded-lg cursor-pointer shadow-md flex h-36 transition-transform transform hover:scale-105"
-            >
-              {newsItem.images.length > 0 && (
-                <img
-                  src={newsItem.images[0]}
-                  alt={newsItem.title}
-                  className="w-1/3 object-cover rounded-l-lg h-full"
-                />
-              )}
-              <div className="p-2 flex flex-col justify-between w-2/3">
-                <h3 className="text-lg font-bold mb-1 line-clamp-2">
-                  {newsItem.title}
-                </h3>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-blue-500 font-bold text-xs">
-                    &bull; {formatDate(newsItem.date)} at {newsItem.time}
-                  </span>
-                </div>
-                <p className="text-gray-600 text-sm line-clamp-2">
-                  {parse(newsItem.description.substring(0, 100))}....
-                </p>
+        {trendingNews.slice(0, 4).map((newsItem) => (
+          <div
+            key={newsItem._id}
+            onClick={() => {
+              navigate(`/news/${newsItem._id}`);
+              setIsDescriptionExpanded(false);
+            }}
+            className="bg-white   rounded-lg cursor-pointer shadow-md flex h-36 transition-transform transform hover:scale-105"
+          >
+            {newsItem.images.length > 0 && (
+              <img
+                src={newsItem.images[0]}
+                alt={newsItem.title}
+                className="w-1/3 object-cover rounded-l-lg h-full"
+              />
+            )}
+            <div className="p-2 flex flex-col justify-between w-2/3">
+              <h3 className="text-lg font-bold mb-1 line-clamp-2">
+                {newsItem.title}
+              </h3>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-blue-500 font-bold text-xs">
+                  &bull; {formatDate(newsItem.date)} at {newsItem.time} <span className="text-gray-600">  &bull;{" "}
+                  {calculateReadingTime(news.description)} min read</span> 
+                </span>
               </div>
+              <p className="text-gray-600 text-sm line-clamp-2">
+                {parse(newsItem.description.substring(0, 100))}....
+              </p>
             </div>
-          ))}
-          {trendingNews.length > 4 && (
-            <div
-              onClick={() => {
-                navigate("/all-news");
-                setIsDescriptionExpanded(false);
-              }}
-              className="bg-white p-4 rounded-lg shadow-md flex cursor-pointer justify-center items-center"
-            >
-              <p className="text-gray-600">More news...</p>
-            </div>
-          )}
-        </div>
+          </div>
+        ))}
+        {trendingNews.length > 4 && (
+          <div
+            onClick={() => {
+              navigate("/all-news");
+              setIsDescriptionExpanded(false);
+            }}
+            className="bg-white p-4 rounded-lg shadow-md flex cursor-pointer justify-center items-center"
+          >
+            <p className="text-gray-600">More news...</p>
+          </div>
+        )}
       </div>
+    </div>
   );
 };
 

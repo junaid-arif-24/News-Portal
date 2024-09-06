@@ -221,7 +221,7 @@ const NewsDetails: React.FC = () => {
                     key={index}
                     src={image}
                     alt={`news-${index}`}
-                    className="w-full rounded mb-4 object-fill h-[400px] object-center"
+                    className="w-full rounded mb-4 object-cover h-[400px] object-center"
                   />
                 ))}
               </Carousel>

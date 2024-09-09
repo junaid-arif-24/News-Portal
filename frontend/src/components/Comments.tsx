@@ -46,6 +46,10 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
       return;
        
     }
+    if (!comment) {
+      toast.error('Please enter a comment');
+      return;
+    }
     try {
       const response = await axios.post<Comment>(`${API_BASE_URL}/api/comments/${newsId}/comments`, { text: comment }, {
         headers: {

@@ -8,7 +8,7 @@ interface Comment {
   _id: string;
   text: string;
   date: string;
-  user: { name: string };
+  user?: { name: string };
   news: { title: string };
 }
 
@@ -72,10 +72,10 @@ const ManageCommentsPage: React.FC = () => {
               <tbody className="divide-y divide-gray-200">
                 {comments.length > 0 ? comments.map(comment => (
                   <tr key={comment._id}>
-                    <td className="px-4 py-2 border">{comment.user.name}</td>
+                    <td className="px-4 py-2 border">{comment.user?.name}</td>
                     <td className="px-4 py-2 border">{comment.news && comment.news.title ? comment.news.title : 'N/A'}</td>
-                    <td className="px-4 py-2 border">{comment.text}</td>
-                    <td className="px-4 py-2 border">{formatDate(comment.date)}</td>
+                    <td className="px-4 py-2 border">{comment?.text}</td>
+                    <td className="px-4 py-2 border">{formatDate(comment?.date)}</td>
                     <td className="px-4 py-2 border">
                       <button
                         className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
@@ -98,10 +98,10 @@ const ManageCommentsPage: React.FC = () => {
           <div className="block md:hidden">
             {comments.length > 0 ? comments.map(comment => (
               <div key={comment._id} className="bg-white shadow rounded-lg mb-4 p-4">
-                <h2 className="text-xl font-bold">{comment.user.name}</h2>
+                <h2 className="text-xl font-bold">{comment.user?.name}</h2>
                 <p className="text-gray-700"><strong>News Title:</strong> {comment.news && comment.news.title ? comment.news.title : 'N/A'}</p>
-                <p className="text-gray-700"><strong>Comment:</strong> {comment.text}</p>
-                <p className="text-gray-500"><strong>Date:</strong> {formatDate(comment.date)}</p>
+                <p className="text-gray-700"><strong>Comment:</strong> {comment?.text}</p>
+                <p className="text-gray-500"><strong>Date:</strong> {formatDate(comment?.date)}</p>
                 <button
                   className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-2"
                   onClick={() => deleteComment(comment._id)}

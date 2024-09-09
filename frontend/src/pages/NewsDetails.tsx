@@ -70,7 +70,7 @@ const NewsDetails: React.FC = () => {
   const [readingTime, setReadingTime] = useState<number | null>(null);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const token = localStorage.getItem("token");
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -197,16 +197,17 @@ const NewsDetails: React.FC = () => {
                 </span>
               </p>
             </div>
-
-            <button
-              onClick={handleSaveToggle}
-              className={`text-2xl ${
-                isSaved ? "text-red-500" : "text-gray-500"
-              }`}
-              aria-label={isSaved ? "Unsave" : "Save"}
-            >
-              {isSaved ? <FaBookmark /> : <FaRegBookmark />}
-            </button>
+            {user?.role === "subscriber" && (
+              <button
+                onClick={handleSaveToggle}
+                className={`text-2xl ${
+                  isSaved ? "text-red-500" : "text-gray-500"
+                }`}
+                aria-label={isSaved ? "Unsave" : "Save"}
+              >
+                {isSaved ? <FaBookmark /> : <FaRegBookmark />}
+              </button>
+            )}
           </div>
           <div className="mb-4">
             {news.images.length > 1 ? (
@@ -275,16 +276,18 @@ const NewsDetails: React.FC = () => {
           {/* YouTube Video Player */}
           {news.youtubeUrl && (
             <div className="mb-4">
-              <YouTube
-                videoId={extractVideoId(news.youtubeUrl) || undefined} // Extract the video ID
-                opts={{
-                  height: "390",
-                  width: "840",
-                  // playerVars: {
-                  //   autoplay: 1,
-                  // },
-                }}
-              />
+              <div className="relative w-full pb-[56.25%]">
+                {" "}
+                {/* 16:9 aspect ratio */}
+                <YouTube
+                  className="absolute top-0 left-0 w-full h-full"
+                  videoId={extractVideoId(news.youtubeUrl) || undefined}
+                  opts={{
+                    height: "100%", // Ensure it takes full height
+                    width: "100%", // Ensure it takes full width
+                  }}
+                />
+              </div>
             </div>
           )}
 
@@ -313,26 +316,23 @@ const NewsDetails: React.FC = () => {
                         <p className="text-orange-600 font-bold flex">
                           <CategoryIcon sx={{ fontSize: 16 }} />{" "}
                           {news.category.name && news.category.name}{" "}
-                         
                         </p>
-                       
+
                         <p className="text-blue-500 font-bold">
-                          &bull; {formatDate(newsItem.date)} at {formatTime(newsItem.date)}
+                          &bull; {formatDate(newsItem.date)} at{" "}
+                          {formatTime(newsItem.date)}
                         </p>
-                       
                       </div>
                       <p className="text-gray-600 font-bold text-xs mb-1">
-                            {" "}
-                            &bull; {calculateReadingTime(news.description)} min
-                            read{" "}
-                          </p>
+                        {" "}
+                        &bull; {calculateReadingTime(news.description)} min read{" "}
+                      </p>
                       <h3 className="text-lg font-semibold mb-2">
                         {newsItem.title}
                       </h3>
                       <p className="text-gray-600 text-sm mb-2">
                         {parse(newsItem.description.substring(0, 100))}....
                       </p>
-                      
                     </div>
                   </div>
                 ))}
@@ -372,8 +372,11 @@ const NewsDetails: React.FC = () => {
               </h3>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-blue-500 font-bold text-xs">
-                  &bull; {formatDate(newsItem.date)} at {newsItem.time} <span className="text-gray-600">  &bull;{" "}
-                  {calculateReadingTime(news.description)} min read</span> 
+                  &bull; {formatDate(newsItem.date)} at {newsItem.time}{" "}
+                  <span className="text-gray-600">
+                    {" "}
+                    &bull; {calculateReadingTime(news.description)} min read
+                  </span>
                 </span>
               </div>
               <p className="text-gray-600 text-sm line-clamp-2">

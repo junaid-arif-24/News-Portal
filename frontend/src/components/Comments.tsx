@@ -9,7 +9,7 @@ interface Comment {
   _id: string;
   text: string;
   date: string;
-  user: {
+  user?: {
     name: string;
     email: string;
   };
@@ -71,10 +71,10 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
             <li key={comment._id} className="bg-white shadow-md rounded-md p-4">
               <div className="flex items-center mb-2">
                 <FaUserCircle className="text-2xl text-gray-500 mr-2" />
-                <span className="text-gray-700 font-semibold">{comment.user.name}</span>
+                <span className="text-gray-700 font-semibold">{comment.user?.name}</span>
               </div>
-              <p className="text-gray-800 mb-1">{comment.text}</p>
-              <span className="text-sm text-gray-500">&bull; {formatDate(comment.date)}</span>
+              <p className="text-gray-800 mb-1">{comment?.text}</p>
+              <span className="text-sm text-gray-500">&bull; {formatDate(comment?.date)}</span>
             </li>
           ))}
         </ul>

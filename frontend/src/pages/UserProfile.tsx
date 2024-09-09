@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import {icons}  from "../utils/icons";
+import { icons } from "../utils/icons";
 import { formatDate, formatTime } from "../utils/helper"; // Adjust the import according to your project structure
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +33,7 @@ interface UserProf {
 const UserProfile: React.FC = () => {
   const [profile, setProfile] = useState<UserProf | null>(null);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated , user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const UserProfile: React.FC = () => {
     }
     try {
       await axios.post(
-        `${API_BASE_URL}/api/user/unsubscribe`,
+        `${API_BASE_URL}/api/categories/unsubscribe`,
         { categoryId },
         {
           headers: {
@@ -84,10 +84,7 @@ const UserProfile: React.FC = () => {
     }
   };
 
-  if (!profile)
-    return (
-     <Loader loading={!profile}/>
-    );
+  if (!profile) return <Loader loading={!profile} />;
 
   return (
     <div className="container mx-auto p-4">
@@ -163,36 +160,44 @@ const UserProfile: React.FC = () => {
             </div>
           </div>
         </div>
-
-        <div className="mb-10">
-  <h2 className="text-lg font-bold mb-4">Subscriptions</h2>
-  {profile.subscriptions.length === 0 ? (
-    <div className="flex justify-center items-center h-24">
-      <p className="text-gray-700 text-3xl">No subscriptions found.</p>
-    </div>
-  ) : (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {profile.subscriptions.map((sub) => (
-        <div key={sub._id} onClick={() => navigate(`/all-news`, { state: { 'category': sub.name } })} className="bg-white p-6 rounded-lg shadow-md flex items-center cursor-pointer justify-between">
-          <div className="flex items-center">
-            <div className="bg-gray-100 p-2 rounded-full mr-4">
-            {icons[sub.name] ? icons[sub.name]({ size: 'h-6 w-6' }) : icons['Default']({ size: " h-6 w-6" })}
+        {user?.role === "subscriber" && (<>
+          <div className="mb-10">
+          <h2 className="text-lg font-bold mb-4">Subscriptions</h2>
+          {profile.subscriptions.length === 0 ? (
+            <div className="flex justify-center items-center h-24">
+              <p className="text-gray-700 text-3xl">No subscriptions found.</p>
             </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-1">{sub.name}</h3>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {profile.subscriptions.map((sub) => (
+                <div
+                  key={sub._id}
+                  onClick={() =>
+                    navigate(`/all-news`, { state: { category: sub.name } })
+                  }
+                  className="bg-white p-6 rounded-lg shadow-md flex items-center cursor-pointer justify-between"
+                >
+                  <div className="flex items-center">
+                    <div className="bg-gray-100 p-2 rounded-full mr-4">
+                      {icons[sub.name]
+                        ? icons[sub.name]({ size: "h-6 w-6" })
+                        : icons["Default"]({ size: " h-6 w-6" })}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold mb-1">{sub.name}</h3>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleUnsubscribe(sub._id)}
+                    className="bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded"
+                  >
+                    Unsubscribe
+                  </button>
+                </div>
+              ))}
             </div>
-          </div>
-          <button
-            onClick={() => handleUnsubscribe(sub._id)}
-            className="bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded"
-          >
-            Unsubscribe
-          </button>
+          )}
         </div>
-      ))}
-    </div>
-  )}
-</div>
 
         <div>
           <h2 className="text-xl font-semibold mb-4">Saved News:</h2>
@@ -215,10 +220,7 @@ const UserProfile: React.FC = () => {
                       className="w-full h-40 object-cover"
                     />
                     <div className="p-4">
-                      <p
-                       
-                        className="text-blue-500 hover:underline text-lg font-semibold"
-                      >
+                      <p className="text-blue-500 hover:underline text-lg font-semibold">
                         {news.title}
                       </p>
                       <p className="text-gray-500 text-sm">
@@ -234,6 +236,11 @@ const UserProfile: React.FC = () => {
             </div>
           )}
         </div>
+        </>
+          
+        )}
+    
+      
       </div>
     </div>
   );

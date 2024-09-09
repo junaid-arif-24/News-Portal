@@ -76,29 +76,34 @@ const NewsDetails: React.FC = () => {
   useEffect(() => {
     const fetchNewsDetails = async () => {
       try {
+        let savedNewsIds;
         const response = await axios.get<News>(
           `${API_BASE_URL}/api/news/${id}`
         );
         setNews(response.data);
 
         // Check if news is saved
-        const savedResponse = await axios.get(
-          `${API_BASE_URL}/api/news/${id}/saved`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        if (isAuthenticated) {
+          const savedResponse = await axios.get(
+            `${API_BASE_URL}/api/news/${id}/saved`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
 
-        const savedNewsIds = savedResponse.data.savedNews.map(
-          (news: any) => news._id
-        );
+           savedNewsIds = savedResponse.data.savedNews.map(
+            (news: any) => news._id
+          );
+        setIsSaved(savedNewsIds.includes(id));
+
+        }
+
         if (response.data.description) {
           const timeToRead = calculateReadingTime(response.data.description); // Use the utility function
           setReadingTime(timeToRead);
         }
-        setIsSaved(savedNewsIds.includes(id));
       } catch (error) {
         console.error("Error fetching news details", error);
       }

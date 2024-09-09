@@ -94,7 +94,7 @@ const UserProfile: React.FC = () => {
           <div className="mb-6">
             <h2 className="text-xl font-bold mb-2">User Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white p-4 rounded-lg shadow-md flex items-center">
+              <div className="bg-white p-4 rounded-lg shadow-md flex  items-center">
                 <div className="bg-blue-100 p-2 rounded-full mr-4">
                   <svg
                     className="h-6 w-6 text-blue-500"
@@ -115,7 +115,7 @@ const UserProfile: React.FC = () => {
                   <p className="text-gray-700">{profile.name}</p>
                 </div>
               </div>
-              <div className="bg-white p-4 rounded-lg shadow-md flex items-center">
+              <div className="bg-white p-4 rounded-lg shadow-md flex-wrap flex items-center">
                 <div className="bg-green-100 p-2 rounded-full mr-4">
                   <svg
                     className="h-6 w-6 text-green-500"
@@ -131,9 +131,9 @@ const UserProfile: React.FC = () => {
                     />
                   </svg>
                 </div>
-                <div>
+                <div >
                   <h3 className="text-lg font-semibold mb-1">Email</h3>
-                  <p className="text-gray-700">{profile.email}</p>
+                  <p className="text-gray-700 ">{profile.email}</p>
                 </div>
               </div>
               <div className="bg-white p-4 rounded-lg shadow-md flex items-center">
@@ -152,7 +152,7 @@ const UserProfile: React.FC = () => {
                     />
                   </svg>
                 </div>
-                <div>
+                <div >
                   <h3 className="text-lg font-semibold mb-1">Role</h3>
                   <p className="text-gray-700">{profile.role}</p>
                 </div>

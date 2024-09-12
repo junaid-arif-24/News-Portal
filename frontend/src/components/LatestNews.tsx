@@ -73,7 +73,6 @@ const LatestNews: React.FC = () => {
                 style: {
                   top: "50%", // Position the buttons vertically in the middle
                   transform: "translateY(-250%)",
-                  // backgroundColor: "rgba(0, 0, 0, 0.5)", // Optional: to make buttons more visible
                 },
               }}
             >
@@ -83,24 +82,25 @@ const LatestNews: React.FC = () => {
                   onClick={() => navigate(`/news/${news._id}`)}
                   className="bg-white md:h-max-[calc(100vh-30px)] p-0 rounded-lg shadow-md cursor-pointer"
                 >
-                  {news.images.length > 0 && (
+                  {news.images?.length > 0 && (
                     <img
-                      src={news.images[0]}
-                      alt={news.title}
+                      src={news.images[0] || '/default-image.jpg'} // Provide a default image if none exists
+                      alt={news.title || 'News Image'} // Provide a default alt text
                       className="w-full h-96 object-cover rounded-lg mb-2"
                     />
                   )}
                   <div className="p-4">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-gray-500">
-                        &bull; {formatDate(news.date)} at{" "}
-                        {formatTime(news.time)} <span className="text-gray-600">   &bull;{" "}
-                        {calculateReadingTime(news.description)} min read </span>
+                        &bull; {formatDate(news.date || '')} at{" "}
+                        {formatTime(news.time || '')} 
+                        <span className="text-gray-600">   &bull;{" "}
+                        {calculateReadingTime(news.description || '')} min read </span>
                       </span>
                     </div>
-                    <h2 className="text-2xl font-bold mb-2">{news.title}</h2>
+                    <h2 className="text-2xl font-bold mb-2">{news.title || 'No Title'}</h2>
                     <p className="text-gray-700">
-                      {parse(news.description.substring(0, 100))}
+                      {parse(news.description?.substring(0, 100) || 'No description available...')}
                     </p>
                   </div>
                 </Paper>
@@ -108,32 +108,33 @@ const LatestNews: React.FC = () => {
             </Carousel>
           </div>
           {/* Side News */}
-          <div className="w-full md:w-1/3 p-4 space-y-4 max-h-full md:h-[calc(100vh-50px)]  overflow-y-auto">
+          <div className="w-full md:w-1/3 p-4 space-y-4 max-h-full md:h-[calc(100vh-50px)] overflow-y-auto">
             {latestNews.slice(4, 8).map((news) => (
               <div
                 onClick={() => navigate(`/news/${news._id}`)}
                 key={news._id}
-                className="bg-white  rounded-lg cursor-pointer shadow-md flex h-36 transition-transform transform hover:scale-105"
+                className="bg-white rounded-lg cursor-pointer shadow-md flex h-36 transition-transform transform hover:scale-105"
               >
-                {news.images.length > 0 && (
+                {news.images?.length > 0 && (
                   <img
-                    src={news.images[0]}
-                    alt={news.title}
+                    src={news.images[0] || '/default-image.jpg'} // Provide a default image if none exists
+                    alt={news.title || 'News Image'} // Provide a default alt text
                     className="w-1/3 object-cover rounded-l-lg h-full"
                   />
                 )}
                 <div className="p-2 flex flex-col justify-between w-2/3">
                   <h3 className="text-lg font-bold mb-1 line-clamp-2">
-                    {news.title}
+                    {news.title || 'No Title'}
                   </h3>
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-bold text-blue-600 text-xs">
-                      &bull; {formatDate(news.date)} at {formatTime(news.time)} <span className="text-gray-600">  &bull;{" "}
-                      {calculateReadingTime(news.description)} min read</span> 
+                      &bull; {formatDate(news.date || '')} at {formatTime(news.time || '')} 
+                      <span className="text-gray-600">  &bull;{" "}
+                      {calculateReadingTime(news.description || '')} min read</span> 
                     </span>
                   </div>
                   <p className="text-gray-600 text-sm line-clamp-2">
-                  {parse(news.description.substring(0, 100))}....
+                    {parse(news.description?.substring(0, 100) || 'No description available...')}....
                   </p>
                 </div>
               </div>

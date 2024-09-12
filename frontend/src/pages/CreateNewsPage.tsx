@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect, useRef } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -35,6 +35,22 @@ const CreateNews: React.FC = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [youtubeUrl, setYoutubeUrl] = useState<string>("");
+  const [errorFields, setErrorFields] = useState<{
+    title: boolean;
+    description: boolean;
+    images: boolean;
+    category: boolean;
+  }>({
+    title: false,
+    description: false,
+    images: false,
+    category: false,
+  });
+
+  const titleRef = useRef<HTMLInputElement>(null);
+  const categoryRef = useRef<HTMLSelectElement>(null);
+  const quillRef = useRef<HTMLDivElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const location = useLocation();
@@ -97,9 +113,75 @@ const CreateNews: React.FC = () => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
+  const validateForm = () => {
+    // Define individual error flags
+    const hasTitleError = !title;
+    const hasDescriptionError = !description;
+    const hasImagesError = images.length === 0;
+    const hasCategoryError = !category;
+  
+    // Set errors based on priority
+    if (hasTitleError) {
+      setErrorFields({
+        title: true,
+        description: false,
+        images: false,
+        category: false,
+      });
+      titleRef.current?.focus();
+      toast.error("Please enter a title");
+      return false;
+    } else if (hasDescriptionError) {
+      setErrorFields({
+        title: false,
+        description: true,
+        images: false,
+        category: false,
+      });
+      quillRef.current?.focus();
+      toast.error("Please enter a description");
+      return false;
+    } else if (hasImagesError) {
+      setErrorFields({
+        title: false,
+        description: false,
+        images: true,
+        category: false,
+      });
+      imageInputRef.current?.focus();
+      toast.error("Please upload at least one image");
+      return false;
+    } else if (hasCategoryError) {
+      setErrorFields({
+        title: false,
+        description: false,
+        images: false,
+        category: true,
+      });
+      categoryRef.current?.focus();
+      toast.error("Please select a category");
+      return false;
+    }
+  
+    // No errors
+    setErrorFields({
+      title: false,
+      description: false,
+      images: false,
+      category: false,
+    });
+    return true;
+  };
+  
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true); // Set loading state to true
+    if (!validateForm()) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       const formData = new FormData();
@@ -172,14 +254,18 @@ const CreateNews: React.FC = () => {
               Title
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              ref={titleRef}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                errorFields.title ? "border-red-500" : ""
+              }`}
               type="text"
               placeholder="Title"
               value={title}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setTitle(e.target.value)
-              }
-              required
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setTitle(e.target.value);
+                setErrorFields((prev) => ({ ...prev, title: false }));
+              }}
+            
             />
           </div>
           <div className="mb-4">
@@ -189,12 +275,22 @@ const CreateNews: React.FC = () => {
             >
               Description
             </label>
-            <ReactQuill
-              theme="snow"
-              value={description}
-              onChange={setDescription}
-              className="bg-white"
-            />
+            <div
+              ref={quillRef}
+              className={`${
+                errorFields.description ? "bg-red-200" : ""
+              }`}
+            >
+              <ReactQuill
+                theme="snow"
+                value={description}
+                onChange={(value) => {
+                  setDescription(value);
+                  setErrorFields((prev) => ({ ...prev, description: false }));
+                }}
+                className={`${errorFields.description} ? "" : "bg-white"`}
+              />
+            </div>
           </div>
           <div className="mb-4">
             <label
@@ -204,8 +300,9 @@ const CreateNews: React.FC = () => {
               Images
             </label>
             <input
+              ref={imageInputRef}
               className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                isEdit ? "bg-gray-300" : ""
+                errorFields.images ? "border-red-500" : ""
               }`}
               type="file"
               multiple
@@ -289,12 +386,15 @@ const CreateNews: React.FC = () => {
               Category
             </label>
             <select
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              ref={categoryRef}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                errorFields.category ? "border-red-500" : ""
+              }`}
               value={category}
-              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                setCategory(e.target.value)
-              }
-              required
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                setCategory(e.target.value);
+                setErrorFields((prev) => ({ ...prev, category: false }));
+              }}
             >
               <option value="">Select a category</option>
               {categories.map((category) => (
@@ -317,7 +417,6 @@ const CreateNews: React.FC = () => {
               onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                 setVisibility(e.target.value as "public" | "private")
               }
-              required
             >
               <option value="public">Public</option>
               <option value="private">Private</option>

@@ -112,7 +112,7 @@ const UserProfile: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-1">Name</h3>
-                  <p className="text-gray-700">{profile.name}</p>
+                  <p className="text-gray-700">{profile.name || "N/A"}</p>
                 </div>
               </div>
               <div className="bg-white p-4 rounded-lg shadow-md flex-wrap flex items-center">
@@ -133,7 +133,7 @@ const UserProfile: React.FC = () => {
                 </div>
                 <div >
                   <h3 className="text-lg font-semibold mb-1">Email</h3>
-                  <p className="text-gray-700 ">{profile.email}</p>
+                  <p className="text-gray-700 ">{profile.email || "N/A"}</p>
                 </div>
               </div>
               <div className="bg-white p-4 rounded-lg shadow-md flex items-center">
@@ -154,7 +154,7 @@ const UserProfile: React.FC = () => {
                 </div>
                 <div >
                   <h3 className="text-lg font-semibold mb-1">Role</h3>
-                  <p className="text-gray-700">{profile.role}</p>
+                  <p className="text-gray-700">{profile.role || "N/A"}</p>
                 </div>
               </div>
             </div>
@@ -169,7 +169,7 @@ const UserProfile: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {profile.subscriptions.map((sub) => (
+              {profile.subscriptions && profile.subscriptions.map((sub) => (
                 <div
                   key={sub._id}
                   onClick={() =>
@@ -184,7 +184,7 @@ const UserProfile: React.FC = () => {
                         : icons["Default"]({ size: " h-6 w-6" })}
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold mb-1">{sub.name}</h3>
+                      <h3 className="text-lg font-semibold mb-1">{sub.name || "N/A"}</h3>
                     </div>
                   </div>
                   <button
@@ -207,7 +207,7 @@ const UserProfile: React.FC = () => {
             </div>
           ) : (
             <div className="flex flex-wrap -mx-2">
-              {profile.savedNews.map((news) => (
+              { profile.savedNews && profile.savedNews.map((news) => (
                 <div
                   key={news._id}
                   className="w-full md:w-1/2 lg:w-1/3 px-2 mb-4 cursor-pointer"
@@ -221,13 +221,13 @@ const UserProfile: React.FC = () => {
                     />
                     <div className="p-4">
                       <p className="text-blue-500 hover:underline text-lg font-semibold">
-                        {news.title}
+                        {news.title || "No Title"}
                       </p>
                       <p className="text-gray-500 text-sm">
                         {formatDate(news.date)} at {formatTime(news.time)}
                       </p>
                       <p className="text-gray-700 mt-2">
-                        Category: {news.category.name}
+                        Category: {news.category.name || "No Category"}
                       </p>
                     </div>
                   </div>

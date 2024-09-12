@@ -5,13 +5,14 @@ import { formatDate } from '../utils/helper';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+
 interface Comment {
   _id: string;
   text: string;
   date: string;
   user?: {
-    name: string;
-    email: string;
+    name?: string; // Make user properties optional
+    email?: string;
   };
 }
 
@@ -25,7 +26,8 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
-  const {isAuthenticated} = useAuth();
+  const { isAuthenticated } = useAuth();
+
   const fetchComments = async () => {
     try {
       const response = await axios.get<Comment[]>(`${API_BASE_URL}/api/comments/${newsId}/comments`);
@@ -34,28 +36,32 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
       console.error('Error fetching comments', error);
     }
   };
+
   useEffect(() => {
- 
     fetchComments();
   }, [newsId]);
 
   const addComment = async () => {
-    if(!isAuthenticated) {
+    if (!isAuthenticated) {
       toast.error('Please login to comment');
       navigate('/login');
       return;
-       
     }
-    if (!comment) {
+
+    if (!comment.trim()) {
       toast.error('Please enter a comment');
       return;
     }
+
     try {
-      const response = await axios.post<Comment>(`${API_BASE_URL}/api/comments/${newsId}/comments`, { text: comment }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.post<Comment>(`${API_BASE_URL}/api/comments/${newsId}/comments`, 
+        { text: comment.trim() }, // Trim the comment to remove extra spaces
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       fetchComments();
       setComment('');
     } catch (error) {
@@ -63,22 +69,21 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
     }
   };
 
-
   return (
     <div className="mt-8">
       <h2 className="text-2xl font-bold mb-4">Comments</h2>
       {comments.length === 0 ? (
-        <div className="text-center text-gray-600 mb-4  font-bold text-xl">No Comments Yet</div>
+        <div className="text-center text-gray-600 mb-4 font-bold text-xl">No Comments Yet</div>
       ) : (
         <ul className="space-y-4 mb-4">
           {comments.map((comment) => (
             <li key={comment._id} className="bg-white shadow-md rounded-md p-4">
               <div className="flex items-center mb-2">
                 <FaUserCircle className="text-2xl text-gray-500 mr-2" />
-                <span className="text-gray-700 font-semibold">{comment.user?.name}</span>
+                <span className="text-gray-700 font-semibold">{comment.user?.name || 'Anonymous'}</span>
               </div>
-              <p className="text-gray-800 mb-1">{comment?.text}</p>
-              <span className="text-sm text-gray-500">&bull; {formatDate(comment?.date)}</span>
+              <p className="text-gray-800 mb-1">{comment.text || 'No comment text available'}</p>
+              <span className="text-sm text-gray-500">&bull; {formatDate(comment.date || '')}</span>
             </li>
           ))}
         </ul>

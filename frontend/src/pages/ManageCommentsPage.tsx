@@ -14,39 +14,42 @@ interface Comment {
 
 const ManageCommentsPage: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // Adjust the base URL as needed
+  const [loading, setLoading] = useState<boolean>(true);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || ''; // Adjust the base URL as needed
 
   useEffect(() => {
     const fetchComments = async () => {
+      setLoading(true); // Start loading
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/comments/all`, {
+        const response = await axios.get<Comment[]>(`${API_BASE_URL}/api/comments/all`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
           },
         });
         setComments(response.data);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching comments', error);
-        setLoading(false);
+        toast.error('Error fetching comments'); // Show error toast
+      } finally {
+        setLoading(false); // End loading
       }
     };
 
     fetchComments();
-  }, []);
+  }, [API_BASE_URL]);
 
   const deleteComment = async (id: string) => {
     try {
       await axios.delete(`${API_BASE_URL}/api/comments/${id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        }, 
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
       });
       setComments(comments.filter(comment => comment._id !== id));
       toast.success('Comment deleted successfully');
     } catch (error) {
       console.error('Error deleting comment', error);
+      toast.error('Error deleting comment');
     }
   };
 
@@ -54,7 +57,9 @@ const ManageCommentsPage: React.FC = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6 text-center">Manage Comments</h1>
       {loading ? (
-        <Loader loading={loading} />
+        <div className="flex justify-center items-center h-64">
+          <Loader loading={true} size={40} />
+        </div>
       ) : (
         <>
           {/* Desktop View */}
@@ -72,10 +77,10 @@ const ManageCommentsPage: React.FC = () => {
               <tbody className="divide-y divide-gray-200">
                 {comments.length > 0 ? comments.map(comment => (
                   <tr key={comment._id}>
-                    <td className="px-4 py-2 border">{comment.user?.name}</td>
-                    <td className="px-4 py-2 border">{comment.news && comment.news.title ? comment.news.title : 'N/A'}</td>
-                    <td className="px-4 py-2 border">{comment?.text}</td>
-                    <td className="px-4 py-2 border">{formatDate(comment?.date)}</td>
+                    <td className="px-4 py-2 border">{comment.user?.name || 'N/A'}</td>
+                    <td className="px-4 py-2 border">{comment.news.title || 'N/A'}</td>
+                    <td className="px-4 py-2 border">{comment.text}</td>
+                    <td className="px-4 py-2 border">{formatDate(comment.date)}</td>
                     <td className="px-4 py-2 border">
                       <button
                         className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
@@ -98,10 +103,10 @@ const ManageCommentsPage: React.FC = () => {
           <div className="block md:hidden">
             {comments.length > 0 ? comments.map(comment => (
               <div key={comment._id} className="bg-white shadow rounded-lg mb-4 p-4">
-                <h2 className="text-xl font-bold">{comment.user?.name}</h2>
-                <p className="text-gray-700"><strong>News Title:</strong> {comment.news && comment.news.title ? comment.news.title : 'N/A'}</p>
-                <p className="text-gray-700"><strong>Comment:</strong> {comment?.text}</p>
-                <p className="text-gray-500"><strong>Date:</strong> {formatDate(comment?.date)}</p>
+                <h2 className="text-xl font-bold">{comment.user?.name || 'N/A'}</h2>
+                <p className="text-gray-700"><strong>News Title:</strong> {comment.news.title || 'N/A'}</p>
+                <p className="text-gray-700"><strong>Comment:</strong> {comment.text}</p>
+                <p className="text-gray-500"><strong>Date:</strong> {formatDate(comment.date)}</p>
                 <button
                   className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-2"
                   onClick={() => deleteComment(comment._id)}

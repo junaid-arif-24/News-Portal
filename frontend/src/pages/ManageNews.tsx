@@ -34,9 +34,9 @@ const ManageNews: React.FC = () => {
   const [searchVisibility, setSearchVisibility] = useState<string>('public');
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || ''; // Ensure API_BASE_URL is defined
 
-  // Fetch categories when the component mounts
+  // Fetch categories and news when the component mounts
   useEffect(() => {
     fetchCategories();
     fetchNews();
@@ -45,9 +45,10 @@ const ManageNews: React.FC = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/categories`);
-      setCategories(response.data);
+      setCategories(response.data || []); // Default to empty array if no data
     } catch (error) {
       console.error('Error fetching categories', error);
+      toast.error('Error fetching categories');
     }
   };
 
@@ -64,9 +65,10 @@ const ManageNews: React.FC = () => {
           visibility: searchVisibility,
         },
       });
-      setNewsList(response.data);
+      setNewsList(response.data || []); // Default to empty array if no data
     } catch (error) {
       console.error('Error fetching news', error);
+      toast.error('Error fetching news');
     } finally {
       setLoading(false);
     }
@@ -81,12 +83,12 @@ const ManageNews: React.FC = () => {
       const token = localStorage.getItem('token');
       await axios.delete(`${API_BASE_URL}/api/news/${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token || ''}`, // Default to empty string if no token
         },
       });
 
       fetchNews();
-      toast.success("News deleted successfully");
+      toast.success('News deleted successfully');
     } catch (error) {
       console.error('Error deleting news', error);
       toast.error('Error deleting news');
@@ -165,11 +167,13 @@ const ManageNews: React.FC = () => {
             className="p-2 border rounded"
           >
             <option value="">Select Category</option>
-            {categories.map((cat) => (
+            {categories.length > 0 ? categories.map((cat) => (
               <option key={cat._id} value={cat.name}>
                 {cat.name}
               </option>
-            ))}
+            )) : (
+              <option value="" disabled>No categories available</option>
+            )}
           </select>
           <select
             value={searchVisibility}
@@ -202,29 +206,32 @@ const ManageNews: React.FC = () => {
             >
               <div className="w-[30%] max-h-[330px]">
                 <img
-                  src={news.images[0]}
-                  alt={news.title}
+                  src={news.images.length > 0 ? news.images[0] : ''} // Handle empty images array
+                  alt={news.title || 'News Image'} // Default alt text
                   className="w-full h-full object-cover rounded-l-lg mb-4"
                 />
               </div>
               <div className="w-[70%] p-4">
-                <h2 className="text-2xl font-bold">{news.title}</h2>
+                <h2 className="text-2xl font-bold">{news.title || 'No Title'}</h2>
                 <p className="text-gray-600">
-                  {parse(news.description.substring(0, 300))}.....
+                  {parse(news.description ? news.description.substring(0, 300) : '')}.....
                 </p>
                 <div className="mt-2 flex flex-wrap">
-                  {news.tags.map((tag, index) => (
+                  {news.tags && news.tags.length > 0 ? news.tags.map((tag, index) => (
                     <span
                       key={index}
                       className="inline-block bg-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
                     >
                       #{tag}
                     </span>
-                  ))}
+                  )) : (
+                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                      No Tags
+                    </span>
+                  )}
                 </div>
                 <div className="text-blue-500 font-bold text-sm">
-                  {formatDate(news.date)} at {news.time} | {news.category.name} |{' '}
-                  {news.visibility}
+                  {formatDate(news.date || '')} at {news.time || 'Unknown Time'} | {news.category.name || 'No Category'} | {news.visibility || 'Unknown'}
                 </div>
                 <div className="mt-4 flex justify-end space-x-2">
                   <button

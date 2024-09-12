@@ -241,10 +241,10 @@ const NewsDetails: React.FC = () => {
           </div>
           <div className="mb-4 text-lg">
             {isDescriptionExpanded ? (
-              parse(news.description)
+              parse(news.description || "No description available...")
             ) : (
               <div>
-                {parse(news.description.substring(0, 400))}...
+                {parse(news.description.substring(0, 400)) || "No description available..."}...
                 <button
                   onClick={() => setIsDescriptionExpanded(true)}
                   className="text-blue-500 hover:underline ml-2"
@@ -257,7 +257,7 @@ const NewsDetails: React.FC = () => {
 
           <div className="mb-4">
             <span className="font-semibold">Category:</span>{" "}
-            {news.category.name}
+            {news.category.name || "No Category"}
           </div>
           <div className="mb-4">
             <div className="flex items-center">
@@ -275,7 +275,7 @@ const NewsDetails: React.FC = () => {
             </div>
           </div>
           <div className="mb-4">
-            <span className="font-semibold">Visibility:</span> {news.visibility}
+            <span className="font-semibold">Visibility:</span> {news.visibility || "Unknown"}
           </div>
 
           {/* YouTube Video Player */}
@@ -320,23 +320,24 @@ const NewsDetails: React.FC = () => {
                       <div className=" flex justify-between text-xs text-right">
                         <p className="text-orange-600 font-bold flex">
                           <CategoryIcon sx={{ fontSize: 16 }} />{" "}
-                          {news.category.name && news.category.name}{" "}
+                          {news.category.name || "No Category"}{" "}
                         </p>
 
-                        <p className="text-blue-500 font-bold">
-                          &bull; {formatDate(newsItem.date)} at{" "}
-                          {formatTime(newsItem.date)}
-                        </p>
-                      </div>
-                      <p className="text-gray-600 font-bold text-xs mb-1">
+                        <p className="text-gray-600 font-bold text-xs mb-1">
                         {" "}
                         &bull; {calculateReadingTime(news.description)} min read{" "}
                       </p>
+                      </div>
+                      <p className="text-blue-500 text-xs  mt-1 font-bold">
+                          &bull; {formatDate(newsItem.date) || "Unknown Date"} at{" "}
+                          {formatTime(newsItem.date) || "Unknown Time"}
+                        </p>
+                     
                       <h3 className="text-lg font-semibold mb-2">
-                        {newsItem.title}
+                        {newsItem.title || "No Title"}
                       </h3>
                       <p className="text-gray-600 text-sm mb-2">
-                        {parse(newsItem.description.substring(0, 100))}....
+                        {parse(newsItem.description.substring(0, 100)) || "No description available..."}....
                       </p>
                     </div>
                   </div>
@@ -373,11 +374,11 @@ const NewsDetails: React.FC = () => {
             )}
             <div className="p-2 flex flex-col justify-between w-2/3">
               <h3 className="text-lg font-bold mb-1 line-clamp-2">
-                {newsItem.title}
+                {newsItem.title || "No Title"} 
               </h3>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-blue-500 font-bold text-xs">
-                  &bull; {formatDate(newsItem.date)} at {newsItem.time}{" "}
+                  &bull; {formatDate(newsItem.date) || "Unknown Date"} at {formatTime(newsItem.time) || "Unknown Time"}{" "}
                   <span className="text-gray-600">
                     {" "}
                     &bull; {calculateReadingTime(news.description)} min read
@@ -385,7 +386,7 @@ const NewsDetails: React.FC = () => {
                 </span>
               </div>
               <p className="text-gray-600 text-sm line-clamp-2">
-                {parse(newsItem.description.substring(0, 100))}....
+                {parse(newsItem.description.substring(0, 100)) || "No description available..."}....
               </p>
             </div>
           </div>

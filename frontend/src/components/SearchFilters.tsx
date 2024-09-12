@@ -40,8 +40,8 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
           description,
           date,
           tags,
-          category
-        }
+          category,
+        },
       });
       setNewsList(response.data);
     } catch (error) {
@@ -66,42 +66,42 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
     setTags('');
     setCategory('');
     setRefreshing(true);
-  }
+  };
 
   return (
-    <div className="bg-white shadow-md mx-0 p-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-      <div className="flex flex-wrap items-center space-x-4">
+    <div className="bg-white shadow-md p-4 flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
+      <div className="flex flex-col md:flex-row flex-wrap items-start md:items-center space-y-4 md:space-y-0 md:space-x-4 w-full">
         <input
           type="text"
           placeholder="Title"
           value={title}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
-          className="border border-gray-300 rounded-md p-1"
+          className="border border-gray-300 rounded-md p-2 w-full md:w-auto"
         />
         <input
           type="text"
           placeholder="Tags (comma separated)"
           value={tags}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setTags(e.target.value)}
-          className="border border-gray-300 rounded-md p-1"
+          className="border border-gray-300 rounded-md p-2 w-full md:w-auto"
         />
         <input
           type="text"
           placeholder="Description"
           value={description}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)}
-          className="border border-gray-300 rounded-md p-1"
+          className="border border-gray-300 rounded-md p-2 w-full md:w-auto"
         />
         <input
           type="date"
           value={date}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setDate(e.target.value)}
-          className="border border-gray-300 rounded-md p-1"
+          className="border border-gray-300 rounded-md p-2 w-full md:w-auto"
         />
         <select
           value={category}
           onChange={(e: ChangeEvent<HTMLSelectElement>) => setCategory(e.target.value)}
-          className="border bg-white rounded-md p-2"
+          className="border bg-white rounded-md p-2 w-full md:w-auto"
         >
           <option value="">Select Category</option>
           {categories.map((cat) => (
@@ -111,16 +111,16 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
           ))}
         </select>
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex space-x-2 w-full md:w-auto">
         <button
           onClick={fetchFilteredNews}
-          className="bg-green-500 text-white rounded-md px-4 py-2"
+          className="bg-green-500 text-white rounded-md px-4 py-2 w-full md:w-auto"
         >
           Go
         </button>
         <button
           onClick={handleRefresh}
-          className="bg-green-500 text-white rounded-md px-4 py-2"
+          className="bg-green-500 text-white rounded-md px-4 py-2 w-full md:w-auto"
         >
           Refresh
         </button>

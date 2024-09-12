@@ -99,9 +99,9 @@ const LatestNews: React.FC = () => {
                       </span>
                     </div>
                     <h2 className="text-2xl font-bold mb-2">{news.title || 'No Title'}</h2>
-                    <p className="text-gray-700">
+                    <div className="text-gray-700">
                       {parse(news.description?.substring(0, 100) || 'No description available...')}
-                    </p>
+                    </div>
                   </div>
                 </Paper>
               ))}
@@ -133,9 +133,9 @@ const LatestNews: React.FC = () => {
                       {calculateReadingTime(news.description || '')} min read</span> 
                     </span>
                   </div>
-                  <p className="text-gray-600 text-sm line-clamp-2">
+                  <div className="text-gray-600 text-sm line-clamp-2">
                     {parse(news.description?.substring(0, 100) || 'No description available...')}....
-                  </p>
+                  </div>
                 </div>
               </div>
             ))}

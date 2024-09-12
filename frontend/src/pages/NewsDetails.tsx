@@ -11,6 +11,7 @@ import Carousel from "react-material-ui-carousel";
 import YouTube from "react-youtube";
 import { calculateReadingTime, formatDate, formatTime } from "../utils/helper";
 import CategoryIcon from "@mui/icons-material/Category";
+import Loader from "../components/Loader";
 
 interface Category {
   _id: string;
@@ -177,7 +178,7 @@ const NewsDetails: React.FC = () => {
   if (!news)
     return (
       <div className="flex justify-center items-center h-screen">
-        Loading...
+        <Loader loading={!news} />
       </div>
     );
 
@@ -336,9 +337,9 @@ const NewsDetails: React.FC = () => {
                       <h3 className="text-lg font-semibold mb-2">
                         {newsItem.title || "No Title"}
                       </h3>
-                      <p className="text-gray-600 text-sm mb-2">
+                      <div className="text-gray-600 text-sm mb-2">
                         {parse(newsItem.description.substring(0, 100)) || "No description available..."}....
-                      </p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -385,9 +386,9 @@ const NewsDetails: React.FC = () => {
                   </span>
                 </span>
               </div>
-              <p className="text-gray-600 text-sm line-clamp-2">
+              <div className="text-gray-600 text-sm line-clamp-2">
                 {parse(newsItem.description.substring(0, 100)) || "No description available..."}....
-              </p>
+              </div>
             </div>
           </div>
         ))}

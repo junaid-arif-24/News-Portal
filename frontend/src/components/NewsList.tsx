@@ -71,9 +71,9 @@ const NewsList: React.FC<NewsListProps> = ({ newsList, isLoading }) => {
                   </p>
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{news.title || 'No Title'}</h3>
-                <p className="text-gray-600 text-sm mb-2">
+                <div className="text-gray-600 text-sm mb-2">
                   {parse(news.description?.substring(0, 100) || 'No description available...')}...
-                </p>
+                </div>
               </div>
             </div>
           ))}

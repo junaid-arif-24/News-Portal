@@ -204,18 +204,18 @@ const ManageNews: React.FC = () => {
               key={news._id}
               className="bg-white flex flex-col md:flex-row gap-5 justify-between rounded shadow"
             >
-              <div className="w-[30%] max-h-[330px]">
+              <div className="md:w-[30%] max-h-[330px]">
                 <img
                   src={news.images.length > 0 ? news.images[0] : ''} // Handle empty images array
                   alt={news.title || 'News Image'} // Default alt text
                   className="w-full h-full object-cover rounded-l-lg mb-4"
                 />
               </div>
-              <div className="w-[70%] p-4">
+              <div className="md:w-[70%] p-4">
                 <h2 className="text-2xl font-bold">{news.title || 'No Title'}</h2>
-                <p className="text-gray-600">
+                <div className="text-gray-600">
                   {parse(news.description ? news.description.substring(0, 300) : '')}.....
-                </p>
+                </div>
                 <div className="mt-2 flex flex-wrap">
                   {news.tags && news.tags.length > 0 ? news.tags.map((tag, index) => (
                     <span

@@ -1,17 +1,41 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 
 const Navbar: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
+  useEffect(() => {
+    const path = location.pathname;
+    const category = location.state?.category;
+
+    // Check the current path and category to highlight the active tab
+    if (path === '/') {
+      setActiveCategory(null); // Home
+    } else if (path === '/login') {
+      setActiveCategory('Login');
+    } else if (path === '/register') {
+      setActiveCategory('Register');
+    } else if (path === '/all-news' && category) {
+      setActiveCategory(category); // Highlight the active category
+    } else if (path === '/all-news') {
+      setActiveCategory('All News'); // Highlight All News
+    } else if (path === '/admin/profile') {
+      setActiveCategory('Admin Dashboard');
+    } else if (path === '/profile') {
+      setActiveCategory('Profile');
+    }
+  }, [location]);
+
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/');
+    setActiveCategory(null); // Reset to Home
     toast.success('Logout successfully!');
   };
 
@@ -39,9 +63,7 @@ const Navbar: React.FC = () => {
     <header className="bg-black text-white p-4">
       <div className="flex justify-between items-center">
         <div className="text-2xl font-bold">
-          <button
-            onClick={() => handleNavigation('/', null)}
-          >
+          <button onClick={() => handleNavigation('/', null)}>
             Shot News
           </button>
         </div>
@@ -54,7 +76,7 @@ const Navbar: React.FC = () => {
           </button>
           <button
             onClick={() => handleNavigation('/all-news', 'All News')}
-            className={activeCategory === 'All News' ? 'border-b-2 border-white' : 'hover:underline'}
+            className={getNavButtonClass('All News')}
           >
             All News
           </button>
@@ -90,14 +112,14 @@ const Navbar: React.FC = () => {
           </button>
           <button
             onClick={() => handleNavigation('/category', 'All Categories')}
-            className={activeCategory === 'All Categories' ? 'border-b-2 border-white' : 'hover:underline'}
+            className={getNavButtonClass('All Categories')}
           >
             All Categories
           </button>
           {isAuthenticated && user?.role === 'admin' && (
             <button
               onClick={() => handleNavigation('/admin/profile', 'Admin Dashboard')}
-              className={activeCategory === 'Admin Dashboard' ? 'border-b-2 border-white' : 'hover:underline'}
+              className={getNavButtonClass('Admin Dashboard')}
             >
               Admin Dashboard
             </button>
@@ -105,21 +127,33 @@ const Navbar: React.FC = () => {
           {isAuthenticated && user?.role === 'subscriber' && (
             <button
               onClick={() => handleNavigation('/profile', 'Profile')}
-              className={activeCategory === 'Profile' ? 'border-b-2 border-white' : 'hover:underline'}
+              className={getNavButtonClass('Profile')}
             >
-             Your Profile
+              Your Profile
             </button>
           )}
         </nav>
         <div className="hidden md:flex space-x-4 items-center">
           {isAuthenticated ? (
             <>
-              <button onClick={handleLogout} className="hover:underline">Logout</button>
+              <button onClick={handleLogout} className="hover:underline">
+                Logout
+              </button>
             </>
           ) : (
             <>
-              <button onClick={() => navigate('/login')} className="hover:underline">Login</button>
-              <button onClick={() => navigate('/register')} className="hover:underline">Register</button>
+              <button
+                onClick={() => handleNavigation('/login', 'Login')}
+                className={getNavButtonClass('Login')}
+              >
+                Login
+              </button>
+              <button
+                onClick={() => handleNavigation('/register', 'Register')}
+                className={getNavButtonClass('Register')}
+              >
+                Register
+              </button>
             </>
           )}
           <div className="relative w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center text-white font-semibold">
@@ -147,8 +181,7 @@ const Navbar: React.FC = () => {
       {menuOpen && (
         <div className="md:hidden mt-4">
           <nav className="flex flex-col space-y-2">
-            <>
-             <button
+            <button
               onClick={() => handleNavigation('/', null)}
               className={activeCategory === null ? 'border-b-2 border-white' : 'hover:underline'}
             >
@@ -156,7 +189,7 @@ const Navbar: React.FC = () => {
             </button>
             <button
               onClick={() => handleNavigation('/all-news', 'All News')}
-              className={activeCategory === 'All News' ? 'border-b-2 border-white' : 'hover:underline'}
+              className={getNavButtonClass('All News')}
             >
               All News
             </button>
@@ -192,43 +225,49 @@ const Navbar: React.FC = () => {
             </button>
             <button
               onClick={() => handleNavigation('/category', 'All Categories')}
-              className={activeCategory === 'All Categories' ? 'border-b-2 border-white' : 'hover:underline'}
+              className={getNavButtonClass('All Categories')}
             >
               All Categories
             </button>
-            </>
-           
             {isAuthenticated && user?.role === 'admin' && (
               <button
                 onClick={() => handleNavigation('/admin/profile', 'Admin Dashboard')}
-                className={activeCategory === 'Admin Dashboard' ? 'border-b-2 border-white' : 'hover:underline'}
+                className={getNavButtonClass('Admin Dashboard')}
               >
                 Admin Dashboard
               </button>
             )}
-            
-                          {isAuthenticated && user?.role === 'subscriber' && (
-                            <button
-                              onClick={() => handleNavigation('/profile', 'Profile')}
-                              className={activeCategory === 'Profile' ? 'border-b-2 border-white' : 'hover:underline'}
-                            >
-                             Your Profile
-                            </button>
-                          )}
-                          {isAuthenticated ? (
-                            <button onClick={handleLogout} className="hover:underline">Logout</button>
-                          ) : (
-                            <>
-                              <button onClick={() => navigate('/login')} className="hover:underline">Login</button>
-                              <button onClick={() => navigate('/register')} className="hover:underline">Register</button>
-                            </>
-                          )}
-                        </nav>
-                      </div>
-                    )}
-                  </header>
-                );
-              };
-              
-              export default Navbar;
-              
+            {isAuthenticated && user?.role === 'subscriber' && (
+              <button
+                onClick={() => handleNavigation('/profile', 'Profile')}
+                className={getNavButtonClass('Profile')}
+              >
+                Your Profile
+              </button>
+            )}
+            {isAuthenticated ? (
+              <button onClick={handleLogout} className="hover:underline">Logout</button>
+            ) : (
+              <>
+                <button
+                  onClick={() => handleNavigation('/login', 'Login')}
+                  className={getNavButtonClass('Login')}
+                >
+                  Login
+                </button>
+                <button
+                  onClick={() => handleNavigation('/register', 'Register')}
+                  className={getNavButtonClass('Register')}
+                >
+                  Register
+                </button>
+              </>
+            )}
+          </nav>
+        </div>
+      )}
+    </header>
+  );
+};
+
+export default Navbar;

@@ -32,9 +32,7 @@ const Register: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      {loading ? (
-        <Loader loading={loading} />  
-      ) : (
+     
         <form onSubmit={handleSubmit} className="w-full max-w-sm p-8 bg-white shadow-md rounded-lg">
           <h1 className="text-2xl font-semibold text-center mb-6">Sign up to start learning</h1>
           <div className="mb-4">
@@ -86,14 +84,20 @@ const Register: React.FC = () => {
               <option value="subscriber">Subscriber</option>
             </select>
           </div>
-          <button type="submit" className="w-full py-2 bg-green-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            Register
-          </button>
+          <button
+          type="submit"
+          disabled={loading}
+          className="w-full flex justify-center items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          {/* Add conditional rendering for Loader and text to ensure both are center-aligned */}
+          {loading && <Loader loading={loading} color="white" size={20}  center={false}/>}
+          <span>{loading ? "Loading..." : "Sign Up"}</span>
+        </button>
           <p className="mt-4 text-center">
             Already have an account? <a href="/login" className="text-blue-500 hover:underline">Log in</a>
           </p>
         </form>
-      )}
+    
     </div>
   );
 };

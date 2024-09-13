@@ -2,19 +2,19 @@
 import React, { CSSProperties } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 
-const override: CSSProperties = {
-  display: 'block',
-  margin: '0 auto',
-//   borderColor: 'red',
-};
-
 interface LoaderProps {
   loading: boolean;
   color?: string;
   size?: number;
+  center?: boolean; // New prop for conditionally centering the loader
 }
 
-const Loader: React.FC<LoaderProps> = ({ loading, color = '#3498db', size = 100 }) => {
+const Loader: React.FC<LoaderProps> = ({ loading, color = '#3498db', size = 100, center = false }) => {
+  // Conditionally apply margin only when center is true
+  const override: CSSProperties = center
+    ? { display: 'block', margin: '0 auto' }
+    : { display: 'block' };
+
   return (
     <ClipLoader
       color={color}

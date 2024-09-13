@@ -197,7 +197,10 @@ const ManageNews: React.FC = () => {
 
       <div className="grid grid-cols-1 gap-4">
         {loading ? (
-          <Loader loading={loading} />
+           <div className="flex justify-center items-center ">
+           <Loader loading={loading} />
+         </div>
+         
         ) : newsList && newsList.length > 0 ? (
           newsList.map((news) => (
             <div

@@ -196,7 +196,9 @@ const ManageCategories: React.FC = () => {
       <div className="bg-white shadow-xl rounded p-4">
         <h2 className="text-lg font-semibold mb-4">All Categories</h2>
         {loading ? (
-          <Loader loading={loading} />
+             <div className="flex justify-center items-center ">
+             <Loader loading={loading} />
+           </div>
         ) : categories.length === 0 ? (
           <p className="text-center text-5xl py-10">No categories</p>
         ) : (

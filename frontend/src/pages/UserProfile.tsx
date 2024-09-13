@@ -84,7 +84,9 @@ const UserProfile: React.FC = () => {
     }
   };
 
-  if (!profile) return <Loader loading={!profile} />;
+  if (!profile) return   <div className="flex justify-center items-center h-screen">
+  <Loader loading={!profile} />
+</div>;
 
   return (
     <div className="container mx-auto p-4">

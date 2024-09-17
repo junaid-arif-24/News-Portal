@@ -6,6 +6,7 @@ import parse from "html-react-parser";
 import Carousel from "react-material-ui-carousel";
 import { Paper } from "@mui/material";
 import { LatestNewsSkeleton } from "./Skeletons"; // Import the custom skeleton
+import { icons } from "../utils/icons"; // Adjust the import path
 
 interface News {
   _id: string;
@@ -18,41 +19,53 @@ interface News {
   visibility: string;
 }
 
+interface Category {
+  _id: string;
+  name: string;
+  description: string;
+}
+
 const LatestNews: React.FC = () => {
   const [latestNews, setLatestNews] = useState<News[]>([]);
-  const [isLoading, setIsLoading] = useState(true); 
-  // State to manage loading
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchLatestNews();
+    fetchCategories();
   }, []);
 
   const fetchLatestNews = async () => {
     try {
-      const response = await axios.get<News[]>(
-        `${API_BASE_URL}/api/news/latest`
-      );
+      const response = await axios.get<News[]>(`${API_BASE_URL}/api/news/latest`);
       setLatestNews(response.data);
     } catch (error) {
       console.error("Error fetching latest news", error);
     } finally {
-      setIsLoading(false); // Set loading to false after data is fetched
+      setIsLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get<Category[]>(`${API_BASE_URL}/api/categories`);
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Error fetching categories", error);
     }
   };
 
   if (isLoading) {
-    return <LatestNewsSkeleton />; // Show skeleton when data is loading
+    return <LatestNewsSkeleton />;
   }
 
   if (latestNews.length === 0) {
     return (
       <div className="flex justify-center items-center h-64">
-        <p className="text-4xl font-semibold text-gray-700">
-          No news available
-        </p>
+        <p className="text-4xl font-semibold text-gray-700">No news available</p>
       </div>
     );
   }
@@ -76,7 +89,7 @@ const LatestNews: React.FC = () => {
                 },
               }}
             >
-              {latestNews.slice(0, 3).map((news) => (
+              {latestNews.slice(0, 8).map((news) => (
                 <Paper
                   key={news._id}
                   onClick={() => navigate(`/news/${news._id}`)}
@@ -84,69 +97,51 @@ const LatestNews: React.FC = () => {
                 >
                   {news.images?.length > 0 && (
                     <img
-                      src={news.images[0] || '/default-image.jpg'} // Provide a default image if none exists
-                      alt={news.title || 'News Image'} // Provide a default alt text
+                      src={news.images[0] || "/default-image.jpg"} // Provide a default image if none exists
+                      alt={news.title || "News Image"} // Provide a default alt text
                       className="w-full h-96 object-cover rounded-lg mb-2"
                     />
                   )}
                   <div className="p-4">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-gray-500">
-                        &bull; {formatDate(news.date || '')} at{" "}
-                        {formatTime(news.time || '')} 
-                        <span className="text-gray-600">   &bull;{" "}
-                        {calculateReadingTime(news.description || '')} min read </span>
+                        &bull; {formatDate(news.date || "")} at {formatTime(news.time || "")}
+                        <span className="text-gray-600"> &bull; {calculateReadingTime(news.description || "")} min read </span>
                       </span>
                     </div>
-                    <h2 className="text-2xl font-bold mb-2">{news.title || 'No Title'}</h2>
+                    <h2 className="text-2xl font-bold mb-2">{news.title || "No Title"}</h2>
                     <div className="text-gray-700">
-                      {parse(news.description?.substring(0, 100) || 'No description available...')}
+                      {parse(news.description?.substring(0, 100) || "No description available...")}
                     </div>
                   </div>
                 </Paper>
               ))}
             </Carousel>
           </div>
-          {/* Side News */}
+
+          {/* Side Section for Categories */}
           <div className="w-full md:w-1/3 p-4 space-y-4 max-h-full md:h-[calc(100vh-50px)] overflow-y-auto">
-            {latestNews.slice(4, 8).map((news) => (
+            {categories.map((category) => (
               <div
-                onClick={() => navigate(`/news/${news._id}`)}
-                key={news._id}
-                className="bg-white rounded-lg cursor-pointer shadow-md flex h-36 transition-transform transform hover:scale-105"
+                key={category._id}
+                onClick={() => navigate("/all-news", { state: { category: category.name } })}
+                className="bg-white rounded-lg cursor-pointer shadow-md flex h-28 transition-transform transform hover:scale-105"
               >
-                {news.images?.length > 0 && (
-                  <img
-                    src={news.images[0] || '/default-image.jpg'} // Provide a default image if none exists
-                    alt={news.title || 'News Image'} // Provide a default alt text
-                    className="w-1/3 object-cover rounded-l-lg h-full"
-                  />
-                )}
-                <div className="p-2 flex flex-col justify-between w-2/3">
-                  <h3 className="text-lg font-bold mb-1 line-clamp-2">
-                    {news.title || 'No Title'}
-                  </h3>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-bold text-blue-600 text-xs">
-                      &bull; {formatDate(news.date || '')} at {formatTime(news.time || '')} 
-                      <span className="text-gray-600">  &bull;{" "}
-                      {calculateReadingTime(news.description || '')} min read</span> 
-                    </span>
-                  </div>
-                  <div className="text-gray-600 text-sm line-clamp-2">
-                    {parse(news.description?.substring(0, 100) || 'No description available...')}....
+                <div className="p-4 flex flex-col justify-between w-full">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h2 className="text-lg font-bold mb-1">{category.name}</h2>
+                      <p className="text-gray-600 text-sm">{category.description}</p>
+                    </div>
+                    <div className="bg-white shadow-lg p-2 rounded-full self-center">
+                      {icons[category.name]
+                        ? icons[category.name]({ size: "h-10 w-10" })
+                        : icons["Default"]({ size: "h-10 w-10" })}
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
-            {latestNews.length > 8 && (
-              <div
-                onClick={() => navigate("/all-news")}
-                className="bg-white p-4 rounded-lg shadow-md flex cursor-pointer justify-center items-center"
-              >
-                <p className="text-gray-600">More news...</p>
-              </div>
-            )}
           </div>
         </div>
       </div>

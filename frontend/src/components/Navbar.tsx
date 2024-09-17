@@ -80,36 +80,8 @@ const Navbar: React.FC = () => {
           >
             All News
           </button>
-          <button
-            onClick={() => handleCategoryClick('Business')}
-            className={getNavButtonClass('Business')}
-          >
-            Business
-          </button>
-          <button
-            onClick={() => handleCategoryClick('Travel')}
-            className={getNavButtonClass('Travel')}
-          >
-            Travel
-          </button>
-          <button
-            onClick={() => handleCategoryClick('Hollywood')}
-            className={getNavButtonClass('Hollywood')}
-          >
-            Hollywood
-          </button>
-          <button
-            onClick={() => handleCategoryClick('Tech')}
-            className={getNavButtonClass('Tech')}
-          >
-            Technology
-          </button>
-          <button
-            onClick={() => handleCategoryClick('Sports')}
-            className={getNavButtonClass('Sports')}
-          >
-            Sports
-          </button>
+         
+          
           <button
             onClick={() => handleNavigation('/category', 'All Categories')}
             className={getNavButtonClass('All Categories')}
@@ -193,36 +165,7 @@ const Navbar: React.FC = () => {
             >
               All News
             </button>
-            <button
-              onClick={() => handleCategoryClick('Business')}
-              className={getNavButtonClass('Business')}
-            >
-              Business
-            </button>
-            <button
-              onClick={() => handleCategoryClick('Travel')}
-              className={getNavButtonClass('Travel')}
-            >
-              Travel
-            </button>
-            <button
-              onClick={() => handleCategoryClick('Hollywood')}
-              className={getNavButtonClass('Hollywood')}
-            >
-              Hollywood
-            </button>
-            <button
-              onClick={() => handleCategoryClick('Tech')}
-              className={getNavButtonClass('Tech')}
-            >
-              Technology
-            </button>
-            <button
-              onClick={() => handleCategoryClick('Sports')}
-              className={getNavButtonClass('Sports')}
-            >
-              Sports
-            </button>
+         
             <button
               onClick={() => handleNavigation('/category', 'All Categories')}
               className={getNavButtonClass('All Categories')}

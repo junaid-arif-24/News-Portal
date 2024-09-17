@@ -108,7 +108,6 @@ const Login: React.FC = () => {
           disabled={loading}
           className="w-full flex justify-center items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          {/* Add conditional rendering for Loader and text to ensure both are center-aligned */}
           {loading && <Loader loading={loading} color="white" size={20}  center={false}/>}
           <span>{loading ? "Loading..." : "Log in"}</span>
         </button>

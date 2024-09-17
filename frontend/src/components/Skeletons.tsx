@@ -65,15 +65,18 @@ export const LatestNewsSkeleton: React.FC = () => {
             </Paper>
           </div>
 
-          {/* Side News Skeleton */}
+          {/* Side News Skeleton (Category Card Style) */}
           <div className="w-full md:w-1/3 p-4 space-y-4 max-h-full overflow-y-auto">
             {Array.from(new Array(4)).map((_, index) => (
-              <div key={index} className="bg-white p-1 rounded-lg shadow-md flex h-36">
-                <Skeleton variant="rectangular" width="33%" height="100%" className="rounded-l-lg" />
-                <div className="p-2 flex flex-col justify-between w-2/3">
-                  <Skeleton variant="text" width="80%" height={20} />
-                  <Skeleton variant="text" width="60%" height={20} />
-                  <Skeleton variant="text" width="90%" height={20} />
+              <div key={index} className="bg-[#DDEEFF] rounded-lg shadow-md flex h-28">
+                <div className="p-4 flex  justify-between w-full">
+                  <div className="w-[80%] flex flex-col">
+                    <Skeleton variant="text" width="60%" height={24} className="mb-1" />
+                    <Skeleton variant="text" width="80%" height={16} />
+                  </div>
+                  <div className=" bg-white shadow-lg p-2 rounded-full self-center">
+                    <Skeleton variant="rectangular" width={40} height={40} />
+                  </div>
                 </div>
               </div>
             ))}

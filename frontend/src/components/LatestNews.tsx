@@ -125,7 +125,7 @@ const LatestNews: React.FC = () => {
               <div
                 key={category._id}
                 onClick={() => navigate("/all-news", { state: { category: category.name } })}
-                className="bg-white rounded-lg cursor-pointer shadow-md flex h-28 transition-transform transform hover:scale-105"
+                className="bg-[#DDEEFF] rounded-lg cursor-pointer shadow-md flex h-28 transition-transform transform hover:scale-105"
               >
                 <div className="p-4 flex flex-col justify-between w-full">
                   <div className="flex justify-between items-center">

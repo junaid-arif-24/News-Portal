@@ -18,7 +18,10 @@ interface News {
   description: string;
   images: string[];
   tags: string[];
-  category: string;
+  category: {
+    _id: string;
+    name: string;
+  };
   visibility: string;
   youtubeUrl: string;
 }
@@ -27,6 +30,8 @@ const CreateNews: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>([]); // Added state for existing images
+  const [removedImages, setRemovedImages] = useState<string[]>([]); 
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState<string>("");
   const [category, setCategory] = useState<string>("");
@@ -63,11 +68,12 @@ const CreateNews: React.FC = () => {
       setTitle(newsToEdit.title);
       setDescription(newsToEdit.description);
       setTags(() => [...newsToEdit.tags]);
-      setCategory(newsToEdit.category);
+      setCategory(newsToEdit.category._id);
       setVisibility(newsToEdit.visibility as "public" | "private");
       setYoutubeUrl(newsToEdit.youtubeUrl);
+      setExistingImages(newsToEdit.images);
       setIsEdit(true);
-      console.log(newsToEdit.tags);
+      console.log(newsToEdit);
     }
 
     console.log("newsToEdit", newsToEdit);
@@ -94,6 +100,11 @@ const CreateNews: React.FC = () => {
     setImages(images.filter((img) => img !== image));
   };
 
+  const handleRemoveExistingImage = (imageUrl: string) => {
+    setExistingImages(existingImages.filter((img) => img !== imageUrl));
+    setRemovedImages((prev) => [...prev, imageUrl]); // Add to removed list
+  };
+
   const handleTagInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTagInput(e.target.value);
   };
@@ -117,7 +128,7 @@ const CreateNews: React.FC = () => {
     // Define individual error flags
     const hasTitleError = !title;
     const hasDescriptionError = !description;
-    const hasImagesError = images.length === 0;
+    const hasImagesError = images.length === 0 && existingImages.length === 0;
     const hasCategoryError = !category;
   
     // Set errors based on priority
@@ -188,6 +199,7 @@ const CreateNews: React.FC = () => {
       formData.append("title", title);
       formData.append("description", description);
       images.forEach((image) => formData.append("images", image));
+      formData.append("removedImages", JSON.stringify(removedImages));
       formData.append("tags", tags.join(",")); // Send tags as a comma-separated string
       formData.append("category", category);
       formData.append("visibility", visibility);
@@ -299,6 +311,14 @@ const CreateNews: React.FC = () => {
             >
               Images
             </label>
+            <div>
+          {/* {existingImages.map((img, index) => (
+            <div key={index}>
+              <img src={img} alt={`news-img-${index}`} />
+              <button type="button" onClick={() => handleRemoveExistingImage(img)}>Remove</button>
+            </div>
+          ))} */}
+        </div>
             <input
               ref={imageInputRef}
               className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
@@ -307,9 +327,25 @@ const CreateNews: React.FC = () => {
               type="file"
               multiple
               onChange={handleImageUpload}
-              disabled={isEdit}
+              
             />
             <div className="mt-2 flex flex-wrap">
+            {existingImages.map((image, index) => (
+                <div key={index} className="relative m-1">
+                  <img
+                    src={image}
+                    alt={`upload-${index}`}
+                    className="w-20 h-20 object-cover rounded"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1"
+                    onClick={() => handleRemoveExistingImage(image)}
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))}
               {images.map((image, index) => (
                 <div key={index} className="relative m-1">
                   <img

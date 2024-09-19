@@ -136,21 +136,81 @@ router.get('/:id', async (req: Request, res: Response) => {
 });
 
 // Update news
-router.put('/:id', auth, checkRole(['admin']),upload2.none(), async (req: Request, res: Response) => {
+
+
+router.put('/:id', auth, checkRole(['admin']), upload.array('images', 12), async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { title, description, category, tags, visibility ,youtubeUrl} = req.body;
+  const { title, description, category, tags, visibility, youtubeUrl, removedImages } = req.body;
+  const files = req.files as Express.Multer.File[];
 
   try {
-    const updatedNews = await News.findByIdAndUpdate(
-      id,
-      { title, description, category, tags: tags.split(','), visibility,youtubeUrl },
-      { new: true }
-    );
+    // Find the existing news entry by ID
+    const newsToUpdate = await News.findById(id);
+    if (!newsToUpdate) {
+      return res.status(404).json({ message: 'News not found' });
+    }
+
+    // Handle image removal
+    if (removedImages && removedImages.length > 0) {
+      let removedImagesArray = [];
+
+      // Parse removedImages if it's a stringified JSON array
+      try {
+        removedImagesArray = typeof removedImages === 'string' ? JSON.parse(removedImages) : removedImages;
+      } catch (err) {
+        console.error('Error parsing removedImages:', err);
+        return res.status(400).json({ message: 'Invalid format for removed images' });
+      }
+
+      // Remove images from Cloudinary
+      for (const imageUrl of removedImagesArray) {
+        // Extract the public ID from the Cloudinary URL
+        const regex = /\/news_images\/([^\/]+)\.[a-zA-Z]+$/; // Regex to get the public ID
+        const match = imageUrl.match(regex);
+
+        if (match && match[1]) {
+          const publicId = match[1]; // Get the public ID from the regex match
+          await cloudinary.uploader.destroy(`news_images/${publicId}`);
+        }
+      }
+
+      // Filter out the removed images from the existing news entry
+      newsToUpdate.images = newsToUpdate.images.filter(
+        (img) => !removedImagesArray.includes(img)
+      );
+    }
+
+    // Handle new image uploads
+    if (files && files.length > 0) {
+      const uploadPromises = files.map(file =>
+        cloudinary.uploader.upload(file.path, { folder: 'news_images', format: 'jpeg' })
+      );
+      const uploadResults = await Promise.all(uploadPromises);
+      const imageUrls = uploadResults.map(result => result.secure_url);
+
+      // Append new images to the existing ones
+      newsToUpdate.images = [...newsToUpdate.images, ...imageUrls];
+    }
+
+    // Update the news fields
+    newsToUpdate.title = title || newsToUpdate.title;
+    newsToUpdate.description = description || newsToUpdate.description;
+    newsToUpdate.category = category || newsToUpdate.category;
+    newsToUpdate.tags = tags ? tags.split(',') : newsToUpdate.tags;
+    newsToUpdate.visibility = visibility || newsToUpdate.visibility;
+    newsToUpdate.youtubeUrl = youtubeUrl || newsToUpdate.youtubeUrl;
+
+    // Save the updated news entry
+    const updatedNews = await newsToUpdate.save();
     res.status(200).json(updatedNews);
   } catch (error) {
+    console.error('Error updating news:', error);
     res.status(400).json({ message: 'Error updating news', error });
   }
 });
+
+
+
 
 // Delete news
 router.delete('/:id', auth, checkRole(['admin']), async (req: Request, res: Response) => {

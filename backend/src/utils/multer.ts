@@ -13,14 +13,7 @@ const storage: StorageEngine = new CloudinaryStorage({
     format: async (): Promise<string> => 'jpeg', // supports promises as well
   } as any,
 });
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'uploads/');
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, file.originalname);
-//   },
-// });
+
 const upload = multer({ storage  });
 
 export default upload;

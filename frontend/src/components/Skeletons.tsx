@@ -67,23 +67,81 @@ export const LatestNewsSkeleton: React.FC = () => {
 
           {/* Side News Skeleton (Category Card Style) */}
           <div className="w-full md:w-1/3 p-4 space-y-4 max-h-full overflow-y-auto">
+           
             {Array.from(new Array(4)).map((_, index) => (
-              <div key={index} className="bg-[#DDEEFF] rounded-lg shadow-md flex h-28">
-                <div className="p-4 flex  justify-between w-full">
-                  <div className="w-[80%] flex flex-col">
-                    <Skeleton variant="text" width="60%" height={24} className="mb-1" />
-                    <Skeleton variant="text" width="80%" height={16} />
-                  </div>
-                  <div className=" bg-white shadow-lg p-2 rounded-full self-center">
-                    <Skeleton variant="rectangular" width={40} height={40} />
-                  </div>
-                </div>
+            <div
+              key={index}
+              className="bg-[#DDEEFF] rounded-lg shadow-md flex h-28 p-4"
+            >
+              <div className="w-[80%] flex flex-col justify-between">
+                {/* Category name skeleton */}
+                <Skeleton variant="text" width="60%" height={24} className="mb-1" />
+                {/* Category description skeleton */}
+                <Skeleton variant="text" width="80%" height={16} />
               </div>
-            ))}
-            <div className="bg-white p-4 rounded-lg shadow-md flex justify-center items-center">
-              <Skeleton variant="text" width="50%" />
+              {/* Category icon skeleton */}
+              <div className="w-[20%] flex justify-center items-center">
+                <Skeleton variant="circular" width={40} height={40} />
+              </div>
             </div>
+          ))}
+          
           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+export const CategoryNewsSkeleton: React.FC = () => {
+  return (
+    <div className="flex flex-col md:flex-row">
+      {/* News List Skeleton (First Section) */}
+      <div className="w-full md:w-2/3 p-3">
+        <h1 className="text-lg font-bold m-3 underline">Loading News...</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {Array.from(new Array(8)).map((_, index) => (
+            <div key={index} className="bg-white rounded-md shadow-md p-4">
+              {/* Image skeleton */}
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={160}
+                className="mb-4"
+              />
+              {/* Title skeleton */}
+              <Skeleton variant="text" width="60%" className="mb-2" />
+              {/* Description skeleton */}
+              <Skeleton variant="text" width="80%" className="mb-1" />
+              <Skeleton variant="text" width="90%" className="mb-1" />
+              <Skeleton variant="text" width="75%" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Categories List Skeleton (Side Section) */}
+      <div className="w-full md:w-1/3 p-3">
+        <h1 className="text-lg font-bold m-3 underline">Loading Categories...</h1>
+        <div className="space-y-4 max-h-full md:h-[calc(100vh-50px)] overflow-y-auto">
+          {Array.from(new Array(4)).map((_, index) => (
+            <div
+              key={index}
+              className="bg-[#DDEEFF] rounded-lg shadow-md flex h-28 p-4"
+            >
+              <div className="w-[80%] flex flex-col justify-between">
+                {/* Category name skeleton */}
+                <Skeleton variant="text" width="60%" height={24} className="mb-1" />
+                {/* Category description skeleton */}
+                <Skeleton variant="text" width="80%" height={16} />
+              </div>
+              {/* Category icon skeleton */}
+              <div className="w-[20%] flex justify-center items-center">
+                <Skeleton variant="circular" width={40} height={40} />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

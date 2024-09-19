@@ -124,7 +124,7 @@ const LatestNews: React.FC = () => {
             {categories.map((category) => (
               <div
                 key={category._id}
-                onClick={() => navigate("/all-news", { state: { category: category.name } })}
+                onClick={() => navigate(`/category/${category.name}`)}
                 className="bg-[#DDEEFF] rounded-lg cursor-pointer shadow-md flex h-28 transition-transform transform hover:scale-105"
               >
                 <div className="p-4 flex flex-col justify-between w-full">

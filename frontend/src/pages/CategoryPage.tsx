@@ -134,7 +134,7 @@ const CategoryPage: React.FC = () => {
             >
               <div
                 onClick={() =>
-                  navigate(`/all-news`, { state: { category: category.name } })
+                  navigate(`/category/${category.name}`)
                 }
                 className="rounded-lg cursor-pointer shadow-md bg-white p-4 flex flex-col justify-between"
               >

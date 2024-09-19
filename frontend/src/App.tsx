@@ -26,6 +26,7 @@ import CategoryPage from "./pages/CategoryPage";
 import AllNews from "./pages/AllNews";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import CategoryNews from "./pages/CategoryNews";
 function App() {
   const location = useLocation();
 
@@ -56,6 +57,8 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/news/:id" element={<NewsDetails />} />
+              <Route path="/category/:cat_name" element={<CategoryNews />} />
+
 
               <Route path="/category" element={<CategoryPage />} />
               <Route path="/all-news" element={<AllNews />} />

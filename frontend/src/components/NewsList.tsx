@@ -21,10 +21,11 @@ interface News {
 
 interface NewsListProps {
   newsList: News[];
-  isLoading: boolean; // Add a prop to check if data is loading
+  isLoading: boolean; 
+  category?: boolean; // Add a prop to check if data is loading
 }
 
-const NewsList: React.FC<NewsListProps> = ({ newsList, isLoading }) => {
+const NewsList: React.FC<NewsListProps> = ({ newsList, isLoading,category }) => {
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -35,8 +36,8 @@ const NewsList: React.FC<NewsListProps> = ({ newsList, isLoading }) => {
   };
 
   return (
-    <div className="mx-auto p-5">
-      <h1 className="text-lg font-bold mb-3 underline ">{location.pathname === "/" && "All News"}</h1>
+    <div className="mx-auto p-4">
+      <h1 className="text-lg font-bold m-3 underline ">{location.pathname === "/" && "All News"}</h1>
 
       {isLoading ? (
         <NewsListSkeleton /> // Show skeleton when data is loading
@@ -45,7 +46,7 @@ const NewsList: React.FC<NewsListProps> = ({ newsList, isLoading }) => {
           <p className="text-4xl font-semibold text-gray-700">No news available</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className={`grid grid-cols-1 sm:grid-cols-2  gap-6 ${category?"lg:grid-cols-2":"lg:grid-cols-4"}`}>
           {newsList.slice(0, maxItems).map((news) => (
             <div
               key={news._id}

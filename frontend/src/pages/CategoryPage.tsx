@@ -10,7 +10,6 @@ import { icons } from "../utils/icons"; // Adjust the import path
 interface Category {
   _id: string;
   name: string;
-  description: string;
 }
 
 const CategoryPage: React.FC = () => {
@@ -143,7 +142,6 @@ const CategoryPage: React.FC = () => {
                     <h2 className="text-xl font-semibold mb-2">
                       {category.name}
                     </h2>
-                    <p className="text-gray-700">{category.description}</p>
                   </div>
                   <div className="bg-white shadow-lg p-2 rounded-full  self-center">
                     {/* Render the icon with size h-12 w-12 */}

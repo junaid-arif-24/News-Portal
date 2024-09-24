@@ -9,10 +9,10 @@ interface AuthRequest extends Request {
 
 // Create category
 export const createCategory = async (req: Request, res: Response) => {
-  const { name, description } = req.body;
+  const { name } = req.body;
 
   try {
-    const newCategory = new Category({ name, description });
+    const newCategory = new Category({ name });
     await newCategory.save();
     res.status(201).json(newCategory);
   } catch (error) {
@@ -110,7 +110,6 @@ export const getAllCategories = async (req: Request, res: Response) => {
         return {
           _id: category._id,
           name: category.name,
-          description: category.description,
           newsCount, // Add news count to the response
         };
       })
@@ -126,10 +125,10 @@ export const getAllCategories = async (req: Request, res: Response) => {
 // Update category
 export const updateCategory = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, description } = req.body;
+  const { name } = req.body;
 
   try {
-    const updatedCategory = await Category.findByIdAndUpdate(id, { name, description }, { new: true });
+    const updatedCategory = await Category.findByIdAndUpdate(id, { name }, { new: true });
     res.status(200).json(updatedCategory);
   } catch (error) {
     res.status(400).json({ message: 'Error updating category', error });

@@ -7,13 +7,11 @@ import Loader from "../components/Loader";
 interface Category {
   _id: string;
   name: string;
-  description: string;
 }
 
 const ManageCategories: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(
     null
   );
@@ -42,21 +40,20 @@ const ManageCategories: React.FC = () => {
 
   const createCategory = async () => {
     try {
-      if (!name || !description) {
+      if (!name ) {
         toast.error("Please fill in all fields");
         return;
       }
       const token = localStorage.getItem("token");
       const response = await axios.post(
         `${API_BASE_URL}/api/categories/create`,
-        { name, description },
+        { name },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       setCategories([...categories, response.data]);
       setName("");
-      setDescription("");
       setShowForm(false); // Hide the form after adding
       toast.success("Category created successfully");
     } catch (error) {
@@ -70,7 +67,7 @@ const ManageCategories: React.FC = () => {
       const token = localStorage.getItem("token");
       const response = await axios.put(
         `${API_BASE_URL}/api/categories/update/${id}`,
-        { name, description },
+        { name },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -79,7 +76,6 @@ const ManageCategories: React.FC = () => {
         categories.map((cat) => (cat._id === id ? response.data : cat))
       );
       setName("");
-      setDescription("");
       setEditingCategoryId(null);
       setShowForm(false); // Hide the form after updating
       toast.success("Category updated successfully");
@@ -106,7 +102,6 @@ const ManageCategories: React.FC = () => {
   const handleEditClick = (category: Category) => {
     setEditingCategoryId(category._id);
     setName(category.name);
-    setDescription(category.description);
     setShowForm(true); // Show the form when editing
   };
 
@@ -138,7 +133,6 @@ const ManageCategories: React.FC = () => {
           onClick={() => {
             setEditingCategoryId(null);
             setName("");
-            setDescription("");
             setShowForm(true); // Show the form
           }}
         >
@@ -162,16 +156,7 @@ const ManageCategories: React.FC = () => {
               }
             />
           </div>
-          <div className="mb-2">
-            <label className="block mb-1 font-semibold">Description</label>
-            <textarea
-              className="w-full p-2 border rounded"
-              value={description}
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-                setDescription(e.target.value)
-              }
-            ></textarea>
-          </div>
+          
           <button
             type="submit"
             className="px-4 py-2 bg-green-500 text-white rounded"
@@ -184,7 +169,6 @@ const ManageCategories: React.FC = () => {
             onClick={() => {
               setEditingCategoryId(null);
               setName("");
-              setDescription("");
               setShowForm(false); // Hide the form
             }}
           >
@@ -210,7 +194,6 @@ const ManageCategories: React.FC = () => {
               >
                 <div>
                   <p className="font-semibold">{category.name || "No Name"}</p>
-                  <p>{category.description || "No Description"}</p>
                 </div>
 
                 <div>

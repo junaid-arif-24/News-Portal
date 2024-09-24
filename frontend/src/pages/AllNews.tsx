@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import SearchFilters from "../components/SearchFilters";
 import Loader from "../components/Loader";
 import NewsList from "../components/NewsList";
+import { useAuth } from "../context/AuthContext";
 
 interface News {
   _id: string;
@@ -23,6 +24,7 @@ interface News {
 function AllNews() {
   const [newsList, setNewsList] = useState<News[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { user } = useAuth();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const location = useLocation();
   const category = location.state?.category || "";
@@ -31,7 +33,9 @@ function AllNews() {
     setIsLoading(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/api/news`, {
-        params: category ? { category } : {},
+        params: {
+          visibility: "public" ,
+        },
       });
       setNewsList(response.data);
     } catch (error) {
@@ -40,6 +44,7 @@ function AllNews() {
       setIsLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchFilteredNews();
@@ -47,8 +52,8 @@ function AllNews() {
 
   return (
     <>
-      {!category && <SearchFilters setNewsList={setNewsList} />}
-      <h1 className="text-lg font-bold m-3 underline  ">{category ? `${category} News` : "All News"}</h1>
+      <SearchFilters setNewsList={setNewsList} />
+      <h1 className="text-lg font-bold m-3 underline  "> "All News"</h1>
 
      
         <NewsList newsList={newsList}  isLoading={isLoading} />

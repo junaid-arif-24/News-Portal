@@ -1,6 +1,8 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
 import axios from 'axios';
 import { FaSearch } from 'react-icons/fa';
+import { useAuth } from '../context/AuthContext';
+import { Visibility } from '@mui/icons-material';
 
 interface SearchFiltersProps {
   setNewsList: React.Dispatch<React.SetStateAction<any[]>>;
@@ -19,6 +21,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
   const [category, setCategory] = useState<string>('');
   const [categories, setCategories] = useState<Category[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const { user } = useAuth();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   // Fetching categories
@@ -41,6 +44,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
           date,
           tags,
           category,
+          Visibility: "public"
         },
       });
       setNewsList(response.data);

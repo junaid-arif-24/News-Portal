@@ -30,7 +30,11 @@ const HomePage: React.FC = () => {
   const fetchFilteredNews = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/news`, {});
+      const response = await axios.get(`${API_BASE_URL}/api/news`, {
+        params: {
+          visibility: "public" ,
+        },
+      });
       setNewsList(response.data);
     } catch (error) {
       console.error("Error fetching news", error);

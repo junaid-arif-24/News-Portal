@@ -40,7 +40,7 @@ function CategoryNews() {
     setIsLoadingNews(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/api/news`, {
-        params: cat_name ? { category: cat_name } : {},
+        params: cat_name ? { category: cat_name , visibility: "public"} : {},
       });
       setNewsList(response.data);
     } catch (error) {

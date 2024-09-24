@@ -29,7 +29,7 @@ const NewsList: React.FC<NewsListProps> = ({ newsList, isLoading,category }) => 
   const navigate = useNavigate();
   const location = useLocation();
   
-  const maxItems = location.pathname === "/all-news" ? newsList.length : 4;
+  const maxItems = location.pathname.includes("/all-news")  || location.pathname.includes("/category")  ? newsList.length : 4;
 
   const handleReadMore = (id: string) => {
     navigate(`/news/${id}`);

@@ -5,6 +5,7 @@ import News from '../models/News';
 
 interface AuthRequest extends Request {
   userId?: string;
+  userRole?: string;
 }
 
 // Create category
@@ -98,15 +99,29 @@ export const getSubscribedCategories = async (req: AuthRequest, res: Response) =
 
 // Get all categories
 
-export const getAllCategories = async (req: Request, res: Response) => {
+
+export const getAllCategories = async (req: AuthRequest, res: Response) => {
   try {
+    // Fetch userRole from request (if available)
+    const { userRole } = req;
+
     // Fetch all categories
     const categories = await Category.find();
 
-    // For each category, count the number of news articles in that category
+    // For each category, count the number of news articles based on the user's role
     const categoriesWithNewsCount = await Promise.all(
       categories.map(async (category) => {
-        const newsCount = await News.countDocuments({ category: category._id });
+        let newsCount = 0;
+
+        // If userRole is 'admin', fetch all news, otherwise fetch only public news
+        if (userRole === 'admin') {
+          // Admins can see all news (public and private)
+          newsCount = await News.countDocuments({ category: category._id });
+        } else {
+          // Subscribers and unauthenticated users can only see public news
+          newsCount = await News.countDocuments({ category: category._id, visibility: 'public' });
+        }
+
         return {
           _id: category._id,
           name: category.name,
@@ -117,10 +132,10 @@ export const getAllCategories = async (req: Request, res: Response) => {
 
     res.status(200).json(categoriesWithNewsCount);
   } catch (error) {
+    console.error('Error fetching categories:', error);
     res.status(400).json({ message: 'Error fetching categories', error });
   }
 };
-
 
 // Update category
 export const updateCategory = async (req: Request, res: Response) => {

@@ -24,6 +24,7 @@ interface Category {
   _id: string;
   name: string;
   description: string;
+  newsCount: number;
 }
 
 function CategoryNews() {
@@ -89,19 +90,19 @@ function CategoryNews() {
             <div
               key={category._id}
               onClick={() => navigate(`/category/${category.name}`)}
-              className="bg-[#DDEEFF] rounded-lg cursor-pointer shadow-md flex h-28 transition-transform transform hover:scale-105"
+              className="bg-[#DDEEFF] rounded-lg cursor-pointer items-center shadow-md flex h-24 transition-transform transform hover:scale-105"
             >
               <div className="p-4 flex flex-col justify-between w-full">
                 <div className="flex justify-between items-center">
-                  <div>
+                 
                     <h2 className="text-lg font-bold mb-1">{category.name}</h2>
-                    <p className="text-gray-600 text-sm">{category.description}</p>
-                  </div>
-                  <div className="bg-white shadow-lg p-2 rounded-full self-center">
-                    {icons[category.name]
-                      ? icons[category.name]({ size: "h-10 w-10" })
-                      : icons["Default"]({ size: "h-10 w-10" })}
-                  </div>
+                    <p className="text-black font-bold w-10 h-10 rounded-full flex justify-center items-center bg-blue-400">
+                      {
+                        category.newsCount || category.newsCount
+                      }
+                    </p>
+                  
+                
                 </div>
               </div>
             </div>

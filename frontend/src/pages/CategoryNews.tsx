@@ -4,6 +4,7 @@ import axios from "axios";
 import NewsList from "../components/NewsList";
 import { icons } from "../utils/icons";
 import { CategoryNewsSkeleton } from "../components/Skeletons"; // Import skeleton
+import { useAuth } from "../context/AuthContext";
 
 interface News {
   _id: string;
@@ -33,6 +34,7 @@ function CategoryNews() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoadingNews, setIsLoadingNews] = useState<boolean>(true);
   const [isLoadingCategories, setIsLoadingCategories] = useState<boolean>(true);
+  const {user} = useAuth();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const navigate = useNavigate();
 
@@ -40,7 +42,7 @@ function CategoryNews() {
     setIsLoadingNews(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/api/news`, {
-        params: cat_name ? { category: cat_name , visibility: "public"} : {},
+        params: cat_name ? { category: cat_name , visibility: user?.role ==="admin" ? undefined: "public"} : {},
       });
       setNewsList(response.data);
     } catch (error) {

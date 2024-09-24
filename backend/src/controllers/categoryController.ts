@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Category from '../models/Category';
 import User from '../models/User';
+import News from '../models/News';
 
 interface AuthRequest extends Request {
   userId?: string;
@@ -96,14 +97,31 @@ export const getSubscribedCategories = async (req: AuthRequest, res: Response) =
 };
 
 // Get all categories
+
 export const getAllCategories = async (req: Request, res: Response) => {
   try {
+    // Fetch all categories
     const categories = await Category.find();
-    res.status(200).json(categories);
+
+    // For each category, count the number of news articles in that category
+    const categoriesWithNewsCount = await Promise.all(
+      categories.map(async (category) => {
+        const newsCount = await News.countDocuments({ category: category._id });
+        return {
+          _id: category._id,
+          name: category.name,
+          description: category.description,
+          newsCount, // Add news count to the response
+        };
+      })
+    );
+
+    res.status(200).json(categoriesWithNewsCount);
   } catch (error) {
     res.status(400).json({ message: 'Error fetching categories', error });
   }
 };
+
 
 // Update category
 export const updateCategory = async (req: Request, res: Response) => {

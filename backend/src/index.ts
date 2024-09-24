@@ -4,15 +4,13 @@ import authRoutes from './routes/auth';
 import categoryRoutes from './routes/category';
 import commentRoutes from './routes/comment';
 import UserRoutes from './routes/user';
-
-
-
 import newsRoutes from './routes/news';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import multer from 'multer';
+
 
 dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 

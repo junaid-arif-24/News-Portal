@@ -2,7 +2,10 @@ import axios from 'axios';
 
 const brevoApiKey = process.env.BREVO_API_KEY;
 const appUrl = process.env.APP_URL;
+
 export const sendRegistrationWelcomeEmail = async (email: string, name: string) => {
+  console.log("Entered sendRegistrationWelcomeEmail",brevoApiKey)
+
   try {
     const response = await axios.post(
       'https://api.brevo.com/v3/smtp/email',
@@ -37,6 +40,7 @@ export const sendRegistrationWelcomeEmail = async (email: string, name: string) 
 
 
 export const sendLoginWelcomeEmail = async (email: string, name: string) => {
+  console.log("Entered sendLoginWelcomeEmail",brevoApiKey)
   try {
     const response = await axios.post(
       'https://api.brevo.com/v3/smtp/email',

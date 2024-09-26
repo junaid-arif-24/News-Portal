@@ -91,7 +91,11 @@ export const getAllNews = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Category not found' });
         }
     }
-    if (typeof visibility === 'string') query.visibility = visibility;
+    if (typeof visibility === 'string') {
+        if (visibility !== 'all') {
+            query.visibility = visibility; // Use the provided visibility if it's not 'all'
+        }
+    }
 
     try {
         const news = await News.find(query).populate('category', 'name');
@@ -161,7 +165,7 @@ export const updateNews = async (req: Request, res: Response) => {
         newsToUpdate.title = title || newsToUpdate.title;
         newsToUpdate.description = description || newsToUpdate.description;
         newsToUpdate.category = category || newsToUpdate.category;
-        newsToUpdate.tags = tags ? tags.split(',') : newsToUpdate.tags;
+        newsToUpdate.tags = tags ? tags.split(',') : null;
         newsToUpdate.visibility = visibility || newsToUpdate.visibility;
         newsToUpdate.youtubeUrl = youtubeUrl || newsToUpdate.youtubeUrl;
 
@@ -228,11 +232,29 @@ export const saveNews = async (req: AuthRequest, res: Response) => {
             await user.save();
         }
 
-        res.status(200).json({ message: 'News saved' });
+        res.status(200).json({ message: 'News saved' , savedNews: user.savedNews});
     } catch (error) {
         res.status(400).json({ message: 'Error saving news', error });
     }
 };
+
+export const getSavedNews = async (req: AuthRequest, res: Response) => {
+    if (!req.userId) {
+        return res.status(401).json({ message: 'User not authenticated' });
+    }
+
+    try {
+        const user = await User.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const savedNews = user.savedNews
+        res.status(200).json(savedNews);
+    } catch (error) {
+        res.status(400).json({ message: 'Error fetching saved news', error });
+    }
+}
 
 // Unsave news
 export const unsaveNews = async (req: AuthRequest, res: Response) => {
@@ -255,7 +277,7 @@ export const unsaveNews = async (req: AuthRequest, res: Response) => {
             await user.save();
         }
 
-        res.status(200).json({ message: 'News unsaved' });
+        res.status(200).json({ message: 'News unsaved' , savedNews: user.savedNews});
     } catch (error) {
         res.status(400).json({ message: 'Error unsaving news', error });
     }

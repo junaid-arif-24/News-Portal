@@ -18,6 +18,9 @@ router.get('/latest', newsController.getLatestNews);
 // Get all news with filters
 router.get('/', newsController.getAllNews);
 
+// Get saved news
+router.get('/savedNews', auth, newsController.getSavedNews);
+
 // Get news by ID
 router.get('/:id', newsController.getNewsById);
 
@@ -30,13 +33,18 @@ router.delete('/:id', auth, checkRole(['admin']), newsController.deleteNews);
 // Get relatable news based on category and tags
 router.get('/relatable/:id', newsController.getRelatableNews);
 
-// Get saved news
-router.get('/:id/saved', auth, newsController.saveNews);
+
+
+
+
 
 // Save news
 router.post('/:id/save', auth, newsController.saveNews);
 
 // Unsave news
 router.post('/:id/unsave', auth, newsController.unsaveNews);
+
+
+
 
 export default router;

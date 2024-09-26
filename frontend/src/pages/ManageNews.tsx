@@ -31,7 +31,7 @@ const ManageNews: React.FC = () => {
   const [searchTags, setSearchTags] = useState<string>('');
   const [searchCategory, setSearchCategory] = useState<string>('');
   const [categories, setCategories] = useState<Category[]>([]);
-  const [searchVisibility, setSearchVisibility] = useState<string>('public');
+  const [searchVisibility, setSearchVisibility] = useState<string>('all');
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || ''; // Ensure API_BASE_URL is defined
@@ -182,7 +182,9 @@ const ManageNews: React.FC = () => {
             }
             className="p-2 border rounded"
           >
-            <option value="">Select Visibility</option>
+            <option value="" disabled>Select Visibility</option>
+            <option value="all">All</option>
+
             <option value="public">Public</option>
             <option value="private">Private</option>
           </select>

@@ -71,7 +71,7 @@ const NewsDetails: React.FC = () => {
   const [readingTime, setReadingTime] = useState<number | null>(null);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const token = localStorage.getItem("token");
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, loading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -82,11 +82,12 @@ const NewsDetails: React.FC = () => {
           `${API_BASE_URL}/api/news/${id}`
         );
         setNews(response.data);
+        console.log("isAuthenticated", isAuthenticated , "user", user)
 
         // Check if news is saved
-        if (isAuthenticated) {
+        if (!loading && isAuthenticated) {
           const savedResponse = await axios.get(
-            `${API_BASE_URL}/api/news/${id}/saved`,
+            `${API_BASE_URL}/api/news/savedNews`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -94,8 +95,10 @@ const NewsDetails: React.FC = () => {
             }
           );
 
-           savedNewsIds = savedResponse.data.savedNews.map(
-            (news: any) => news._id
+          console.log("savedResponse", savedResponse)
+
+           savedNewsIds = savedResponse.data.map(
+            (id: string) => id
           );
         setIsSaved(savedNewsIds.includes(id));
 
@@ -109,8 +112,12 @@ const NewsDetails: React.FC = () => {
         console.error("Error fetching news details", error);
       }
     };
-    fetchNewsDetails();
-  }, [id]);
+
+    // Wait for loading to finish before executing the logic
+    if (!loading) {
+      fetchNewsDetails();
+    }
+  }, [id, isAuthenticated, loading]);
 
   useEffect(() => {
     if (id) {
@@ -139,7 +146,7 @@ const NewsDetails: React.FC = () => {
   }
 
   const handleSaveToggle = async () => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated ) {
       toast.error("Please login to save news");
       navigate("/login");
       return;
@@ -264,15 +271,20 @@ const NewsDetails: React.FC = () => {
             <div className="flex items-center">
               <span className="font-semibold mr-2 mb-3">Tags:</span>
               <div className="flex flex-wrap">
-                {news.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="inline-block bg-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
+  {news.tags && Array.isArray(news.tags) && news.tags.length > 0 ? (
+    news.tags.map((tag, index) => (
+      <span
+        key={index}
+        className="inline-block bg-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+      >
+        {"#" + tag}
+      </span>
+    ))
+  ) : (
+    <span className="mb-2 font-semibold text-gray-500">No Tags </span>
+  )}
+</div>
+
             </div>
           </div>
           <div className="mb-4">

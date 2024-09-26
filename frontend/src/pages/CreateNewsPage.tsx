@@ -70,7 +70,7 @@ const CreateNews: React.FC = () => {
       setTags(() => [...newsToEdit.tags]);
       setCategory(newsToEdit.category._id);
       setVisibility(newsToEdit.visibility as "public" | "private");
-      setYoutubeUrl(newsToEdit.youtubeUrl);
+      setYoutubeUrl(newsToEdit.youtubeUrl );
       setExistingImages(newsToEdit.images);
       setIsEdit(true);
       console.log(newsToEdit);
@@ -408,7 +408,7 @@ const CreateNews: React.FC = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               placeholder="Youtube video url"
-              value={youtubeUrl}
+              value={youtubeUrl === "undefined" ? "" : youtubeUrl}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setYoutubeUrl(e.target.value)
               }

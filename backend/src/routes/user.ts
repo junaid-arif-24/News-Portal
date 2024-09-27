@@ -8,6 +8,10 @@ const router = express.Router();
 // Get all users (admin only)
 router.get('/', auth, checkRole(['admin']), userController.getAllUsers);
 
+
+// update user by id
+router.put('/update/:id',auth, checkRole(['admin']), userController.updateUser);
+
 // Block a user (admin only)
 router.patch('/block/:id', auth, checkRole(['admin']), userController.blockUser);
 

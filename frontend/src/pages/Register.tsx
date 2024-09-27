@@ -71,7 +71,7 @@ const Register: React.FC = () => {
               required
             />
           </div>
-          <div className="mb-6">
+          {/* <div className="mb-6">
             <label htmlFor="role" className="block text-gray-700 mb-2">Role</label>
             <select
               id="role"
@@ -83,7 +83,7 @@ const Register: React.FC = () => {
               <option value="admin">Admin</option>
               <option value="subscriber">Subscriber</option>
             </select>
-          </div>
+          </div> */}
           <button
           type="submit"
           disabled={loading}

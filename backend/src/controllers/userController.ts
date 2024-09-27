@@ -4,10 +4,26 @@ import User from '../models/User';
 // Get all users (admin only)
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
-    const users = await User.find({ role: 'subscriber' });
+    const users = await User.find();
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching users', error });
+  }
+};
+
+// Update user details (admin only)
+export const updateUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { name, email, role } = req.body;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(id, { name, email, role }, { new: true });
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating user', error });
   }
 };
 

@@ -3,15 +3,11 @@ import axios from 'axios';
 import { FaSearch } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { Visibility } from '@mui/icons-material';
+import { Category, SearchFiltersProps } from '../types';
 
-interface SearchFiltersProps {
-  setNewsList: React.Dispatch<React.SetStateAction<any[]>>;
-}
 
-interface Category {
-  _id: string;
-  name: string;
-}
+
+
 
 const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
   const [title, setTitle] = useState<string>('');

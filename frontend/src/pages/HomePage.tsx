@@ -5,21 +5,7 @@ import axios from "axios";
 import TrendingNews from "../components/TrendingNews";
 import { useNavigate } from "react-router-dom";
 import Marquee from "react-fast-marquee";
-
-interface News {
-  _id: string;
-  title: string;
-  description: string;
-  images: string[];
-  category: {
-    _id: string;
-    name: string;
-  };
-  time: string;
-  tags: string[];
-  visibility: string;
-  date: string;
-}
+import { News } from "../types";
 
 const HomePage: React.FC = () => {
   const [newsList, setNewsList] = useState<News[]>([]);

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUser, login as apiLogin, register as apiRegister, logout as apiLogout } from '../services/api';
+import { User } from '../types';
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -11,12 +12,7 @@ interface AuthContextProps {
   loading: boolean;
 }
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
+
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 

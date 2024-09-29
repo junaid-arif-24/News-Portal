@@ -3,14 +3,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { formatDate } from '../utils/helper';
 import Loader from '../components/Loader';
+import { Comment } from '../types';
 
-interface Comment {
-  _id: string;
-  text: string;
-  date: string;
-  user?: { name: string };
-  news: { title: string };
-}
 
 const ManageCommentsPage: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>([]);

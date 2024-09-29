@@ -5,20 +5,8 @@ import { formatDate } from '../utils/helper';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+import { Comment, CommentsProps } from '../types';
 
-interface Comment {
-  _id: string;
-  text: string;
-  date: string;
-  user?: {
-    name?: string; // Make user properties optional
-    email?: string;
-  };
-}
-
-interface CommentsProps {
-  newsId: string;
-}
 
 const Comments: React.FC<CommentsProps> = ({ newsId }) => {
   const [comments, setComments] = useState<Comment[]>([]);

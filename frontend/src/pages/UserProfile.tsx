@@ -6,29 +6,8 @@ import { formatDate, formatTime } from "../utils/helper"; // Adjust the import a
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
-interface Subscription {
-  _id: string;
-  name: string;
-}
+import { UserProf } from "../types";
 
-interface SavedNews {
-  _id: string;
-  title: string;
-  date: string;
-  time: string;
-  images: string[];
-  category: {
-    name: string;
-  };
-}
-
-interface UserProf {
-  email: string;
-  name: string;
-  role: string;
-  subscriptions: Subscription[];
-  savedNews: SavedNews[];
-}
 
 const UserProfile: React.FC = () => {
   const [profile, setProfile] = useState<UserProf | null>(null);

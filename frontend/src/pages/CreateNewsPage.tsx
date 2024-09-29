@@ -6,25 +6,9 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-quill/dist/quill.snow.css"; // Import styles for react-quill
 import ReactQuill from "react-quill";
 import Loader from '../components/Loader';
+import { Category , News} from "../types";
 
-interface Category {
-  _id: string;
-  name: string;
-}
 
-interface News {
-  _id?: string;
-  title: string;
-  description: string;
-  images: string[];
-  tags: string[];
-  category: {
-    _id: string;
-    name: string;
-  };
-  visibility: string;
-  youtubeUrl: string;
-}
 
 const CreateNews: React.FC = () => {
   const [title, setTitle] = useState<string>("");

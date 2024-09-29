@@ -3,11 +3,8 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../components/Loader";
+import { Category } from "../types";
 
-interface Category {
-  _id: string;
-  name: string;
-}
 
 const ManageCategories: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);

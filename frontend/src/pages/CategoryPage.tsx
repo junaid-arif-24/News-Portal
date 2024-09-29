@@ -6,12 +6,7 @@ import Loader from "../components/Loader";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { icons } from "../utils/icons"; // Adjust the import path
-
-interface Category {
-  _id: string;
-  name: string;
-  newsCount: number; // Added newsCount field
-}
+import { Category } from "../types";
 
 const CategoryPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -140,7 +135,6 @@ const CategoryPage: React.FC = () => {
                     <p className="text-black font-bold w-10 h-10 rounded-full flex justify-center items-center bg-blue-400">
                       {category.newsCount || 0}
                     </p>
-                    
                   </div>
                 </div>
               </div>

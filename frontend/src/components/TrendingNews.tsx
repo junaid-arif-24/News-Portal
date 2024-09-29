@@ -5,21 +5,9 @@ import { calculateReadingTime, formatDate, formatTime } from '../utils/helper';
 import parse from 'html-react-parser';
 import { TrendingNewsSkeleton } from './Skeletons';
 import CategoryIcon from '@mui/icons-material/Category';
-import EventIcon from '@mui/icons-material/Event';
+import { News } from '../types';
 
-interface News {
-  _id: string;
-  title: string;
-  description: string;
-  images: string[];
-  date: string;
-  time: string; // Include time in the News interface
-  tags: string[];
-  category: {
-    _id: string;
-    name: string;
-  } | null; // Handle case where category might be null
-}
+
 
 const TrendingNews: React.FC = () => {
   const [trendingNews, setTrendingNews] = useState<News[]>([]);

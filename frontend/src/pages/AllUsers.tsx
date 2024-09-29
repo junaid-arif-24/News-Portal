@@ -3,14 +3,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Loader from '../components/Loader';
+import { User } from '../types';
 
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  role: string;
-  isBlocked: boolean;
-}
 
 const AllUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);

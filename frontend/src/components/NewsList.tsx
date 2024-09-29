@@ -4,26 +4,9 @@ import { calculateReadingTime, formatDate, formatTime } from "../utils/helper";
 import parse from 'html-react-parser';
 import CategoryIcon from '@mui/icons-material/Category';
 import { NewsListSkeleton } from './Skeletons'; // Import the custom skeleton
+import { NewsListProps } from "../types";
 
-interface News {
-  _id: string;
-  title: string;
-  description: string;
-  images: string[];
-  date: string;
-  time: string;
-  tags: string[];
-  category: {
-    _id: string;
-    name: string;
-  } | null; // Handle case where category might be null
-}
 
-interface NewsListProps {
-  newsList: News[];
-  isLoading: boolean; 
-  category?: boolean; // Add a prop to check if data is loading
-}
 
 const NewsList: React.FC<NewsListProps> = ({ newsList, isLoading,category }) => {
   const navigate = useNavigate();

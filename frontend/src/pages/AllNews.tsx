@@ -5,21 +5,9 @@ import SearchFilters from "../components/SearchFilters";
 import Loader from "../components/Loader";
 import NewsList from "../components/NewsList";
 import { useAuth } from "../context/AuthContext";
+import { News } from "../types";
 
-interface News {
-  _id: string;
-  title: string;
-  description: string;
-  images: string[];
-  category: {
-    _id: string;
-    name: string;
-  };
-  time: string;
-  tags: string[];
-  visibility: string;
-  date: string;
-}
+
 
 function AllNews() {
   const [newsList, setNewsList] = useState<News[]>([]);

@@ -5,23 +5,8 @@ import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
 import { formatDate } from '../utils/helper';
 import parse from 'html-react-parser';
+import { News , Category} from '../types';
 
-interface Category {
-  _id: string;
-  name: string;
-}
-
-interface News {
-  _id: string;
-  title: string;
-  description: string;
-  images: string[];
-  category: Category;
-  tags: string[];
-  visibility: string;
-  date: string;
-  time: string;
-}
 
 const ManageNews: React.FC = () => {
   const [newsList, setNewsList] = useState<News[]>([]);

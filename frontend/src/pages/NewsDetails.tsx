@@ -12,25 +12,8 @@ import YouTube from "react-youtube";
 import { calculateReadingTime, formatDate, formatTime } from "../utils/helper";
 import CategoryIcon from "@mui/icons-material/Category";
 import Loader from "../components/Loader";
+import { News } from "../types";
 
-interface Category {
-  _id: string;
-  name: string;
-}
-
-interface News {
-  _id: string;
-  title: string;
-  description: string;
-  date: string;
-  time: string;
-  images: string[];
-  category: Category;
-  tags: string[];
-  visibility: string;
-  views: number;
-  youtubeUrl: string;
-}
 
 const fetchRelatableNews = async (
   newsId: string,

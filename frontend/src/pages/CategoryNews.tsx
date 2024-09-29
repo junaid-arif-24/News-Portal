@@ -5,28 +5,10 @@ import NewsList from "../components/NewsList";
 import { icons } from "../utils/icons";
 import { CategoryNewsSkeleton } from "../components/Skeletons"; // Import skeleton
 import { useAuth } from "../context/AuthContext";
+import { Category, News } from "../types";
 
-interface News {
-  _id: string;
-  title: string;
-  description: string;
-  images: string[];
-  category: {
-    _id: string;
-    name: string;
-  };
-  time: string;
-  tags: string[];
-  visibility: string;
-  date: string;
-}
 
-interface Category {
-  _id: string;
-  name: string;
-  description: string;
-  newsCount: number;
-}
+
 
 function CategoryNews() {
   const { cat_name } = useParams<{ cat_name: string }>();

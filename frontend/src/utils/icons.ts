@@ -1,12 +1,6 @@
 import * as React from 'react';
+import { Icons, IconsProps } from '../types';
 
-interface IconsProps {
-  size?: string; // Accepts a size prop for dynamic sizing
-}
-
-interface Icons {
-  [key: string]: (props: IconsProps) => React.ReactElement;
-}
 
 export const icons: Icons = {
   Business: ({ size = 'h-6 w-6' }: IconsProps) =>

@@ -6,24 +6,9 @@ import parse from "html-react-parser";
 import Carousel from "react-material-ui-carousel";
 import { Paper } from "@mui/material";
 import { LatestNewsSkeleton } from "./Skeletons"; // Import the custom skeleton
-import { icons } from "../utils/icons"; // Adjust the import path
+import { Category, News } from "../types";
 
-interface News {
-  _id: string;
-  title: string;
-  description: string;
-  images: string[];
-  time: string;
-  date: string;
-  category: string;
-  visibility: string;
-}
 
-interface Category {
-  _id: string;
-  name: string;
-  newsCount: number;
-}
 
 const LatestNews: React.FC = () => {
   const [latestNews, setLatestNews] = useState<News[]>([]);

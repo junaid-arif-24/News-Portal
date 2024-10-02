@@ -136,7 +136,11 @@ const Navbar: React.FC = () => {
             )}
           </div>
         </div>
-        <div className="md:hidden">
+
+        { location.pathname.includes('/admin') ?(
+          <></>
+          
+        ):(<div className="md:hidden">
           <button onClick={toggleMenu} className="focus:outline-none">
             <svg
               className="w-6 h-6"
@@ -148,7 +152,8 @@ const Navbar: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
           </button>
-        </div>
+        </div>)}
+        
       </div>
       {menuOpen && (
         <div className="md:hidden mt-4">

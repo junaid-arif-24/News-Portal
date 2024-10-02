@@ -69,12 +69,12 @@ function CategoryNews() {
 
       <div className="md:w-1/2 p-3">
         <h1 className="text-lg font-bold m-3 underline">Categories</h1>
-        <div className="w-full p-4 space-y-4 max-h-full md:h-[calc(100vh-50px)] overflow-y-auto">
+        <div className="w-full p-4 space-y-8 max-h-full md:h-[calc(100vh-50px)] overflow-y-auto">
           {categories.map((category) => (
             <div
               key={category._id}
               onClick={() => navigate(`/category/${category.name}`)}
-              className="bg-[#DDEEFF] rounded-lg cursor-pointer items-center shadow-md flex h-24 transition-transform transform hover:scale-105"
+              className="bg-[#DDEEFF] rounded-lg cursor-pointer items-center shadow-md flex h-14 transition-transform transform hover:scale-105"
             >
               <div className="p-4 flex flex-col justify-between w-full">
                 <div className="flex justify-between items-center">

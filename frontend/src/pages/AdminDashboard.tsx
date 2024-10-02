@@ -104,7 +104,7 @@ const AdminDashboard: React.FC = () => {
             sx={{
               width: "50px",
               backgroundColor: "black",
-              marginRight: "170px",
+              marginRight: "10px",
             }}
           >
             <Toolbar>
@@ -114,7 +114,7 @@ const AdminDashboard: React.FC = () => {
                 edge="start"
                 onClick={handleDrawerToggle}
               >
-                <WidgetsIcon sx={{ color: "white", fontSize: "30px", marginTop: "5px" }} />
+                <WidgetsIcon sx={{ color: "white", fontSize: "30px", marginTop: "0px", }} />
               </IconButton>
             </Toolbar>
           </AppBar>

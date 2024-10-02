@@ -1,13 +1,18 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
 
 // Base URL for the API
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // Adjust the base URL as needed
 
+
+// Define the common axios instance
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+});
+
 // Login function
 export const login = async (email: string, password: string) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
+    const response = await apiClient.post(`/auth/login`, { email, password });
     localStorage.setItem('token', response.data.token);
     setAuthToken(response.data.token);
     return response.data;
@@ -27,7 +32,7 @@ export const login = async (email: string, password: string) => {
 // Register function
 export const register = async (name: string, email: string, password: string , role: string) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/register`, { name, email, password, role });
+    const response = await apiClient.post(`/auth/register`, { name, email, password, role });
     return response.data;
   } catch (error) {
     throw new Error('Registration failed');
@@ -46,7 +51,7 @@ export const setAuthToken = (token: string) => {
 // Fetch news by ID
 export const fetchNewsById = async (id: string) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/news/${id}`);
+    const response = await apiClient.get(`/news/${id}`);
     return response.data;
   } catch (error) {
     throw new Error('Fetching news failed');
@@ -61,7 +66,7 @@ export const getUser = async () => {
       throw new Error('No token found');
     }
 
-    const response = await axios.get(`${API_BASE_URL}/auth/user`, {
+    const response = await apiClient.get(`/auth/user`, {
       headers: {
         Authorization: `Bearer ${token}` // Include the token in the Authorization header
       }
@@ -75,10 +80,43 @@ export const getUser = async () => {
 // Logout function
 export const logout = async () => {
   try {
-    await axios.post(`${API_BASE_URL}/auth/logout`);
+    await apiClient.post(`/auth/logout`);
     localStorage.removeItem('token');
     setAuthToken('');
   } catch (error) {
     throw new Error('Logout failed');
+  }
+};
+
+
+
+// Fetch news with optional filters
+export const fetchNews = async (filters: {
+  title?: string;
+  description?: string;
+  date?: string;
+  tags?: string;
+  category?: string;
+  visibility?: string;
+}) => {
+  try {
+    const response = await apiClient.get('/api/news', {
+      params: { ...filters },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching news', error);
+    throw error;
+  }
+};
+
+// Fetch all categories
+export const fetchCategories = async () => {
+  try {
+    const response = await apiClient.get('/api/categories');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching categories', error);
+    throw error;
   }
 };

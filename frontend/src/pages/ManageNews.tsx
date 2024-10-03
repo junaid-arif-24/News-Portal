@@ -6,6 +6,7 @@ import Loader from '../components/Loader';
 import { formatDate } from '../utils/helper';
 import parse from 'html-react-parser';
 import { News , Category} from '../types';
+import { fetchCategories, fetchNews } from '../services/api';
 
 
 const ManageNews: React.FC = () => {
@@ -23,34 +24,32 @@ const ManageNews: React.FC = () => {
 
   // Fetch categories and news when the component mounts
   useEffect(() => {
-    fetchCategories();
-    fetchNews();
+    fetchAllCategories();
+    fetchAllNews();
   }, []);
 
-  const fetchCategories = async () => {
+  const fetchAllCategories = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/categories`);
-      setCategories(response.data || []); // Default to empty array if no data
+      const responseData = await fetchCategories();
+      setCategories(responseData || []); 
     } catch (error) {
       console.error('Error fetching categories', error);
       toast.error('Error fetching categories');
     }
   };
 
-  const fetchNews = async () => {
+  const fetchAllNews = async () => {
     try {
       setLoading(true);
-      const response = await axios.get<News[]>(`${API_BASE_URL}/api/news`, {
-        params: {
-          title: searchTitle,
-          description: searchDescription,
-          date: searchDate,
-          tags: searchTags,
-          category: searchCategory,
-          visibility: searchVisibility,
-        },
+      const responseData = await fetchNews({
+        title: searchTitle,
+        description: searchDescription,
+        date: searchDate,
+        tags: searchTags,
+        category: searchCategory,
+        visibility: searchVisibility,
       });
-      setNewsList(response.data || []); // Default to empty array if no data
+      setNewsList(responseData || []); // Default to empty array if no data
     } catch (error) {
       console.error('Error fetching news', error);
       toast.error('Error fetching news');
@@ -72,7 +71,7 @@ const ManageNews: React.FC = () => {
         },
       });
 
-      fetchNews();
+      fetchAllNews();
       toast.success('News deleted successfully');
     } catch (error) {
       console.error('Error deleting news', error);
@@ -175,7 +174,7 @@ const ManageNews: React.FC = () => {
           </select>
         </div>
         <button
-          onClick={fetchNews}
+          onClick={fetchAllNews}
           className="mt-4 bg-green-500 text-white px-4 py-2 rounded"
         >
           Search

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { resetPassword } from '../services/api';
 
 const ResetPassword: React.FC = () => {
   const [password, setPassword] = useState('');
@@ -8,8 +8,7 @@ const ResetPassword: React.FC = () => {
   const [error, setError] = useState('');
   const token = localStorage.getItem('reset-token');
   const navigate = useNavigate();
-  const location = useLocation();
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,15 +26,7 @@ const ResetPassword: React.FC = () => {
         return;
       }
 
-      const response = await axios.post(
-        `${API_BASE_URL}/auth/reset-password`,
-        { password }, // Only send the new password in the body
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Send the token in the Authorization header
-          },
-        }
-      );
+      const response = await resetPassword(password);
 
       if (response.status === 200) {
         navigate('/login');

@@ -13,29 +13,25 @@ import { calculateReadingTime, formatDate, formatTime } from "../utils/helper";
 import CategoryIcon from "@mui/icons-material/Category";
 import Loader from "../components/Loader";
 import { News } from "../types";
-
+import { fetchNewsById, fetchRelatedNews, fetchSavedNews, fetchTrendingNews } from "../services/api";
 
 const fetchRelatableNews = async (
   newsId: string,
   setRelatableNews: React.Dispatch<React.SetStateAction<News[]>>
 ) => {
   try {
-    const response = await axios.get<News[]>(
-      `${process.env.REACT_APP_API_BASE_URL}/api/news/relatable/${newsId}`
-    );
+    const response = await fetchRelatedNews(newsId);
     setRelatableNews(response.data);
   } catch (error) {
     console.error("Error fetching relatable news", error);
   }
 };
 
-const fetchTrendingNews = async (
+const fetchAllTrendingNews = async (
   setTrendingNews: React.Dispatch<React.SetStateAction<News[]>>
 ) => {
   try {
-    const response = await axios.get<News[]>(
-      `${process.env.REACT_APP_API_BASE_URL}/api/news/trending`
-    );
+    const response = await fetchTrendingNews();
     setTrendingNews(response.data);
   } catch (error) {
     console.error("Error fetching trending news", error);
@@ -61,30 +57,18 @@ const NewsDetails: React.FC = () => {
     const fetchNewsDetails = async () => {
       try {
         let savedNewsIds;
-        const response = await axios.get<News>(
-          `${API_BASE_URL}/api/news/${id}`
-        );
+        const response = await fetchNewsById(id || "");
         setNews(response.data);
-        console.log("isAuthenticated", isAuthenticated , "user", user)
+        // console.log("isAuthenticated", isAuthenticated, "user", user);
 
         // Check if news is saved
         if (!loading && isAuthenticated) {
-          const savedResponse = await axios.get(
-            `${API_BASE_URL}/api/news/savedNews`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          const savedResponse = await fetchSavedNews()
 
-          console.log("savedResponse", savedResponse)
+          console.log("savedResponse", savedResponse);
 
-           savedNewsIds = savedResponse.data.map(
-            (id: string) => id
-          );
-        setIsSaved(savedNewsIds.includes(id));
-
+          savedNewsIds = savedResponse.map((id: string) => id);
+          setIsSaved(savedNewsIds.includes(id));
         }
 
         if (response.data.description) {
@@ -109,7 +93,7 @@ const NewsDetails: React.FC = () => {
   }, [id]);
 
   useEffect(() => {
-    fetchTrendingNews(setTrendingNews);
+    fetchAllTrendingNews(setTrendingNews);
   }, []);
 
   useEffect(() => {
@@ -129,7 +113,7 @@ const NewsDetails: React.FC = () => {
   }
 
   const handleSaveToggle = async () => {
-    if (!isAuthenticated ) {
+    if (!isAuthenticated) {
       toast.error("Please login to save news");
       navigate("/login");
       return;
@@ -235,7 +219,9 @@ const NewsDetails: React.FC = () => {
               parse(news.description || "No description available...")
             ) : (
               <div>
-                {parse(news.description.substring(0, 400)) || "No description available..."}...
+                {parse(news.description.substring(0, 400)) ||
+                  "No description available..."}
+                ...
                 <button
                   onClick={() => setIsDescriptionExpanded(true)}
                   className="text-blue-500 hover:underline ml-2"
@@ -254,24 +240,28 @@ const NewsDetails: React.FC = () => {
             <div className="flex items-center">
               <span className="font-semibold mr-2 mb-3">Tags:</span>
               <div className="flex flex-wrap">
-  {news.tags && Array.isArray(news.tags) && news.tags.length > 0 ? (
-    news.tags.map((tag, index) => (
-      <span
-        key={index}
-        className="inline-block bg-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-      >
-        {"#" + tag}
-      </span>
-    ))
-  ) : (
-    <span className="mb-2 font-semibold text-gray-500">No Tags </span>
-  )}
-</div>
-
+                {news.tags &&
+                Array.isArray(news.tags) &&
+                news.tags.length > 0 ? (
+                  news.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="inline-block bg-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                    >
+                      {"#" + tag}
+                    </span>
+                  ))
+                ) : (
+                  <span className="mb-2 font-semibold text-gray-500">
+                    No Tags{" "}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
           <div className="mb-4">
-            <span className="font-semibold">Visibility:</span> {news.visibility || "Unknown"}
+            <span className="font-semibold">Visibility:</span>{" "}
+            {news.visibility || "Unknown"}
           </div>
 
           {/* YouTube Video Player */}
@@ -320,20 +310,23 @@ const NewsDetails: React.FC = () => {
                         </p>
 
                         <p className="text-gray-600 font-bold text-xs mb-1">
-                        {" "}
-                        &bull; {calculateReadingTime(news.description)} min read{" "}
-                      </p>
+                          {" "}
+                          &bull; {calculateReadingTime(news.description)} min
+                          read{" "}
+                        </p>
                       </div>
                       <p className="text-blue-500 text-xs  mt-1 font-bold">
-                          &bull; {formatDate(newsItem.date) || "Unknown Date"} at{" "}
-                          {formatTime(newsItem.date) || "Unknown Time"}
-                        </p>
-                     
+                        &bull; {formatDate(newsItem.date) || "Unknown Date"} at{" "}
+                        {formatTime(newsItem.date) || "Unknown Time"}
+                      </p>
+
                       <h3 className="text-lg font-semibold mb-2">
                         {newsItem.title || "No Title"}
                       </h3>
                       <div className="text-gray-600 text-sm mb-2">
-                        {parse(newsItem.description.substring(0, 100)) || "No description available..."}....
+                        {parse(newsItem.description.substring(0, 100)) ||
+                          "No description available..."}
+                        ....
                       </div>
                     </div>
                   </div>
@@ -370,11 +363,12 @@ const NewsDetails: React.FC = () => {
             )}
             <div className="p-2 flex flex-col justify-between w-2/3">
               <h3 className="text-lg font-bold mb-1 line-clamp-2">
-                {newsItem.title || "No Title"} 
+                {newsItem.title || "No Title"}
               </h3>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-blue-500 font-bold text-xs">
-                  &bull; {formatDate(newsItem.date) || "Unknown Date"} at {formatTime(newsItem.time) || "Unknown Time"}{" "}
+                  &bull; {formatDate(newsItem.date) || "Unknown Date"} at{" "}
+                  {formatTime(newsItem.time) || "Unknown Time"}{" "}
                   <span className="text-gray-600">
                     {" "}
                     &bull; {calculateReadingTime(news.description)} min read
@@ -382,7 +376,9 @@ const NewsDetails: React.FC = () => {
                 </span>
               </div>
               <div className="text-gray-600 text-sm line-clamp-2">
-                {parse(newsItem.description.substring(0, 100)) || "No description available..."}....
+                {parse(newsItem.description.substring(0, 100)) ||
+                  "No description available..."}
+                ....
               </div>
             </div>
           </div>

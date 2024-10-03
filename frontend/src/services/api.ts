@@ -54,6 +54,30 @@ export const register = async (
   }
 };
 
+// function api call for forgot password
+export const forgotPassword = async (email: string) => {
+  try {
+    const response = await apiClient.post(`/auth/forgot-password`, { email });
+    localStorage.setItem('reset-token', response.data.resetToken);
+  } catch (error) {
+    throw new Error("Forgot password failed");
+  }
+};
+
+// reset password api call 
+export const resetPassword = async (password: string) => {
+  try {
+    const response = await apiClient.post(`/auth/reset-password`, { password } ,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('reset-token')}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    throw new Error("Reset password failed");
+  }
+};
+
 // Function to set the authorization token
 export const setAuthToken = (token: string) => {
   if (token) {
@@ -64,14 +88,7 @@ export const setAuthToken = (token: string) => {
 };
 
 // Fetch news by ID
-export const fetchNewsById = async (id: string) => {
-  try {
-    const response = await apiClient.get(`/news/${id}`);
-    return response.data;
-  } catch (error) {
-    throw new Error("Fetching news failed");
-  }
-};
+
 
 // Get current usER
 export const getUser = async () => {
@@ -122,17 +139,6 @@ export const fetchNews = async (filters: {
     throw error;
   }
 };
-
-// Fetch all categories
-// export const fetchCategories = async () => {
-//   try {
-//     const response = await apiClient.get('/api/categories');
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error fetching categories', error);
-//     throw error;
-//   }
-// };
 
 // Fetch all users
 export const fetchAllUsers = async () => {
@@ -347,3 +353,59 @@ export const createOrUpdateNews = async (
 
   return response.data;
 };
+
+// fetch related news
+export const fetchRelatedNews = async (newsId: string) => {
+  try {
+    const token = localStorage.getItem("token") || "";
+    const response = await apiClient.get(
+      `/api/news/relatable/${newsId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error("Error fetching related news", error);
+    throw error;
+  }
+};
+
+// fetch trending news
+export const fetchTrendingNews = async () => {
+  try {
+    const token = localStorage.getItem("token") || "";
+    const response = await apiClient.get("/api/news/trending", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error fetching trending news", error);
+    throw error;
+  }
+};
+
+// fetch News by Id
+export const fetchNewsById = async (id: string) => {
+  try {
+    const response = await apiClient.get(`/api/news/${id}`);
+    return response;
+  } catch (error) {
+    throw new Error("Fetching news failed");
+  }
+};
+
+// saved news 
+export const fetchSavedNews = async () => {
+  try {
+    const token = localStorage.getItem("token") || "";
+    const response = await apiClient.get("/api/news/savedNews", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching saved news", error);
+    throw error;
+  }
+}
+

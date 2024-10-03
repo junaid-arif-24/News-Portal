@@ -100,7 +100,7 @@ const AdminDashboard: React.FC = () => {
       {isSmallScreen ? (
         <>
           <AppBar
-            position="fixed"
+            position="absolute"
             sx={{
               width: "50px",
               backgroundColor: "black",

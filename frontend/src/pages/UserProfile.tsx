@@ -153,9 +153,7 @@ const UserProfile: React.FC = () => {
               {profile.subscriptions && profile.subscriptions.map((sub) => (
                 <div
                   key={sub._id}
-                  onClick={() =>
-                    navigate(`/all-news`, { state: { category: sub.name } })
-                  }
+                 
                   className="bg-white p-6 rounded-lg shadow-md flex items-center cursor-pointer justify-between"
                 >
                   <div className="flex items-center">

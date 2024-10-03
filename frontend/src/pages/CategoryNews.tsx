@@ -69,7 +69,7 @@ function CategoryNews() {
 
       <div className="md:w-1/2 p-3">
         <h1 className="text-lg font-bold m-3 underline">Categories</h1>
-        <div className="w-full p-4 space-y-8 max-h-full md:h-[calc(100vh-50px)] overflow-y-auto">
+        <div className="w-full p-4 space-y-4 max-h-full md:h-[calc(100vh-50px)] overflow-y-auto">
           {categories.map((category) => (
             <div
               key={category._id}

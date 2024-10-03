@@ -275,7 +275,7 @@ const NewsDetails: React.FC = () => {
           </div>
 
           {/* YouTube Video Player */}
-          {news.youtubeUrl && (
+          {!news.youtubeUrl || news.youtubeUrl === "undefined" ? null : (
             <div className="mb-4">
               <div className="relative w-full pb-[56.25%]">
                 {" "}

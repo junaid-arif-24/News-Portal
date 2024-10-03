@@ -66,7 +66,7 @@ export const LatestNewsSkeleton: React.FC = () => {
           </div>
 
           {/* Side News Skeleton (Category Card Style) */}
-          <div className="w-full md:w-1/3 p-4 space-y-8 max-h-full overflow-y-auto">
+          <div className="w-full md:w-1/3 p-4 space-y-4 max-h-full overflow-y-auto">
            
             {Array.from(new Array(4)).map((_, index) => (
             <div
@@ -124,7 +124,7 @@ export const CategoryNewsSkeleton: React.FC = () => {
       {/* Categories List Skeleton (Side Section) */}
       <div className="w-full md:w-1/3 p-3">
         <h1 className="text-lg font-bold m-3 underline">Loading Categories...</h1>
-        <div className="space-y-8 max-h-full md:h-[calc(100vh-50px)] overflow-y-auto">
+        <div className="space-y-4 max-h-full md:h-[calc(100vh-50px)] overflow-y-auto">
           {Array.from(new Array(4)).map((_, index) => (
             <div
               key={index}

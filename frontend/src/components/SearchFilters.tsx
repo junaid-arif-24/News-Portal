@@ -4,6 +4,7 @@ import { FaSearch } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { Visibility } from '@mui/icons-material';
 import { Category, SearchFiltersProps } from '../types';
+import { fetchCategories, fetchNews } from '../services/api';
 
 
 
@@ -17,14 +18,13 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
   const [category, setCategory] = useState<string>('');
   const [categories, setCategories] = useState<Category[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const { user } = useAuth();
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+ 
 
   // Fetching categories
-  const fetchCategories = async () => {
+  const getCategories = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/categories`);
-      setCategories(response.data);
+      const data = await fetchCategories(); // Using fetchCategories from api.ts
+      setCategories(data);
     } catch (error) {
       console.error('Error fetching categories', error);
     }
@@ -33,24 +33,22 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
   // Fetching filtered news
   const fetchFilteredNews = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/news`, {
-        params: {
-          title,
-          description,
-          date,
-          tags,
-          category,
-          Visibility: "public"
-        },
+      const data = await fetchNews({
+        title,
+        description,
+        date,
+        tags,
+        category,
+        visibility: "public",
       });
-      setNewsList(response.data);
+      setNewsList(data);
     } catch (error) {
       console.error('Error fetching news', error);
     }
   };
 
   useEffect(() => {
-    fetchCategories(); // Fetch categories when the component mounts
+    getCategories(); // Fetch categories when the component mounts
   }, []);
 
   useEffect(() => {

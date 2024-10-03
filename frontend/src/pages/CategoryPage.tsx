@@ -7,6 +7,12 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { icons } from "../utils/icons"; // Adjust the import path
 import { Category } from "../types";
+import {
+  fetchCategories,
+  fetchSubscribedCategories,
+  subscribeCategory,
+  unsubscribeCategory,
+} from "../services/api"; // Import from api.ts
 
 const CategoryPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -14,49 +20,39 @@ const CategoryPage: React.FC = () => {
     []
   );
   const [loading, setLoading] = useState<boolean>(true);
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetchCategories();
-      await fetchSubscribedCategories();
+      await handleFetchCategories();
+      await handleFetchSubscribedCategories();
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [isAuthenticated, user ]);
 
-  const fetchCategories = async () => {
+  const handleFetchCategories = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/categories`);
-      setCategories(response.data);
+      const data = await fetchCategories();
+      setCategories(data);
     } catch (error) {
       console.error("Error fetching categories", error);
     }
   };
 
-  const fetchSubscribedCategories = async () => {
+  const handleFetchSubscribedCategories = async () => {
     try {
-      if (!isAuthenticated) {
-        return;
-      }
-      const response = await axios.get(
-        `${API_BASE_URL}/api/categories/subscribed-categories`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      setSubscribedCategories(
-        response.data.map((category: Category) => category._id)
-      );
+      if (!isAuthenticated) return;
+      const data = await fetchSubscribedCategories();
+      const subscribedCategories = data.map((category: Category) => category._id);
+      setSubscribedCategories(() => subscribedCategories); 
+   
     } catch (error) {
       console.error("Error fetching subscribed categories", error);
     }
   };
-
+  // Subscribe to a category
   const handleSubscribe = async (categoryId: string) => {
     if (!isAuthenticated) {
       toast.error("Please login to subscribe");
@@ -64,22 +60,15 @@ const CategoryPage: React.FC = () => {
       return;
     }
     try {
-      await axios.post(
-        `${API_BASE_URL}/api/categories/subscribe`,
-        { categoryId },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      toast.success("Subscribed successfully");
+      await subscribeCategory(categoryId);
       setSubscribedCategories([...subscribedCategories, categoryId]);
+      toast.success("Subscribed successfully");
     } catch (error) {
       console.error("Error subscribing", error);
     }
   };
 
+  // Unsubscribe from a category
   const handleUnsubscribe = async (categoryId: string) => {
     if (!isAuthenticated) {
       toast.error("Please login to unsubscribe");
@@ -87,19 +76,12 @@ const CategoryPage: React.FC = () => {
       return;
     }
     try {
-      await axios.post(
-        `${API_BASE_URL}/api/categories/unsubscribe`,
-        { categoryId },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      toast.success("Unsubscribed successfully");
+      await unsubscribeCategory(categoryId);
       setSubscribedCategories(
         subscribedCategories.filter((id) => id !== categoryId)
       );
+      toast.success("Unsubscribed successfully");
+
     } catch (error) {
       console.error("Error unsubscribing", error);
     }
@@ -137,6 +119,31 @@ const CategoryPage: React.FC = () => {
                     </p>
                   </div>
                 </div>
+                {user?.role === "subscriber" && (
+                  <div className="flex justify-between mt-1">
+                    {subscribedCategories.includes(category._id) ? (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent the parent onClick from firing
+                          handleUnsubscribe(category._id);
+                        }}
+                        className="bg-gray-500 hover:bg-gray-700 text-white text-sm font-bold py-2 px-4 rounded"
+                      >
+                        Unsubscribe
+                      </button>
+                    ) : (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent the parent onClick from firing
+                          handleSubscribe(category._id);
+                        }}
+                        className="bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded"
+                      >
+                        Subscribe
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           ))}

@@ -4,6 +4,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../components/Loader";
 import { Category } from "../types";
+import { fetchCategories, createCategory, updateCategory, deleteCategory } from "../services/api"; // Import API functions
+
 
 
 const ManageCategories: React.FC = () => {
@@ -17,14 +19,11 @@ const ManageCategories: React.FC = () => {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const loadCategories = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        const token = localStorage.getItem("token");
-        const response = await axios.get(`${API_BASE_URL}/api/categories`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setCategories(response.data);
+        const fetchedCategories = await fetchCategories();
+        setCategories(fetchedCategories);
       } catch (error) {
         console.error("Error fetching categories", error);
         toast.error("Error fetching categories");
@@ -32,26 +31,19 @@ const ManageCategories: React.FC = () => {
         setLoading(false);
       }
     };
-    fetchCategories();
+    loadCategories();
   }, []);
 
-  const createCategory = async () => {
+  const handleCreateCategory = async () => {
     try {
       if (!name ) {
         toast.error("Please fill in all fields");
         return;
       }
-      const token = localStorage.getItem("token");
-      const response = await axios.post(
-        `${API_BASE_URL}/api/categories/create`,
-        { name },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setCategories([...categories, response.data]);
+      const newCategory = await createCategory(name);
+      setCategories([...categories, newCategory]);
       setName("");
-      setShowForm(false); // Hide the form after adding
+      setShowForm(false);
       toast.success("Category created successfully");
     } catch (error) {
       console.error("Error creating category", error);
@@ -59,22 +51,13 @@ const ManageCategories: React.FC = () => {
     }
   };
 
-  const updateCategory = async (id: string) => {
+  const handleUpdateCategory = async (id: string) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.put(
-        `${API_BASE_URL}/api/categories/update/${id}`,
-        { name },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setCategories(
-        categories.map((cat) => (cat._id === id ? response.data : cat))
-      );
+      const updatedCategory = await updateCategory(id, name);
+      setCategories(categories.map((cat) => (cat._id === id ? updatedCategory : cat)));
       setName("");
       setEditingCategoryId(null);
-      setShowForm(false); // Hide the form after updating
+      setShowForm(false);
       toast.success("Category updated successfully");
     } catch (error) {
       console.error("Error updating category", error);
@@ -82,12 +65,9 @@ const ManageCategories: React.FC = () => {
     }
   };
 
-  const deleteCategory = async (id: string) => {
+  const handleDeleteCategory = async (id: string) => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.delete(`${API_BASE_URL}/api/categories/delete/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await deleteCategory(id);
       setCategories(categories.filter((cat) => cat._id !== id));
       toast.success("Category deleted successfully");
     } catch (error) {
@@ -95,6 +75,7 @@ const ManageCategories: React.FC = () => {
       toast.error("Error deleting category");
     }
   };
+
 
   const handleEditClick = (category: Category) => {
     setEditingCategoryId(category._id);
@@ -105,9 +86,9 @@ const ManageCategories: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingCategoryId) {
-      updateCategory(editingCategoryId);
+      handleUpdateCategory(editingCategoryId);
     } else {
-      createCategory();
+      handleCreateCategory();
     }
   };
 
@@ -202,7 +183,7 @@ const ManageCategories: React.FC = () => {
                   </button>
                   <button
                     className="px-4 py-2 bg-red-500 text-white rounded"
-                    onClick={() => deleteCategory(category._id)}
+                    onClick={() => handleDeleteCategory(category._id)}
                   >
                     Delete
                   </button>

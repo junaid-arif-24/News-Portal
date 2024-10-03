@@ -6,6 +6,7 @@ import { icons } from "../utils/icons";
 import { CategoryNewsSkeleton } from "../components/Skeletons"; // Import skeleton
 import { useAuth } from "../context/AuthContext";
 import { Category, News } from "../types";
+import { fetchCategories, fetchNews } from "../services/api";
 
 
 
@@ -23,10 +24,11 @@ function CategoryNews() {
   const fetchFilteredNews = async () => {
     setIsLoadingNews(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/news`, {
-        params: cat_name ? { category: cat_name , visibility: user?.role ==="admin" ? undefined: "public"} : {},
-      });
-      setNewsList(response.data);
+      const filters = cat_name
+        ? { category: cat_name, visibility: user?.role === "admin" ? undefined : "public" }
+        : {};
+      const newsData = await fetchNews(filters); // Use the API function
+      setNewsList(newsData);
     } catch (error) {
       console.error("Error fetching news", error);
     } finally {
@@ -34,13 +36,11 @@ function CategoryNews() {
     }
   };
 
-  const fetchCategories = async () => {
+  const loadCategories = async () => {
     setIsLoadingCategories(true);
     try {
-      const response = await axios.get<Category[]>(
-        `${API_BASE_URL}/api/categories`
-      );
-      setCategories(response.data);
+      const categoryData = await fetchCategories(); // Use the API function
+      setCategories(categoryData);
     } catch (error) {
       console.error("Error fetching categories", error);
     } finally {
@@ -53,7 +53,7 @@ function CategoryNews() {
   }, [cat_name]);
 
   useEffect(() => {
-    fetchCategories();
+    loadCategories();
   }, []);
 
   if (isLoadingNews || isLoadingCategories) {

@@ -7,6 +7,7 @@ import "react-quill/dist/quill.snow.css"; // Import styles for react-quill
 import ReactQuill from "react-quill";
 import Loader from '../components/Loader';
 import { Category , News} from "../types";
+import { createOrUpdateNews, fetchCategories } from "../services/api";
 
 
 
@@ -47,7 +48,7 @@ const CreateNews: React.FC = () => {
   const newsToEdit = location.state as News | null;
 
   useEffect(() => {
-    fetchCategories();
+    fetchCategoriesData();
     if (newsToEdit) {
       setTitle(newsToEdit.title);
       setDescription(newsToEdit.description);
@@ -63,10 +64,10 @@ const CreateNews: React.FC = () => {
     console.log("newsToEdit", newsToEdit);
   }, [newsToEdit]);
 
-  const fetchCategories = async () => {
+  const fetchCategoriesData = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/categories`);
-      setCategories(response.data);
+      const categories = await fetchCategories();
+      setCategories(categories);
     } catch (error) {
       console.error("Error fetching categories", error);
       toast.error("Error fetching categories");
@@ -176,40 +177,21 @@ const CreateNews: React.FC = () => {
       setLoading(false);
       return;
     }
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    images.forEach((image) => formData.append("images", image));
+    formData.append("removedImages", JSON.stringify(removedImages));
+    formData.append("tags", tags.join(",")); // Send tags as a comma-separated string
+    formData.append("category", category);
+    formData.append("visibility", visibility);
+    formData.append("youtubeUrl", youtubeUrl);
 
     try {
-      const token = localStorage.getItem("token");
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("description", description);
-      images.forEach((image) => formData.append("images", image));
-      formData.append("removedImages", JSON.stringify(removedImages));
-      formData.append("tags", tags.join(",")); // Send tags as a comma-separated string
-      formData.append("category", category);
-      formData.append("visibility", visibility);
-      formData.append("youtubeUrl", youtubeUrl);
+     
 
-      if (newsToEdit) {
-        await axios.put(
-          `${API_BASE_URL}/api/news/${newsToEdit._id}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        toast.success("News updated successfully");
-      } else {
-        await axios.post(`${API_BASE_URL}/api/news/create`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        toast.success("News created successfully");
-      }
+      await createOrUpdateNews(formData, isEdit, newsToEdit?._id);
+      toast.success(isEdit ? "News updated successfully" : "News created successfully");
 
       setTitle("");
       setDescription("");

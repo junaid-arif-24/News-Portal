@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Loader from '../components/Loader';
 import { User } from '../types';
+import { fetchAllUsers, blockUser, unblockUser, deleteUser, updateUser } from '../services/api';
 
 
 const AllUsers: React.FC = () => {
@@ -25,12 +26,8 @@ const AllUsers: React.FC = () => {
   const fetchUsers = async () => {
     setLoading(true); 
     try {
-      const response = await axios.get<User[]>(`${API_BASE_URL}/api/user`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-        },
-      });
-      setUsers(response.data);
+      const users = await fetchAllUsers(); // Fetch users using API call
+      setUsers(users);
     } catch (error) {
       console.error('Error fetching users', error);
     } finally {
@@ -41,12 +38,8 @@ const AllUsers: React.FC = () => {
   const handleBlock = async (userId: string) => {
     try {
       setIsLoading(userId);
-      await axios.patch(`${API_BASE_URL}/api/user/block/${userId}`, {}, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-        },
-      });
-      fetchUsers(); 
+      await blockUser(userId); // Block user using API call
+      fetchUsers();
       toast.success('User blocked successfully');
     } catch (error) {
       console.error('Error blocking user', error);
@@ -59,12 +52,8 @@ const AllUsers: React.FC = () => {
   const handleUnblock = async (userId: string) => {
     try {
       setIsLoading(userId);
-      await axios.patch(`${API_BASE_URL}/api/user/unblock/${userId}`, {}, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-        },
-      });
-      fetchUsers(); 
+      await unblockUser(userId); // Unblock user using API call
+      fetchUsers();
       toast.success('User unblocked successfully');
     } catch (error) {
       console.error('Error unblocking user', error);
@@ -77,11 +66,7 @@ const AllUsers: React.FC = () => {
   const handleDelete = async (userId: string) => {
     try {
       setIsDeleting(userId);
-      await axios.delete(`${API_BASE_URL}/api/user/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-        },
-      });
+      await deleteUser(userId); // Delete user using API call
       fetchUsers(); 
       toast.success('User deleted successfully!');
     } catch (error) {
@@ -101,11 +86,7 @@ const AllUsers: React.FC = () => {
   // Save edited user
   const handleSaveEdit = async (userId: string) => {
     try {
-      await axios.put(`${API_BASE_URL}/api/user/update/${userId}`, editedUser, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-        },
-      });
+      await updateUser(userId, editedUser); // Update user using API call
       setEditUserId(null); // Exit edit mode
       fetchUsers(); // Refresh users after update
       toast.success('User updated successfully');

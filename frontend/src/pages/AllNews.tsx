@@ -6,37 +6,34 @@ import Loader from "../components/Loader";
 import NewsList from "../components/NewsList";
 import { useAuth } from "../context/AuthContext";
 import { News } from "../types";
+import { fetchNews } from "../services/api";
 
 
 
 function AllNews() {
   const [newsList, setNewsList] = useState<News[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { user } = useAuth();
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-  const location = useLocation();
-  const category = location.state?.category || "";
 
   const fetchFilteredNews = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/news`, {
-        params: {
-          visibility: "public" ,
-        },
+      // Use fetchNews from the separate API file
+      const news = await fetchNews({
+        visibility: "public",
       });
-      setNewsList(response.data);
+      setNewsList(news);
     } catch (error) {
       console.error("Error fetching news", error);
     } finally {
       setIsLoading(false);
     }
   };
+
   
 
   useEffect(() => {
     fetchFilteredNews();
-  }, [category]);
+  }, []);
 
   return (
     <>

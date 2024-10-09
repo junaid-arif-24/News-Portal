@@ -8,6 +8,7 @@ import { Paper } from "@mui/material";
 import { LatestNewsSkeleton } from "./Skeletons"; // Import the custom skeleton
 import { Category, News } from "../types";
 import { fetchCategories, fetchLatestNews } from "../services/api";
+import CategoryList from "./CategoryList";
 
 
 
@@ -108,26 +109,11 @@ const LatestNews: React.FC = () => {
           {/* Side Section for Categories */}
           <div className="w-full md:w-1/3 p-4 space-y-4 max-h-full md:h-[calc(100vh-50px)] overflow-y-auto">
             {categories.map((category) => (
-              <div
-                key={category._id}
-                onClick={() => navigate(`/category/${category.name}`)}
-                className="bg-[#DDEEFF] rounded-lg cursor-pointer shadow-md flex h-14 items-center transition-transform transform hover:scale-105"
-              >
-                <div className="p-4 flex flex-col justify-between w-full">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h2 className="text-lg font-bold mb-1">{category.name || category.name}</h2>
-                    
-                    </div>
-                    <p className="text-black font-bold w-10 h-10 rounded-full flex justify-center items-center bg-blue-400">
-                      {
-                        category.newsCount || category.newsCount
-                      }
-                    </p>
-                    
-                  </div>
-                </div>
-              </div>
+              <CategoryList
+              key={category._id}
+              category={category}
+              onClick={() => navigate(`/category/${category.name}`)}
+            />
             ))}
           </div>
         </div>

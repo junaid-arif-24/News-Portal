@@ -7,6 +7,7 @@ import { CategoryNewsSkeleton } from "../components/Skeletons"; // Import skelet
 import { useAuth } from "../context/AuthContext";
 import { Category, News } from "../types";
 import { fetchCategories, fetchNews } from "../services/api";
+import CategoryList from "../components/CategoryList";
 
 
 
@@ -71,25 +72,11 @@ function CategoryNews() {
         <h1 className="text-lg font-bold m-3 underline">Categories</h1>
         <div className="w-full p-4 space-y-4 max-h-full md:h-[calc(100vh-50px)] overflow-y-auto">
           {categories.map((category) => (
-            <div
-              key={category._id}
-              onClick={() => navigate(`/category/${category.name}`)}
-              className="bg-[#DDEEFF] rounded-lg cursor-pointer items-center shadow-md flex h-14 transition-transform transform hover:scale-105"
-            >
-              <div className="p-4 flex flex-col justify-between w-full">
-                <div className="flex justify-between items-center">
-                 
-                    <h2 className="text-lg font-bold mb-1">{category.name}</h2>
-                    <p className="text-black font-bold w-10 h-10 rounded-full flex justify-center items-center bg-blue-400">
-                      {
-                        category.newsCount || category.newsCount
-                      }
-                    </p>
-                  
-                
-                </div>
-              </div>
-            </div>
+             <CategoryList
+             key={category._id}
+             category={category}
+             onClick={() => navigate(`/category/${category.name}`)}
+           />
           ))}
         </div>
       </div>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Category, User } from "../types";
+import { Category, Comment, User } from "../types";
 
 // Base URL for the API
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // Adjust the base URL as needed
@@ -144,7 +144,7 @@ export const fetchNews = async (filters: {
 export const fetchAllUsers = async () => {
   try {
     const token = localStorage.getItem("token") || "";
-    const response = await apiClient.get("/api/user", {
+    const response = await apiClient.get("/api/user/all", {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
@@ -371,6 +371,17 @@ export const fetchRelatedNews = async (newsId: string) => {
   }
 };
 
+// fetch latest news
+export const fetchLatestNews = async () => {
+  try {
+    const response = await apiClient.get("/api/news/latest");
+    return response;
+  } catch (error) {
+    console.error("Error fetching latest news", error);
+    throw error;
+  }
+};
+
 // fetch trending news
 export const fetchTrendingNews = async () => {
   try {
@@ -405,6 +416,60 @@ export const fetchSavedNews = async () => {
     return response.data;
   } catch (error) {
     console.error("Error fetching saved news", error);
+    throw error;
+  }
+}
+
+
+// Apis for Comments
+
+export const fetchAllComments = async () => {
+  try {
+    const token = localStorage.getItem("token") || "";
+    const response = await apiClient.get("/api/comments/all", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error fetching comments", error);
+    throw error;
+  }
+};
+
+export const createComment = async (comment :string,newsId : string) => {
+  try {
+    const token = localStorage.getItem("token") || "";
+    const response = await apiClient.post(`/api/comments/${newsId}/comments`, { text: comment }, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error creating comment", error);
+    throw error;
+  }
+};
+
+export const deleteComment = async (id: string) => {
+  try {
+    const token = localStorage.getItem("token") || "";
+    await apiClient.delete(`/api/comments/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  } catch (error) {
+    console.error("Error deleting comment", error);
+    throw error;
+  }
+};
+
+export const fetchAllCommentsByNewsId = async (newsId: string) => {
+  try {
+    const token = localStorage.getItem("token") || "";
+    const response = await apiClient.get(`/api/comments/${newsId}/comments`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error fetching comments", error);
     throw error;
   }
 }

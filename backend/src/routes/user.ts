@@ -6,7 +6,7 @@ import * as userController from '../controllers/userController';
 const router = express.Router();
 
 // Get all users (admin only)
-router.get('/', auth, checkRole(['admin']), userController.getAllUsers);
+router.get('/all', auth, checkRole(['admin']), userController.getAllUsers);
 
 
 // update user by id

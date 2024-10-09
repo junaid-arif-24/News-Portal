@@ -6,6 +6,7 @@ import parse from 'html-react-parser';
 import { TrendingNewsSkeleton } from './Skeletons';
 import CategoryIcon from '@mui/icons-material/Category';
 import { News } from '../types';
+import { fetchTrendingNews } from '../services/api';
 
 
 
@@ -15,13 +16,9 @@ const TrendingNews: React.FC = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
-    const fetchTrendingNews = async () => {
+    const handleFetchTrendingNews = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/news/trending`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
+        const response = await fetchTrendingNews();
         setTrendingNews(response.data);
         setLoading(false);
       } catch (error) {
@@ -30,7 +27,7 @@ const TrendingNews: React.FC = () => {
       }
     };
 
-    fetchTrendingNews();
+    handleFetchTrendingNews();
   }, []);
 
   // Function to handle navigation

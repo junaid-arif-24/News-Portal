@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { formatDate } from '../utils/helper';
 import Loader from '../components/Loader';
 import { Comment } from '../types';
+import { deleteComment, fetchAllComments } from '../services/api';
 
 
 const ManageCommentsPage: React.FC = () => {
@@ -15,11 +16,7 @@ const ManageCommentsPage: React.FC = () => {
     const fetchComments = async () => {
       setLoading(true); // Start loading
       try {
-        const response = await axios.get<Comment[]>(`${API_BASE_URL}/api/comments/all`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-          },
-        });
+        const response = await fetchAllComments();
         setComments(response.data);
       } catch (error) {
         console.error('Error fetching comments', error);
@@ -32,13 +29,9 @@ const ManageCommentsPage: React.FC = () => {
     fetchComments();
   }, [API_BASE_URL]);
 
-  const deleteComment = async (id: string) => {
+  const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`${API_BASE_URL}/api/comments/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-        },
-      });
+      await deleteComment(id);
       setComments(comments.filter(comment => comment._id !== id));
       toast.success('Comment deleted successfully');
     } catch (error) {
@@ -78,7 +71,7 @@ const ManageCommentsPage: React.FC = () => {
                     <td className="px-4 py-2 border">
                       <button
                         className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                        onClick={() => deleteComment(comment._id)}
+                        onClick={() => handleDelete(comment._id)}
                       >
                         Delete
                       </button>
@@ -103,7 +96,7 @@ const ManageCommentsPage: React.FC = () => {
                 <p className="text-gray-500"><strong>Date:</strong> {formatDate(comment.date)}</p>
                 <button
                   className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-2"
-                  onClick={() => deleteComment(comment._id)}
+                  onClick={() => handleDelete(comment._id)}
                 >
                   Delete
                 </button>

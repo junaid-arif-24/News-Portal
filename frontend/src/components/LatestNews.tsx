@@ -7,6 +7,7 @@ import Carousel from "react-material-ui-carousel";
 import { Paper } from "@mui/material";
 import { LatestNewsSkeleton } from "./Skeletons"; // Import the custom skeleton
 import { Category, News } from "../types";
+import { fetchCategories, fetchLatestNews } from "../services/api";
 
 
 
@@ -19,13 +20,13 @@ const LatestNews: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchLatestNews();
-    fetchCategories();
+    handleFetchLatestNews();
+    fetchAllCategories();
   }, []);
 
-  const fetchLatestNews = async () => {
+  const handleFetchLatestNews = async () => {
     try {
-      const response = await axios.get<News[]>(`${API_BASE_URL}/api/news/latest`);
+      const response = await fetchLatestNews();
       setLatestNews(response.data);
     } catch (error) {
       console.error("Error fetching latest news", error);
@@ -34,10 +35,10 @@ const LatestNews: React.FC = () => {
     }
   };
 
-  const fetchCategories = async () => {
+  const fetchAllCategories = async () => {
     try {
-      const response = await axios.get<Category[]>(`${API_BASE_URL}/api/categories`);
-      setCategories(response.data);
+      const response = await fetchCategories();
+      setCategories(response);
     } catch (error) {
       console.error("Error fetching categories", error);
     }

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { Comment, CommentsProps } from '../types';
+import { createComment, fetchAllCommentsByNewsId } from '../services/api';
 
 
 const Comments: React.FC<CommentsProps> = ({ newsId }) => {
@@ -18,7 +19,7 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get<Comment[]>(`${API_BASE_URL}/api/comments/${newsId}/comments`);
+      const response = await fetchAllCommentsByNewsId(newsId);
       setComments(response.data);
     } catch (error) {
       console.error('Error fetching comments', error);
@@ -42,14 +43,7 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
     }
 
     try {
-      await axios.post<Comment>(`${API_BASE_URL}/api/comments/${newsId}/comments`, 
-        { text: comment.trim() }, // Trim the comment to remove extra spaces
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await createComment(comment, newsId);
       fetchComments();
       setComment('');
     } catch (error) {

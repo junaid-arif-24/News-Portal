@@ -16,8 +16,8 @@ const ManageCommentsPage: React.FC = () => {
     const fetchComments = async () => {
       setLoading(true); // Start loading
       try {
-        const response = await fetchAllComments();
-        setComments(response.data);
+        const responseData = await fetchAllComments();
+        setComments(responseData);
       } catch (error) {
         console.error('Error fetching comments', error);
         toast.error('Error fetching comments'); // Show error toast

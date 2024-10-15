@@ -20,8 +20,8 @@ const fetchRelatableNews = async (
   setRelatableNews: React.Dispatch<React.SetStateAction<News[]>>
 ) => {
   try {
-    const response = await fetchRelatedNews(newsId);
-    setRelatableNews(response.data);
+    const responseData = await fetchRelatedNews(newsId);
+    setRelatableNews(responseData);
   } catch (error) {
     console.error("Error fetching relatable news", error);
     toast.error("Error fetching relatable news");
@@ -32,8 +32,8 @@ const fetchAllTrendingNews = async (
   setTrendingNews: React.Dispatch<React.SetStateAction<News[]>>
 ) => {
   try {
-    const response = await fetchTrendingNews();
-    setTrendingNews(response.data);
+    const responseData = await fetchTrendingNews();
+    setTrendingNews(responseData);
   } catch (error) {
     console.error("Error fetching trending news", error);
     toast.error("Error fetching trending news");
@@ -59,8 +59,8 @@ const NewsDetails: React.FC = () => {
     const fetchNewsDetails = async () => {
       try {
         let savedNewsIds;
-        const response = await fetchNewsById(id || "");
-        setNews(response.data);
+        const responseData = await fetchNewsById(id || "");
+        setNews(responseData);
         // console.log("isAuthenticated", isAuthenticated, "user", user);
 
         // Check if news is saved
@@ -73,8 +73,8 @@ const NewsDetails: React.FC = () => {
           setIsSaved(savedNewsIds.includes(id));
         }
 
-        if (response.data.description) {
-          const timeToRead = calculateReadingTime(response.data.description); // Use the utility function
+        if (responseData.description) {
+          const timeToRead = calculateReadingTime(responseData.description); // Use the utility function
           setReadingTime(timeToRead);
         }
       } catch (error) {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Category, User, Comment } from "../types/DataProvider";
+import { Category, User, Comment, News } from "../types/DataProvider";
 
 // Base URL for the API
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -94,11 +94,11 @@ export const fetchNews = async (filters: {
   tags?: string;
   category?: string;
   visibility?: string;
-}) => {
+}): Promise<News[]> => {
   const response = await apiClient.get("/api/news", {
     params: { ...filters },
   });
-  return response.data;
+  return response.data as News[];
 };
 
 // Fetch all users
@@ -133,13 +133,13 @@ export const updateUser = async (
 // Fetch all categories
 export const fetchCategories = async (): Promise<Category[]> => {
   const response = await apiClient.get("/api/categories");
-  return response.data;
+  return response.data as Category[];
 };
 
 // Create a category
 export const createCategory = async (name: string): Promise<Category> => {
   const response = await apiClient.post("/api/categories/create", { name });
-  return response.data;
+  return response.data as Category;
 };
 
 // Update a category
@@ -150,7 +150,7 @@ export const updateCategory = async (
   const response = await apiClient.put(`/api/categories/update/${id}`, {
     name,
   });
-  return response.data;
+  return response.data as Category;
 };
 
 // Delete a category
@@ -159,25 +159,25 @@ export const deleteCategory = async (id: string): Promise<void> => {
 };
 
 // Fetch subscribed categories
-export const fetchSubscribedCategories = async () => {
+export const fetchSubscribedCategories = async (): Promise<Category[]> => {
   const response = await apiClient.get("/api/categories/subscribed-categories");
-  return response.data;
+  return response.data as Category[];
 };
 
 // Subscribe to a category
-export const subscribeCategory = async (categoryId: string) => {
+export const subscribeCategory = async (categoryId: string): Promise<Category> => {
   const response = await apiClient.post("/api/categories/subscribe", {
     categoryId,
   });
-  return response.data;
+  return response.data as Category;
 };
 
 // Unsubscribe from a category
-export const unsubscribeCategory = async (categoryId: string) => {
+export const unsubscribeCategory = async (categoryId: string): Promise<Category> => {
   const response = await apiClient.post("/api/categories/unsubscribe", {
     categoryId,
   });
-  return response.data;
+  return response.data as Category;
 };
 
 // Create or update news
@@ -202,33 +202,33 @@ export const createOrUpdateNews = async (
 };
 
 // Fetch related news
-export const fetchRelatedNews = async (newsId: string) => {
+export const fetchRelatedNews = async (newsId: string): Promise<News[]> => {
   const response = await apiClient.get(`/api/news/relatable/${newsId}`);
-  return response.data;
+  return response.data as News[];
 };
 
 // Fetch latest news
-export const fetchLatestNews = async () => {
+export const fetchLatestNews = async (): Promise<News[]> => {
   const response = await apiClient.get("/api/news/latest");
-  return response.data;
+  return response.data as News[];
 };
 
 // Fetch trending news
-export const fetchTrendingNews = async () => {
+export const fetchTrendingNews = async (): Promise<News[]> => {
   const response = await apiClient.get("/api/news/trending");
-  return response.data;
+  return response.data as News[];
 };
 
 // Fetch news by ID
-export const fetchNewsById = async (id: string) => {
+export const fetchNewsById = async (id: string): Promise<News> => {
   const response = await apiClient.get(`/api/news/${id}`);
-  return response.data;
+  return response.data as News;
 };
 
 // Fetch saved news
 export const fetchSavedNews = async () => {
   const response = await apiClient.get("/api/news/savedNews");
-  return response.data;
+  return response.data ;
 };
 
 // Add a comment
@@ -240,7 +240,7 @@ export const createComment = async (newsId: string, comment: string): Promise<Co
 // Fetch comments for a news article
 export const fetchAllCommentsByNewsId = async (newsId: string): Promise<Comment[]> => {
   const response = await apiClient.get(`/api/news/${newsId}/comments`);
-  return response.data;
+  return response.data as Comment[];
 };
 
 // Delete a comment
@@ -251,47 +251,9 @@ export const deleteComment = async ( commentId: string) => {
 
 // Apis for Comments
 
-export const fetchAllComments = async () => {
+export const fetchAllComments = async (): Promise<Comment[]> => {
     const response = await apiClient.get("/api/comments/all");
-    return response;
+    return response.data as Comment[];
  
 };
-
-// export const createComment = async (comment :string,newsId : string) => {
-//   try {
-//     const token = localStorage.getItem("token") || "";
-//     const response = await apiClient.post(`/api/comments/${newsId}/comments`, { text: comment }, {
-//       headers: { Authorization: `Bearer ${token}` },
-//     });
-//     return response;
-//   } catch (error) {
-//     console.error("Error creating comment", error);
-//     throw error;
-//   }
-// };
-
-// export const deleteComment = async (id: string) => {
-//   try {
-//     const token = localStorage.getItem("token") || "";
-//     await apiClient.delete(`/api/comments/${id}`, {
-//       headers: { Authorization: `Bearer ${token}` },
-//     });
-//   } catch (error) {
-//     console.error("Error deleting comment", error);
-//     throw error;
-//   }
-// };
-
-// export const fetchAllCommentsByNewsId = async (newsId: string) => {
-//   try {
-//     const token = localStorage.getItem("token") || "";
-//     const response = await apiClient.get(`/api/comments/${newsId}/comments`, {
-//       headers: { Authorization: `Bearer ${token}` },
-//     });
-//     return response;
-//   } catch (error) {
-//     console.error("Error fetching comments", error);
-//     throw error;
-//   }
-// }
 

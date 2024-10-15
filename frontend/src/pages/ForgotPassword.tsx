@@ -3,8 +3,8 @@ import axios from 'axios';
 import { forgotPassword } from '../services/api';
 
 const ForgotPassword: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+  const [email, setEmail] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 

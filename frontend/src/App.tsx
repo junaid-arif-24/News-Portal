@@ -27,6 +27,14 @@ import AllNews from "./pages/AllNews";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import CategoryNews from "./pages/CategoryNews";
+
+// Import Admin Pages
+import ManageNews from "./pages/ManageNews";
+import CreateNews from "./pages/CreateNewsPage";
+import ManageCategories from "./pages/CategoryManagement";
+import ManageCommentsPage from "./pages/ManageCommentsPage";
+import AllUsers from "./pages/AllUsers";
+
 function App() {
   const location = useLocation();
 
@@ -68,11 +76,23 @@ function App() {
               {/* <Route path="profile" element={<UserProfile />} /> */}
 
               {/* Protected Routes */}
+              {/* Protected Routes */}
               <Route
                 path="/admin/*"
                 element={
                   <AdminRoute>
-                    <AdminDashboard />
+                    <AdminDashboard>
+                    <Routes>
+                      <Route path="profile" element={<UserProfile />} />
+                      <Route path="create-news" element={<CreateNews />} />
+                      <Route path="manage-news" element={<ManageNews />} />
+                      <Route path="manage-category" element={<ManageCategories />} />
+                      <Route path="manage-comments" element={<ManageCommentsPage />} />
+                      <Route path="all-users" element={<AllUsers />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                    </AdminDashboard>
+                  
                   </AdminRoute>
                 }
               />

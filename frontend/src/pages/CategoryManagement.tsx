@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../components/Loader";
-import { Category } from "../types";
+import { Category } from "../types/DataProvider";
 import { fetchCategories, createCategory, updateCategory, deleteCategory } from "../services/api"; // Import API functions
 
 

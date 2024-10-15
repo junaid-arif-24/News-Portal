@@ -6,7 +6,7 @@ import Loader from "../components/Loader";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { icons } from "../utils/icons"; // Adjust the import path
-import { Category } from "../types";
+import { Category } from "../types/DataProvider";
 import {
   fetchCategories,
   fetchSubscribedCategories,
@@ -49,7 +49,7 @@ const CategoryPage: React.FC = () => {
       setSubscribedCategories(() => subscribedCategories); 
    
     } catch (error) {
-      console.error("Error fetching subscribed categories", error);
+      toast.error("Error fetching subscribed categories");
     }
   };
   // Subscribe to a category
@@ -64,7 +64,7 @@ const CategoryPage: React.FC = () => {
       setSubscribedCategories([...subscribedCategories, categoryId]);
       toast.success("Subscribed successfully");
     } catch (error) {
-      console.error("Error subscribing", error);
+      toast.error("Error subscribing");
     }
   };
 
@@ -83,7 +83,7 @@ const CategoryPage: React.FC = () => {
       toast.success("Unsubscribed successfully");
 
     } catch (error) {
-      console.error("Error unsubscribing", error);
+      toast.error("Error unsubscribing");
     }
   };
 

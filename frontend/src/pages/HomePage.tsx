@@ -5,7 +5,8 @@ import axios from "axios";
 import TrendingNews from "../components/TrendingNews";
 import { useNavigate } from "react-router-dom";
 import Marquee from "react-fast-marquee";
-import { News } from "../types";
+import { News } from "../types/DataProvider";
+import { toast } from "react-toastify";
 
 const HomePage: React.FC = () => {
   const [newsList, setNewsList] = useState<News[]>([]);
@@ -23,7 +24,7 @@ const HomePage: React.FC = () => {
       });
       setNewsList(response.data);
     } catch (error) {
-      console.error("Error fetching news", error);
+      toast.error("Error fetching news");
     } finally {
       setIsLoading(false);
     }

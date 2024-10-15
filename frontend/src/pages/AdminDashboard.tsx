@@ -29,15 +29,16 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import AllUsers from "./AllUsers";
+import { AdminRouteProps } from "../types/DataProvider";
 
 const drawerWidth = 240;
 
-const AdminDashboard: React.FC = () => {
+const AdminDashboard: React.FC<AdminRouteProps> = ({children}) => {
   const location = useLocation(); // Hook to get current route
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -152,15 +153,7 @@ const AdminDashboard: React.FC = () => {
         </Drawer>
       )}
       <main className="w-full">
-        <Routes>
-          <Route path="profile" element={<UserProfile />} />
-          <Route path="create-news" element={<CreateNews />} />
-          <Route path="manage-news" element={<ManageNews />} />
-          <Route path="manage-category" element={<ManageCategories />} />
-          <Route path="manage-comments" element={<ManageCommentsPage />} />
-          <Route path="all-users" element={<AllUsers />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        {children}
       </main>
     </div>
   );

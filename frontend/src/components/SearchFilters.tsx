@@ -1,10 +1,7 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
-import axios from 'axios';
-import { FaSearch } from 'react-icons/fa';
-import { useAuth } from '../context/AuthContext';
-import { Visibility } from '@mui/icons-material';
-import { Category, SearchFiltersProps } from '../types';
+import { Category, SearchFiltersProps } from '../types/DataProvider';
 import { fetchCategories, fetchNews } from '../services/api';
+import { toast } from 'react-toastify';
 
 
 
@@ -26,7 +23,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
       const data = await fetchCategories(); // Using fetchCategories from api.ts
       setCategories(data);
     } catch (error) {
-      console.error('Error fetching categories', error);
+      toast.error('Error fetching categories');
     }
   };
 
@@ -43,7 +40,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ setNewsList }) => {
       });
       setNewsList(data);
     } catch (error) {
-      console.error('Error fetching news', error);
+      toast.error('Error fetching news');
     }
   };
 

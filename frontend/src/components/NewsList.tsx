@@ -1,10 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { calculateReadingTime, formatDate, formatTime } from "../utils/helper";
-import parse from 'html-react-parser';
-import CategoryIcon from '@mui/icons-material/Category';
 import { NewsListSkeleton } from './Skeletons'; // Import the custom skeleton
-import { NewsListProps } from "../types";
+import { NewsListProps } from "../types/DataProvider";
 import NewsCard from "./NewsCard";
 
 

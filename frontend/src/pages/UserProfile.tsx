@@ -6,7 +6,7 @@ import { formatDate, formatTime } from "../utils/helper"; // Adjust the import a
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
-import { UserProf } from "../types";
+import { UserProf } from "../types/DataProvider";
 
 
 const UserProfile: React.FC = () => {
@@ -29,6 +29,7 @@ const UserProfile: React.FC = () => {
       setProfile(response.data);
     } catch (error) {
       console.error("Error fetching profile", error);
+      toast.error("Error fetching profile");
     }
   };
 
@@ -60,6 +61,7 @@ const UserProfile: React.FC = () => {
       toast.success("Unsubscribed successfully");
     } catch (error) {
       console.error("Error unsubscribing", error);
+      toast.error("Error unsubscribing");
     }
   };
 

@@ -1,7 +1,7 @@
 // src/components/Loader.tsx
 import React, { CSSProperties } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { LoaderProps } from '../types';
+import { LoaderProps } from '../types/DataProvider';
 
 
 

@@ -6,18 +6,18 @@ import parse from "html-react-parser";
 import Carousel from "react-material-ui-carousel";
 import { Paper } from "@mui/material";
 import { LatestNewsSkeleton } from "./Skeletons"; // Import the custom skeleton
-import { Category, News } from "../types";
+import { Category, News } from "../types/DataProvider";
 import { fetchCategories, fetchLatestNews } from "../services/api";
 import CategoryList from "./CategoryList";
+import { toast } from "react-toastify";
 
 
 
 const LatestNews: React.FC = () => {
   const [latestNews, setLatestNews] = useState<News[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,10 +27,10 @@ const LatestNews: React.FC = () => {
 
   const handleFetchLatestNews = async () => {
     try {
-      const response = await fetchLatestNews();
-      setLatestNews(response.data);
+      const responseData = await fetchLatestNews();
+      setLatestNews(responseData);
     } catch (error) {
-      console.error("Error fetching latest news", error);
+      toast.error("Error fetching latest news");
     } finally {
       setIsLoading(false);
     }
@@ -41,7 +41,7 @@ const LatestNews: React.FC = () => {
       const response = await fetchCategories();
       setCategories(response);
     } catch (error) {
-      console.error("Error fetching categories", error);
+      toast.error("Error fetching categories");
     }
   };
 

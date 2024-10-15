@@ -3,9 +3,9 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { resetPassword } from '../services/api';
 
 const ResetPassword: React.FC = () => {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
   const token = localStorage.getItem('reset-token');
   const navigate = useNavigate();
   

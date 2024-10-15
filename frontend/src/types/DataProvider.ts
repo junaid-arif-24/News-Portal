@@ -96,3 +96,77 @@ export interface Comment {
     subscriptions: Subscription[];
     savedNews: SavedNews[];
   }
+
+  export interface CategoryListProps {
+    category: Category;
+    onClick: () => void;
+  }
+  
+  // Data for the footer categories
+  export const footerData = [
+    {
+      title: 'Business',
+      links: [
+        { name: 'Startup', path: '/' },
+        { name: 'Employee', path: '/' },
+        { name: 'Success', path: '/' },
+        { name: 'Videos', path: '/' },
+        { name: 'Markets', path: '/' },
+      ],
+    },
+    {
+      title: 'Technology',
+      links: [
+        { name: 'Innovate', path: '/' },
+        { name: 'Gadget', path: '/' },
+        { name: 'Innovative Cities', path: '/' },
+        { name: 'Upstarts', path: '/' },
+        { name: 'Future Tech', path: '/' },
+      ],
+    },
+    {
+      title: 'Travel',
+      links: [
+        { name: 'Destinations', path: '/' },
+        { name: 'Food & Drink', path: '/' },
+        { name: 'Stay', path: '/' },
+        { name: 'News', path: '/' },
+        { name: 'Videos', path: '/' },
+      ],
+    },
+    {
+      title: 'Sports',
+      links: [
+        { name: 'Football', path: '/' },
+        { name: 'Tennis', path: '/' },
+        { name: 'Golf', path: '/' },
+        { name: 'Motorsports', path: '/' },
+        { name: 'Esports', path: '/' },
+      ],
+    },
+  ];
+
+ export interface NavbarButtonProps {
+    path: string;
+    label: string;
+    activeCategory: string | null;
+    onClick: () => void;
+  }
+  
+ export interface ProfileIconProps {
+    isAuthenticated: boolean;
+    user: { name?: string } | null;
+  }
+  
+export interface NewsCardProps { news: News, onClick: () => void }
+
+export interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+export interface errorFields{
+  title: boolean;
+  description: boolean;
+  images: boolean;
+  category: boolean;
+}

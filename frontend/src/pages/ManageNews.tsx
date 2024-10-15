@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
 import { formatDate } from '../utils/helper';
 import parse from 'html-react-parser';
-import { News , Category} from '../types';
+import { News , Category} from '../types/DataProvider';
 import { fetchCategories, fetchNews } from '../services/api';
 
 

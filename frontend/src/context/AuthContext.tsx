@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUser, login as apiLogin, register as apiRegister, logout as apiLogout } from '../services/api';
-import { User } from '../types';
+import { User } from '../types/DataProvider';
 
 interface AuthContextProps {
   isAuthenticated: boolean;

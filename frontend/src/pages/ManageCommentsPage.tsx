@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { formatDate } from '../utils/helper';
 import Loader from '../components/Loader';
-import { Comment } from '../types';
+import { Comment } from '../types/DataProvider';
 import { deleteComment, fetchAllComments } from '../services/api';
 
 

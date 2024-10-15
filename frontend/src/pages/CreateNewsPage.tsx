@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-quill/dist/quill.snow.css"; // Import styles for react-quill
 import ReactQuill from "react-quill";
 import Loader from '../components/Loader';
-import { Category , News} from "../types";
+import { Category , errorFields, News} from "../types/DataProvider";
 import { createOrUpdateNews, fetchCategories } from "../services/api";
 
 
@@ -22,15 +22,10 @@ const CreateNews: React.FC = () => {
   const [category, setCategory] = useState<string>("");
   const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [categories, setCategories] = useState<Category[]>([]);
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [youtubeUrl, setYoutubeUrl] = useState<string>("");
-  const [errorFields, setErrorFields] = useState<{
-    title: boolean;
-    description: boolean;
-    images: boolean;
-    category: boolean;
-  }>({
+  const [errorFields, setErrorFields] = useState<errorFields>({
     title: false,
     description: false,
     images: false,

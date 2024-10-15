@@ -1,7 +1,13 @@
+// Footer.tsx
 import React from 'react';
 import { FaFacebookF, FaLinkedinIn, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import FooterCategory from './FooterCategory'; // Import the FooterCategory component
+import { footerData } from '../types/DataProvider';
+
 const Footer: React.FC = () => {
+  
+
   return (
     <footer className="bg-black py-10 border-t mt-10">
       <div className="container mx-auto px-4 flex flex-wrap justify-between items-center">
@@ -18,48 +24,13 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div className="flex flex-wrap justify-between text-white space-x-10">
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Business</h3>
-            <ul className="text-gray-400">
-              <li className="mb-2"><Link to="/">Startup</Link></li>
-              <li className="mb-2"><Link to="/">Employee</Link></li>
-              <li className="mb-2"><Link to="/">Success</Link></li>
-              <li className="mb-2"><Link to="/">Videos</Link></li>
-              <li className="mb-2"><Link to="/">Markets</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Technology</h3>
-            <ul className="text-gray-400">
-            <li className="mb-2"><Link to="/">Innovate</Link></li>
-              <li className="mb-2"><Link to="/">Gadget</Link></li>
-              <li className="mb-2"><Link to="/">Innovative Cities</Link></li>
-              <li className="mb-2"><Link to="/">Upstarts</Link></li>
-              <li className="mb-2"><Link to="/">Future Tech</Link></li>
-              
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Travel</h3>
-            <ul className="text-gray-400">
-            <li className="mb-2"><Link to="/">Destinations</Link></li>
-              <li className="mb-2"><Link to="/">Food & Drink</Link></li>
-              <li className="mb-2"><Link to="/">Stay</Link></li>
-              <li className="mb-2"><Link to="/">News</Link></li>
-              <li className="mb-2"><Link to="/">Videos</Link></li>
-              
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Sports</h3>
-            <ul className="text-gray-400">
-            <li className="mb-2"><Link to="/">Football</Link></li>
-              <li className="mb-2"><Link to="/">Tennis</Link></li>
-              <li className="mb-2"><Link to="/">Golf</Link></li>
-              <li className="mb-2"><Link to="/">Motorsports</Link></li>
-              <li className="mb-2"><Link to="/">Esports</Link></li>
-            </ul>
-          </div>
+          {footerData.map((category, index) => (
+            <FooterCategory
+              key={index}
+              title={category.title}
+              links={category.links}
+            />
+          ))}
         </div>
       </div>
       <div className="mt-10 text-gray-400 text-center">

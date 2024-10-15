@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Loader from '../components/Loader';
-import { User } from '../types';
+import { User } from '../types/DataProvider';
 import { fetchAllUsers, blockUser, unblockUser, deleteUser, updateUser } from '../services/api';
 
 
@@ -14,7 +14,6 @@ const AllUsers: React.FC = () => {
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true); 
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
   // Use the useMediaQuery hook to check if the screen is small
   const isSmallScreen = useMediaQuery('(max-width: 640px)');
@@ -29,7 +28,7 @@ const AllUsers: React.FC = () => {
       const users = await fetchAllUsers(); // Fetch users using API call
       setUsers(users);
     } catch (error) {
-      console.error('Error fetching users', error);
+      toast.error('Error fetching users');
     } finally {
       setLoading(false);
     }
@@ -42,7 +41,6 @@ const AllUsers: React.FC = () => {
       fetchUsers();
       toast.success('User blocked successfully');
     } catch (error) {
-      console.error('Error blocking user', error);
       toast.error('Error blocking user');
     } finally {
       setIsLoading(null);
@@ -56,7 +54,6 @@ const AllUsers: React.FC = () => {
       fetchUsers();
       toast.success('User unblocked successfully');
     } catch (error) {
-      console.error('Error unblocking user', error);
       toast.error('Error unblocking user');
     } finally {
       setIsLoading(null);
@@ -70,7 +67,6 @@ const AllUsers: React.FC = () => {
       fetchUsers(); 
       toast.success('User deleted successfully!');
     } catch (error) {
-      console.error('Error deleting user', error);
       toast.error('Error deleting user');
     } finally {
       setIsDeleting(null);
@@ -91,7 +87,6 @@ const AllUsers: React.FC = () => {
       fetchUsers(); // Refresh users after update
       toast.success('User updated successfully');
     } catch (error) {
-      console.error('Error updating user', error);
       toast.error('Error updating user');
     }
   };

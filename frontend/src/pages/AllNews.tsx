@@ -5,8 +5,9 @@ import SearchFilters from "../components/SearchFilters";
 import Loader from "../components/Loader";
 import NewsList from "../components/NewsList";
 import { useAuth } from "../context/AuthContext";
-import { News } from "../types";
+import { News } from "../types/DataProvider";
 import { fetchNews } from "../services/api";
+import { toast } from "react-toastify";
 
 
 
@@ -23,7 +24,7 @@ function AllNews() {
       });
       setNewsList(news);
     } catch (error) {
-      console.error("Error fetching news", error);
+      toast.error("Error fetching news");
     } finally {
       setIsLoading(false);
     }

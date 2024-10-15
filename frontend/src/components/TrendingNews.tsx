@@ -5,25 +5,26 @@ import { calculateReadingTime, formatDate, formatTime } from '../utils/helper';
 import parse from 'html-react-parser';
 import { TrendingNewsSkeleton } from './Skeletons';
 import CategoryIcon from '@mui/icons-material/Category';
-import { News } from '../types';
+import { News } from '../types/DataProvider';
 import { fetchTrendingNews } from '../services/api';
 import NewsCard from './NewsCard';
+import { toast } from 'react-toastify';
 
 
 
 const TrendingNews: React.FC = () => {
   const [trendingNews, setTrendingNews] = useState<News[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     const handleFetchTrendingNews = async () => {
       try {
-        const response = await fetchTrendingNews();
-        setTrendingNews(response.data);
+        const responseData = await fetchTrendingNews();
+        setTrendingNews(responseData);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching trending news', error);
+        toast.error('Error fetching trending news');
         setLoading(false);
       }
     };

@@ -12,7 +12,7 @@ import YouTube from "react-youtube";
 import { calculateReadingTime, formatDate, formatTime } from "../utils/helper";
 import CategoryIcon from "@mui/icons-material/Category";
 import Loader from "../components/Loader";
-import { News } from "../types";
+import { News } from "../types/DataProvider";
 import { fetchNewsById, fetchRelatedNews, fetchSavedNews, fetchTrendingNews } from "../services/api";
 
 const fetchRelatableNews = async (
@@ -24,6 +24,7 @@ const fetchRelatableNews = async (
     setRelatableNews(response.data);
   } catch (error) {
     console.error("Error fetching relatable news", error);
+    toast.error("Error fetching relatable news");
   }
 };
 
@@ -35,6 +36,7 @@ const fetchAllTrendingNews = async (
     setTrendingNews(response.data);
   } catch (error) {
     console.error("Error fetching trending news", error);
+    toast.error("Error fetching trending news");
   }
 };
 
@@ -77,6 +79,7 @@ const NewsDetails: React.FC = () => {
         }
       } catch (error) {
         console.error("Error fetching news details", error);
+        toast.error("Error fetching news details");
       }
     };
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icons, IconsProps } from '../types';
+import { Icons, IconsProps } from '../types/DataProvider';
 
 
 export const icons: Icons = {

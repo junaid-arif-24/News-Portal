@@ -1,10 +1,9 @@
-import { News } from "../types";
+import { News, NewsCardProps } from "../types/DataProvider";
 import CategoryIcon from '@mui/icons-material/Category';
 import { calculateReadingTime, formatDate, formatTime } from "../utils/helper";
 import parse from 'html-react-parser';
 
-
- const NewsCard: React.FC<{ news: News, onClick: () => void }> = ({ news, onClick }) => (
+ const NewsCard: React.FC<NewsCardProps> = ({ news, onClick }) => (
     <div
       onClick={onClick}
       className="bg-white cursor-pointer rounded-md shadow-md flex flex-col gap-1 transition-transform transform hover:scale-105"

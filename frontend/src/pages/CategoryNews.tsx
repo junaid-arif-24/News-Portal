@@ -5,9 +5,10 @@ import NewsList from "../components/NewsList";
 import { icons } from "../utils/icons";
 import { CategoryNewsSkeleton } from "../components/Skeletons"; // Import skeleton
 import { useAuth } from "../context/AuthContext";
-import { Category, News } from "../types";
+import { Category, News } from "../types/DataProvider";
 import { fetchCategories, fetchNews } from "../services/api";
 import CategoryList from "../components/CategoryList";
+import { toast } from "react-toastify";
 
 
 
@@ -31,7 +32,7 @@ function CategoryNews() {
       const newsData = await fetchNews(filters); // Use the API function
       setNewsList(newsData);
     } catch (error) {
-      console.error("Error fetching news", error);
+      toast.error("Error fetching news");
     } finally {
       setIsLoadingNews(false);
     }
@@ -43,7 +44,7 @@ function CategoryNews() {
       const categoryData = await fetchCategories(); // Use the API function
       setCategories(categoryData);
     } catch (error) {
-      console.error("Error fetching categories", error);
+      toast.error("Error fetching categories");
     } finally {
       setIsLoadingCategories(false);
     }

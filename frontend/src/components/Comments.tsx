@@ -5,24 +5,23 @@ import { formatDate } from '../utils/helper';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
-import { Comment, CommentsProps } from '../types';
+import { Comment, CommentsProps } from '../types/DataProvider';
 import { createComment, fetchAllCommentsByNewsId } from '../services/api';
 
 
 const Comments: React.FC<CommentsProps> = ({ newsId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [comment, setComment] = useState<string>('');
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-  const token = localStorage.getItem('token');
+ 
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
   const fetchComments = async () => {
     try {
-      const response = await fetchAllCommentsByNewsId(newsId);
-      setComments(response.data);
+      const responseData = await fetchAllCommentsByNewsId(newsId);
+      setComments(responseData);
     } catch (error) {
-      console.error('Error fetching comments', error);
+      toast.error('Error fetching comments');
     }
   };
 
@@ -47,7 +46,7 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
       fetchComments();
       setComment('');
     } catch (error) {
-      console.error('Error adding comment', error);
+      toast.error('Error adding comment');
     }
   };
 

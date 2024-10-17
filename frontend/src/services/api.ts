@@ -108,14 +108,11 @@ export const fetchAllUsers = async () => {
 };
 
 // Block a user
-export const blockUser = async (userId: string) => {
-  await apiClient.patch(`/api/user/block/${userId}`);
+export const toggleBlockUser = async (userId: string, isBlocked: boolean) => {
+  await apiClient.patch(`/api/user/toggle-block/${userId}`, { isBlocked });
 };
 
-// Unblock a user
-export const unblockUser = async (userId: string) => {
-  await apiClient.patch(`/api/user/unblock/${userId}`);
-};
+
 
 // Delete a user
 export const deleteUser = async (userId: string) => {

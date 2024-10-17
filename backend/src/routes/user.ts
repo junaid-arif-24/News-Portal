@@ -13,10 +13,10 @@ router.get('/all', auth, checkRole(['admin']), userController.getAllUsers);
 router.put('/update/:id',auth, checkRole(['admin']), userController.updateUser);
 
 // Block a user (admin only)
-router.patch('/block/:id', auth, checkRole(['admin']), userController.blockUser);
+router.patch('/toggle-block/:id', auth, checkRole(['admin']), userController.toggleBlockUser);
 
 // Unblock a user (admin only)
-router.patch('/unblock/:id', auth, checkRole(['admin']), userController.unblockUser);
+// router.patch('/unblock/:id', auth, checkRole(['admin']), userController.unblockUser);
 
 // Delete a user (admin only)
 router.delete('/:id', auth, checkRole(['admin']), userController.deleteUser);

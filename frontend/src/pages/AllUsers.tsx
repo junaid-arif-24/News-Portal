@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import Loader from '../components/Loader';
-import { User } from '../types/DataProvider';
-import { fetchAllUsers, blockUser, unblockUser, deleteUser, updateUser } from '../services/api';
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Loader from "../components/Loader";
+import { User } from "../types/DataProvider";
+import {
+  fetchAllUsers,
+  deleteUser,
+  updateUser,
+  toggleBlockUser,
+} from "../services/api";
 
 const AllUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -13,48 +17,38 @@ const AllUsers: React.FC = () => {
   const [editedUser, setEditedUser] = useState<Partial<User>>({});
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true); 
+  const [loading, setLoading] = useState<boolean>(true);
 
   // Use the useMediaQuery hook to check if the screen is small
-  const isSmallScreen = useMediaQuery('(max-width: 640px)');
+  const isSmallScreen = useMediaQuery("(max-width: 640px)");
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
   const fetchUsers = async () => {
-    setLoading(true); 
+    setLoading(true);
     try {
       const users = await fetchAllUsers(); // Fetch users using API call
       setUsers(users);
     } catch (error) {
-      toast.error('Error fetching users');
+      toast.error("Error fetching users");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleBlock = async (userId: string) => {
+  // New function to handle both block and unblock
+  const handleToggleBlock = async (userId: string, shouldBlock: boolean) => {
     try {
       setIsLoading(userId);
-      await blockUser(userId); // Block user using API call
+      await toggleBlockUser(userId, shouldBlock ); // Send boolean value
       fetchUsers();
-      toast.success('User blocked successfully');
+      toast.success(
+        `User ${shouldBlock ? "blocked" : "unblocked"} successfully`
+      );
     } catch (error) {
-      toast.error('Error blocking user');
-    } finally {
-      setIsLoading(null);
-    }
-  };
-
-  const handleUnblock = async (userId: string) => {
-    try {
-      setIsLoading(userId);
-      await unblockUser(userId); // Unblock user using API call
-      fetchUsers();
-      toast.success('User unblocked successfully');
-    } catch (error) {
-      toast.error('Error unblocking user');
+      toast.error(`Error ${shouldBlock ? "blocking" : "unblocking"} user`);
     } finally {
       setIsLoading(null);
     }
@@ -64,10 +58,10 @@ const AllUsers: React.FC = () => {
     try {
       setIsDeleting(userId);
       await deleteUser(userId); // Delete user using API call
-      fetchUsers(); 
-      toast.success('User deleted successfully!');
+      fetchUsers();
+      toast.success("User deleted successfully!");
     } catch (error) {
-      toast.error('Error deleting user');
+      toast.error("Error deleting user");
     } finally {
       setIsDeleting(null);
     }
@@ -85,9 +79,9 @@ const AllUsers: React.FC = () => {
       await updateUser(userId, editedUser); // Update user using API call
       setEditUserId(null); // Exit edit mode
       fetchUsers(); // Refresh users after update
-      toast.success('User updated successfully');
+      toast.success("User updated successfully");
     } catch (error) {
-      toast.error('Error updating user');
+      toast.error("Error updating user");
     }
   };
 
@@ -98,7 +92,9 @@ const AllUsers: React.FC = () => {
   };
 
   // Update the fields when editing
-  const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleFieldChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setEditedUser((prevState) => ({
       ...prevState,
@@ -116,27 +112,27 @@ const AllUsers: React.FC = () => {
         </div>
       ) : isSmallScreen ? (
         <div className="space-y-4">
-          {users.map(user => (
+          {users.map((user) => (
             <div key={user._id} className="bg-white p-4 rounded shadow-md">
               {editUserId === user._id ? (
                 <>
                   <input
                     type="text"
                     name="name"
-                    value={editedUser.name || ''}
+                    value={editedUser.name || ""}
                     onChange={handleFieldChange}
                     className="block w-full p-2 mb-2 border rounded"
                   />
                   <input
                     type="email"
                     name="email"
-                    value={editedUser.email || ''}
+                    value={editedUser.email || ""}
                     onChange={handleFieldChange}
                     className="block w-full p-2 mb-2 border rounded"
                   />
                   <select
                     name="role"
-                    value={editedUser.role || ''}
+                    value={editedUser.role || ""}
                     onChange={handleFieldChange}
                     className="block w-full p-2 mb-2 border rounded"
                   >
@@ -160,26 +156,34 @@ const AllUsers: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <p><strong>Name:</strong> {user.name || 'No name available'}</p>
-                  <p><strong>Email:</strong> {user.email || 'No email available'}</p>
-                  <p><strong>Role:</strong> {user.role || 'No role available'}</p>
-                  <p><strong>Status:</strong> {user.isBlocked ? 'Blocked' : 'Active'}</p>
+                  <p>
+                    <strong>Name:</strong> {user.name || "No name available"}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {user.email || "No email available"}
+                  </p>
+                  <p>
+                    <strong>Role:</strong> {user.role || "No role available"}
+                  </p>
+                  <p>
+                    <strong>Status:</strong>{" "}
+                    {user.isBlocked ? "Blocked" : "Active"}
+                  </p>
                   <div className="flex justify-between mt-4">
-                    {user.isBlocked ? (
-                      <button
-                        onClick={() => handleUnblock(user._id)}
-                        className="bg-green-500 text-white px-4 py-2 rounded"
-                      >
-                        {isLoading === user._id && <Loader loading={true} size={20} />} Unblock
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleBlock(user._id)}
-                        className="bg-yellow-500 text-white px-4 py-2 rounded"
-                      >
-                        {isLoading === user._id && <Loader loading={true} size={20} />} Block
-                      </button>
-                    )}
+                    <button
+                      onClick={() =>
+                        handleToggleBlock(user._id, !user.isBlocked)
+                      } // Toggle block/unblock
+                      className={`${
+                        user.isBlocked ? "bg-green-500" : "bg-yellow-500"
+                      } text-white px-4 py-2 rounded`}
+                    >
+                      {isLoading === user._id && (
+                        <Loader loading={true} size={20} />
+                      )}
+                      {user.isBlocked ? "Unblock" : "Block"}
+                    </button>
+
                     <button
                       onClick={() => handleEdit(user)}
                       className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -190,7 +194,10 @@ const AllUsers: React.FC = () => {
                       onClick={() => handleDelete(user._id)}
                       className="bg-red-500 text-white px-4 py-2 rounded"
                     >
-                      {isDeleting === user._id && <Loader loading={true} size={20} />} Delete
+                      {isDeleting === user._id && (
+                        <Loader loading={true} size={20} />
+                      )}{" "}
+                      Delete
                     </button>
                   </div>
                 </>
@@ -210,19 +217,19 @@ const AllUsers: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
+            {users.map((user) => (
               <tr key={user._id} className="border-b">
                 <td className="py-2 px-4">
                   {editUserId === user._id ? (
                     <input
                       type="text"
                       name="name"
-                      value={editedUser.name || ''}
+                      value={editedUser.name || ""}
                       onChange={handleFieldChange}
                       className="p-2 border rounded"
                     />
                   ) : (
-                    user.name || 'No name available'
+                    user.name || "No name available"
                   )}
                 </td>
                 <td className="py-2 px-4">
@@ -230,19 +237,19 @@ const AllUsers: React.FC = () => {
                     <input
                       type="email"
                       name="email"
-                      value={editedUser.email || ''}
+                      value={editedUser.email || ""}
                       onChange={handleFieldChange}
                       className="p-2 border rounded"
                     />
                   ) : (
-                    user.email || 'No email available'
+                    user.email || "No email available"
                   )}
                 </td>
                 <td className="py-2 px-4">
                   {editUserId === user._id ? (
                     <select
                       name="role"
-                      value={editedUser.role || ''}
+                      value={editedUser.role || ""}
                       onChange={handleFieldChange}
                       className="p-2 border rounded"
                     >
@@ -250,10 +257,12 @@ const AllUsers: React.FC = () => {
                       <option value="admin">Admin</option>
                     </select>
                   ) : (
-                    user.role || 'No role available'
+                    user.role || "No role available"
                   )}
                 </td>
-                <td className="py-2 px-4">{user.isBlocked ? 'Blocked' : 'Active'}</td>
+                <td className="py-2 px-4">
+                  {user.isBlocked ? "Blocked" : "Active"}
+                </td>
                 <td className="py-2 px-4 space-x-2">
                   {editUserId === user._id ? (
                     <>
@@ -272,21 +281,19 @@ const AllUsers: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      {user.isBlocked ? (
-                        <button
-                          onClick={() => handleUnblock(user._id)}
-                          className="bg-green-500 text-white px-4 py-2 rounded"
-                        >
-                          {isLoading === user._id && <Loader loading={true} size={20} />} Unblock
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => handleBlock(user._id)}
-                          className="bg-yellow-500 text-white px-4 py-2 rounded"
-                        >
-                          {isLoading === user._id && <Loader loading={true} size={20} />} Block
-                        </button>
-                      )}
+                      <button
+                        onClick={() =>
+                          handleToggleBlock(user._id, !user.isBlocked)
+                        } // Toggle block/unblock
+                        className={`${
+                          user.isBlocked ? "bg-green-500" : "bg-yellow-500"
+                        } text-white px-4 py-2 rounded`}
+                      >
+                        {isLoading === user._id && (
+                          <Loader loading={true} size={20} />
+                        )}
+                        {user.isBlocked ? "Unblock" : "Block"}
+                      </button>
                       <button
                         onClick={() => handleEdit(user)}
                         className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -297,7 +304,10 @@ const AllUsers: React.FC = () => {
                         onClick={() => handleDelete(user._id)}
                         className="bg-red-500 text-white px-4 py-2 rounded"
                       >
-                        {isDeleting === user._id && <Loader loading={true} size={20} />} Delete
+                        {isDeleting === user._id && (
+                          <Loader loading={true} size={20} />
+                        )}{" "}
+                        Delete
                       </button>
                     </>
                   )}

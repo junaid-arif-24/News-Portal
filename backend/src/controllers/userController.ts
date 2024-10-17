@@ -27,25 +27,17 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-// Block a user (admin only)
-export const blockUser = async (req: Request, res: Response) => {
+// Block/Unblock a user (admin only)
+export const toggleBlockUser = async (req: Request, res: Response) => {
   try {
-    await User.findByIdAndUpdate(req.params.id, { isBlocked: true });
-    res.status(200).json({ message: 'User blocked successfully' });
+    const { isBlocked } = req.body; // Expecting true or false from frontend
+    await User.findByIdAndUpdate(req.params.id, { isBlocked }); // Set isBlocked based on frontend input
+    res.status(200).json({ message: `User ${isBlocked ? 'blocked' : 'unblocked'} successfully` });
   } catch (error) {
-    res.status(500).json({ message: 'Error blocking user', error });
+    res.status(500).json({ message: 'Error updating user block status', error });
   }
 };
 
-// Unblock a user (admin only)
-export const unblockUser = async (req: Request, res: Response) => {
-  try {
-    await User.findByIdAndUpdate(req.params.id, { isBlocked: false });
-    res.status(200).json({ message: 'User unblocked successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error unblocking user', error });
-  }
-};
 
 // Delete a user (admin only)
 export const deleteUser = async (req: Request, res: Response) => {

@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AxiosError } from "axios";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -45,10 +46,10 @@ const Login: React.FC = () => {
 
       // Check the error message
       if (
-        error instanceof Error &&
-        error.message === "Your account is blocked"
+        error instanceof AxiosError &&
+        error.response?.data.message === "Your account is blocked"
       ) {
-        toast.error(error.message);
+        toast.error(error.response?.data.message);
       } else {
         console.error("Login failed:", error);
         toast.error("Login failed. Please try again.");

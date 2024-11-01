@@ -12,7 +12,7 @@ import YouTube from "react-youtube";
 import { calculateReadingTime, formatDate, formatTime } from "../utils/helper";
 import CategoryIcon from "@mui/icons-material/Category";
 import Loader from "../components/Loader";
-import { News } from "../types/DataProvider";
+import { Comment, News } from "../types/DataProvider";
 import { fetchNewsById, fetchRelatedNews, fetchSavedNews, fetchTrendingNews } from "../services/api";
 
 const fetchRelatableNews = async (
@@ -50,38 +50,41 @@ const NewsDetails: React.FC = () => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] =
     useState<boolean>(false);
   const [readingTime, setReadingTime] = useState<number | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const token = localStorage.getItem("token");
   const { isAuthenticated, user, loading } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchNewsDetails = async () => {
-      try {
-        let savedNewsIds;
-        const responseData = await fetchNewsById(id || "");
-        setNews(responseData);
-        // console.log("isAuthenticated", isAuthenticated, "user", user);
+  const fetchNewsDetails = async () => {
+    try {
+      let savedNewsIds;
+      const responseData = await fetchNewsById(id || "");
+      setNews(responseData);
+      // console.log("isAuthenticated", isAuthenticated, "user", user);
 
-        // Check if news is saved
-        if (!loading && isAuthenticated) {
-          const savedResponse = await fetchSavedNews()
+      // Check if news is saved
+      if (!loading && isAuthenticated) {
+        const savedResponse = await fetchSavedNews()
 
-          console.log("savedResponse", savedResponse);
+        console.log("savedResponse", savedResponse);
 
-          savedNewsIds = savedResponse.map((id: string) => id);
-          setIsSaved(savedNewsIds.includes(id));
-        }
-
-        if (responseData.description) {
-          const timeToRead = calculateReadingTime(responseData.description); // Use the utility function
-          setReadingTime(timeToRead);
-        }
-      } catch (error) {
-        console.error("Error fetching news details", error);
-        toast.error("Error fetching news details");
+        savedNewsIds = savedResponse.map((id: string) => id);
+        setIsSaved(savedNewsIds.includes(id));
       }
-    };
+
+      if (responseData.description) {
+        const timeToRead = calculateReadingTime(responseData.description); // Use the utility function
+        setReadingTime(timeToRead);
+      }
+      setComments(responseData.comments);
+    } catch (error) {
+      console.error("Error fetching news details", error);
+      toast.error("Error fetching news details");
+    }
+  };
+  useEffect(() => {
+   
 
     // Wait for loading to finish before executing the logic
     if (!loading) {
@@ -342,7 +345,7 @@ const NewsDetails: React.FC = () => {
             )}
           </div>
 
-          <div className="mt-8">{id ? <Comments newsId={id} /> : null}</div>
+          <div className="mt-8">{id ? <Comments newsId={id} comments={comments} fetchNewsDetails={fetchNewsDetails} /> : null}</div>
         </div>
       </div>
       <div className="w-full lg:w-1/3 p-4 space-y-4">

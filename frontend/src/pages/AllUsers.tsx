@@ -42,7 +42,7 @@ const AllUsers: React.FC = () => {
   const handleToggleBlock = async (userId: string, shouldBlock: boolean) => {
     try {
       setIsLoading(userId);
-      await toggleBlockUser(userId, shouldBlock ); // Send boolean value
+      await updateUser(userId, {isBlocked:shouldBlock} ); // Send boolean value
       fetchUsers();
       toast.success(
         `User ${shouldBlock ? "blocked" : "unblocked"} successfully`

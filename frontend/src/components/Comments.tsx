@@ -6,28 +6,27 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { Comment, CommentsProps } from '../types/DataProvider';
-import { createComment, fetchAllCommentsByNewsId } from '../services/api';
+import { createComment } from '../services/api';
 
 
-const Comments: React.FC<CommentsProps> = ({ newsId }) => {
-  const [comments, setComments] = useState<Comment[]>([]);
+const Comments: React.FC<CommentsProps> = ({ newsId, comments, fetchNewsDetails }) => {
   const [comment, setComment] = useState<string>('');
  
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
-  const fetchComments = async () => {
-    try {
-      const responseData = await fetchAllCommentsByNewsId(newsId);
-      setComments(responseData);
-    } catch (error) {
-      toast.error('Error fetching comments');
-    }
-  };
+  // const fetchComments = async () => {
+  //   try {
+  //     const responseData = await fetchAllCommentsByNewsId(newsId);
+  //     setComments(responseData);
+  //   } catch (error) {
+  //     toast.error('Error fetching comments');
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchComments();
-  }, [newsId]);
+  // useEffect(() => {
+  //   fetchComments();
+  // }, [newsId]);
 
   const addComment = async () => {
     if (!isAuthenticated) {
@@ -42,8 +41,9 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
     }
 
     try {
-      await createComment(comment, newsId);
-      fetchComments();
+      await createComment( newsId,comment);
+      // fetchComments();
+      fetchNewsDetails();
       setComment('');
     } catch (error) {
       toast.error('Error adding comment');

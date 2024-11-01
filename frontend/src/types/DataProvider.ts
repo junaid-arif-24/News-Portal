@@ -19,6 +19,8 @@ export interface Comment {
   
   export interface CommentsProps {
     newsId: string;
+    comments: Comment[];
+    fetchNewsDetails: () => void;
   }
   
   export interface News {
@@ -36,6 +38,7 @@ export interface Comment {
     date: string;
     youtubeUrl: string;
     views: number;
+    comments: Comment[];
 
   }
   

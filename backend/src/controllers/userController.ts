@@ -14,10 +14,10 @@ export const getAllUsers = async (req: Request, res: Response) => {
 // Update user details (admin only)
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, email, role } = req.body;
+  const { name, email, role ,isBlocked} = req.body;
 
   try {
-    const updatedUser = await User.findByIdAndUpdate(id, { name, email, role }, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(id, { name, email, role, isBlocked }, { new: true });
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
     }

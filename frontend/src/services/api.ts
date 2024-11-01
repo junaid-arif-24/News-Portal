@@ -230,15 +230,15 @@ export const fetchSavedNews = async () => {
 
 // Add a comment
 export const createComment = async (newsId: string, comment: string): Promise<Comment> => {
-  const response = await apiClient.post(`/api/news/${newsId}/comments`, { text: comment });
+  const response = await apiClient.post(`/api/comments/${newsId}/comments`, { text: comment });
   return response.data;
 };
 
 // Fetch comments for a news article
-export const fetchAllCommentsByNewsId = async (newsId: string): Promise<Comment[]> => {
-  const response = await apiClient.get(`/api/news/${newsId}/comments`);
-  return response.data as Comment[];
-};
+// export const fetchAllCommentsByNewsId = async (newsId: string): Promise<Comment[]> => {
+//   const response = await apiClient.get(`/api/comments/${newsId}/comments`);
+//   return response.data as Comment[];
+// };
 
 // Delete a comment
 export const deleteComment = async ( commentId: string) => {

@@ -41,16 +41,16 @@ export const addComment = async (req: AuthRequest, res: Response) => {
 };
 
 // Get comments for a specific news article
-export const getCommentsForNews = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const comments = await Comment.find({ news: new mongoose.Types.ObjectId(id) })
-      .populate('user', 'name email');
-    res.status(200).json(comments);
-  } catch (error) {
-    res.status(400).json({ message: 'Error fetching comments', error });
-  }
-};
+// export const getCommentsForNews = async (req: Request, res: Response) => {
+//   const { id } = req.params;
+//   try {
+//     const comments = await Comment.find({ news: new mongoose.Types.ObjectId(id) })
+//       .populate('user', 'name email');
+//     res.status(200).json(comments);
+//   } catch (error) {
+//     res.status(400).json({ message: 'Error fetching comments', error });
+//   }
+// };
 
 // Delete a comment
 export const deleteComment = async (req: Request, res: Response) => {

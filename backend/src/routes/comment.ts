@@ -11,7 +11,7 @@ router.get('/all', auth, commentController.getAllComments);
 router.post('/:id/comments', auth, commentController.addComment);
 
 // Get comments for a news article
-router.get('/:id/comments', commentController.getCommentsForNews);
+// router.get('/:id/comments', commentController.getCommentsForNews);
 
 // Delete a comment
 router.delete('/:id', auth, commentController.deleteComment);

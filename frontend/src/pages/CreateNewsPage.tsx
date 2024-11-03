@@ -6,9 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-quill/dist/quill.snow.css"; // Import styles for react-quill
 import ReactQuill from "react-quill";
 import Loader from '../components/Loader';
-import { Category , errorFields, News} from "../types/DataProvider";
+import { Category ,  News} from "../types/DataProvider";
 import { createOrUpdateNews, fetchCategories } from "../services/api";
-
+export interface errorFields{
+  title: boolean;
+  description: boolean;
+  images: boolean;
+  category: boolean;
+}
 
 
 const CreateNews: React.FC = () => {

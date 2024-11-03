@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Category, User, Comment, News } from "../types/DataProvider";
+import { Category, User, Comment, News, SavedNewsId } from "../types/DataProvider";
 
 // Base URL for the API
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -74,9 +74,9 @@ export const setAuthToken = (token: string) => {
 };
 
 // Fetch user by ID
-export const getUser = async () => {
+export const getUser = async ():Promise<User> => {
   const response = await apiClient.get(`/auth/user`);
-  return response.data;
+  return response.data as User;
 };
 
 // Logout function
@@ -102,15 +102,15 @@ export const fetchNews = async (filters: {
 };
 
 // Fetch all users
-export const fetchAllUsers = async () => {
+export const fetchAllUsers = async ():Promise<User[]> => {
   const response = await apiClient.get("/api/user/all");
-  return response.data;
+  return response.data as User[];
 };
 
 // Block a user
-export const toggleBlockUser = async (userId: string, isBlocked: boolean) => {
-  await apiClient.patch(`/api/user/toggle-block/${userId}`, { isBlocked });
-};
+// export const toggleBlockUser = async (userId: string, isBlocked: boolean) => {
+//   await apiClient.patch(`/api/user/toggle-block/${userId}`, { isBlocked });
+// };
 
 
 
@@ -222,11 +222,23 @@ export const fetchNewsById = async (id: string): Promise<News> => {
   return response.data as News;
 };
 
-// Fetch saved news
-export const fetchSavedNews = async () => {
-  const response = await apiClient.get("/api/news/savedNews");
-  return response.data ;
+export const deleteNews = async (id: string) => {
+  await apiClient.delete(`/api/news/${id}`);
 };
+
+export const saveNewsbyId = async (id: string) => {
+  await apiClient.post(`/api/news/${id}/save`);
+};
+
+export const unsaveNewsbyId = async (id: string) => {
+  await apiClient.post(`/api/news/${id}/unsave`);
+};
+// Fetch saved news
+export const fetchSavedNews = async ():Promise<SavedNewsId[]> => {
+  const response = await apiClient.get("/api/news/savedNews");
+  return response.data as SavedNewsId[];
+};
+
 
 // Add a comment
 export const createComment = async (newsId: string, comment: string): Promise<Comment> => {

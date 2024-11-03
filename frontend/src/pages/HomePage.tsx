@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Marquee from "react-fast-marquee";
 import { News } from "../types/DataProvider";
 import { toast } from "react-toastify";
+import { fetchNews } from "../services/api";
 
 const HomePage: React.FC = () => {
   const [newsList, setNewsList] = useState<News[]>([]);
@@ -17,12 +18,10 @@ const HomePage: React.FC = () => {
   const fetchFilteredNews = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/news`, {
-        params: {
-          visibility: "public" ,
-        },
-      });
-      setNewsList(response.data);
+      const response = await fetchNews({
+        visibility: "public",
+      })
+      setNewsList(response);
     } catch (error) {
       toast.error("Error fetching news");
     } finally {

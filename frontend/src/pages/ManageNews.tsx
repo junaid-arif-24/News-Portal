@@ -6,7 +6,7 @@ import Loader from '../components/Loader';
 import { formatDate } from '../utils/helper';
 import parse from 'html-react-parser';
 import { News , Category} from '../types/DataProvider';
-import { fetchCategories, fetchNews } from '../services/api';
+import { deleteNews, fetchCategories, fetchNews } from '../services/api';
 
 
 const ManageNews: React.FC = () => {
@@ -65,12 +65,7 @@ const ManageNews: React.FC = () => {
   const handleDelete = async (id: string) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`${API_BASE_URL}/api/news/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token || ''}`, // Default to empty string if no token
-        },
-      });
-
+      await deleteNews(id);
       fetchAllNews();
       toast.success('News deleted successfully');
     } catch (error) {

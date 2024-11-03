@@ -1,9 +1,13 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { NewsListSkeleton } from './Skeletons'; // Import the custom skeleton
-import { NewsListProps } from "../types/DataProvider";
+import { News } from "../types/DataProvider";
 import NewsCard from "./NewsCard";
-
+export interface NewsListProps {
+  newsList: News[];
+  isLoading: boolean; 
+  category?: boolean; // Add a prop to check if data is loading
+}
 
 
 const NewsList: React.FC<NewsListProps> = ({ newsList, isLoading,category }) => {

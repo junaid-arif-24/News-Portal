@@ -6,11 +6,12 @@ import { formatDate, formatTime } from "../utils/helper"; // Adjust the import a
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
-import { UserProf } from "../types/DataProvider";
+import { User } from "../types/DataProvider";
+import { getUser, unsubscribeCategory } from "../services/api";
 
 
 const UserProfile: React.FC = () => {
-  const [profile, setProfile] = useState<UserProf | null>(null);
+  const [profile, setProfile] = useState<User | null>(null);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { isAuthenticated , user } = useAuth();
   const navigate = useNavigate();
@@ -21,12 +22,8 @@ const UserProfile: React.FC = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/auth/user`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setProfile(response.data);
+      const response = await getUser()
+      setProfile(response);
     } catch (error) {
       console.error("Error fetching profile", error);
       toast.error("Error fetching profile");
@@ -40,15 +37,7 @@ const UserProfile: React.FC = () => {
       return;
     }
     try {
-      await axios.post(
-        `${API_BASE_URL}/api/categories/unsubscribe`,
-        { categoryId },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      await unsubscribeCategory(categoryId);
       setProfile((prevProfile) => {
         if (prevProfile) {
           const updatedSubscriptions = prevProfile.subscriptions.filter(

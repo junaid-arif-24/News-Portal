@@ -12,8 +12,8 @@ import YouTube from "react-youtube";
 import { calculateReadingTime, formatDate, formatTime } from "../utils/helper";
 import CategoryIcon from "@mui/icons-material/Category";
 import Loader from "../components/Loader";
-import { Comment, News } from "../types/DataProvider";
-import { fetchNewsById, fetchRelatedNews, fetchSavedNews, fetchTrendingNews } from "../services/api";
+import { Comment, News, SavedNewsId } from "../types/DataProvider";
+import { fetchNewsById, fetchRelatedNews, fetchSavedNews, fetchTrendingNews, saveNewsbyId, unsaveNewsbyId } from "../services/api";
 
 const fetchRelatableNews = async (
   newsId: string,
@@ -69,8 +69,8 @@ const NewsDetails: React.FC = () => {
 
         console.log("savedResponse", savedResponse);
 
-        savedNewsIds = savedResponse.map((id: string) => id);
-        setIsSaved(savedNewsIds.includes(id));
+        savedNewsIds = savedResponse.map((id: SavedNewsId) => id.id);
+        setIsSaved(savedNewsIds.includes(id as string));
       }
 
       if (responseData.description) {
@@ -126,26 +126,10 @@ const NewsDetails: React.FC = () => {
     }
     try {
       if (isSaved) {
-        await axios.post(
-          `${API_BASE_URL}/api/news/${id}/unsave`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        await unsaveNewsbyId(id || "");
         toast.success("News has been unsaved");
       } else {
-        await axios.post(
-          `${API_BASE_URL}/api/news/${id}/save`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        await saveNewsbyId(id || "");
         toast.success("News has been saved");
       }
       setIsSaved(!isSaved);

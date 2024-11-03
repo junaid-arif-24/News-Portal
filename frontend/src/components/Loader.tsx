@@ -1,8 +1,12 @@
 // src/components/Loader.tsx
 import React, { CSSProperties } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { LoaderProps } from '../types/DataProvider';
-
+export interface LoaderProps {
+  loading: boolean;
+  color?: string;
+  size?: number;
+  center?: boolean; 
+}
 
 
 const Loader: React.FC<LoaderProps> = ({ loading, color = '#3498db', size = 100, center = false }) => {

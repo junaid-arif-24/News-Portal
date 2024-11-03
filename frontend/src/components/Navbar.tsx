@@ -2,7 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
-import { NavbarButtonProps, ProfileIconProps } from "../types/DataProvider";
+export interface NavbarButtonProps {
+  path: string;
+  label: string;
+  activeCategory: string | null;
+  onClick: () => void;
+}
+export interface ProfileIconProps {
+  isAuthenticated: boolean;
+  user: { name?: string } | null;
+}
 
 
 // Reusable NavButton Component

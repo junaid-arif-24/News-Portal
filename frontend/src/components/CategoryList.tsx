@@ -1,8 +1,11 @@
 // components/CategoryCard.tsx
 import React from "react";
-import { Category, CategoryListProps } from "../types/DataProvider";
+import { Category } from "../types/DataProvider";
 
-
+export interface CategoryListProps {
+  category: Category;
+  onClick: () => void;
+}
 const CategoryList: React.FC<CategoryListProps> = ({ category, onClick }) => {
   return (
     <div

@@ -3,7 +3,7 @@ import React from 'react';
 import { FaFacebookF, FaLinkedinIn, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import FooterCategory from './FooterCategory'; // Import the FooterCategory component
-import { footerData } from '../types/DataProvider';
+import { footerData } from '../utils/UI';
 
 const Footer: React.FC = () => {
   

@@ -8,7 +8,6 @@ import {
   fetchAllUsers,
   deleteUser,
   updateUser,
-  toggleBlockUser,
 } from "../services/api";
 
 const AllUsers: React.FC = () => {

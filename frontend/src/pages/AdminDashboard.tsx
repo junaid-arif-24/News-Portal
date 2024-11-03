@@ -29,7 +29,9 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import AllUsers from "./AllUsers";
-import { AdminRouteProps } from "../types/DataProvider";
+export interface AdminRouteProps {
+  children: React.ReactNode;
+}
 
 const drawerWidth = 240;
 

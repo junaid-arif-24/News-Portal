@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Icons, IconsProps } from '../types/DataProvider';
+export interface IconsProps {
+  size?: string; 
+}
+
+export interface Icons {
+  [key: string]: (props: IconsProps) => React.ReactElement;
+}
 
 
 export const icons: Icons = {

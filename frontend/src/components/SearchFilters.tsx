@@ -1,8 +1,11 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
-import { Category, SearchFiltersProps } from '../types/DataProvider';
+import { Category } from '../types/DataProvider';
 import { fetchCategories, fetchNews } from '../services/api';
 import { toast } from 'react-toastify';
 
+export interface SearchFiltersProps {
+  setNewsList: React.Dispatch<React.SetStateAction<any[]>>;
+}
 
 
 

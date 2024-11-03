@@ -127,8 +127,7 @@ export const getNewsById = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "News not found" });
     }
     const comments = await Comment.find({ news: id })
-    .populate("user", "name email") // Populate user details in each comment
-    .exec();
+    .populate("user", "name email") // Populate user details in each comment;
     const newsWithComments = {
         ...news.toObject(),
         comments: comments,

@@ -1,7 +1,8 @@
-import { News, NewsCardProps } from "../types/DataProvider";
+import { News } from "../types/DataProvider";
 import CategoryIcon from '@mui/icons-material/Category';
 import { calculateReadingTime, formatDate, formatTime } from "../utils/helper";
 import parse from 'html-react-parser';
+export interface NewsCardProps { news: News, onClick: () => void }
 
  const NewsCard: React.FC<NewsCardProps> = ({ news, onClick }) => (
     <div
